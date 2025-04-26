@@ -1,10 +1,24 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import { connectToDatabase } from "./mongodb";
+import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// Load environment variables
+dotenv.config();
+
+// ES modules compatible __dirname equivalent
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+// Serve static assets
+app.use('/src/assets', express.static(path.join(__dirname, '../client/src/assets')));
 
 app.use((req, res, next) => {
   const start = Date.now();
@@ -37,14 +51,34 @@ app.use((req, res, next) => {
 });
 
 (async () => {
+  try {
+    // Connect to MongoDB database
+    await connectToDatabase();
+    console.log('MongoDB connection successful');
+  } catch (error) {
+    console.error('Failed to connect to MongoDB:', error);
+    
+    // In development mode, we'll allow the app to start without MongoDB
+    if (process.env.NODE_ENV === 'development') {
+      console.warn('⚠️ Running in development mode without MongoDB. Some features will not work.');
+      console.warn('⚠️ To use MongoDB:');
+      console.warn('   1. Make sure MongoDB is running locally');
+      console.warn('   2. Create a database named "quickrent_furnish" in MongoDB Compass');
+      console.warn('   3. Run the seed script: npx tsx scripts/seed-mongodb.ts');
+    } else {
+      // In production, MongoDB is required
+      throw new Error('MongoDB connection is required - application cannot start without it');
+    }
+  }
+  
   const server = await registerRoutes(app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
+    console.error("Server error:", err);
     const status = err.status || err.statusCode || 500;
     const message = err.message || "Internal Server Error";
 
     res.status(status).json({ message });
-    throw err;
   });
 
   // importantly only setup vite in development and after
@@ -60,10 +94,10 @@ app.use((req, res, next) => {
   // this serves both the API and the client.
   // It is the only port that is not firewalled.
   const port = 5000;
+  console.log(` Server is starting on http://localhost:${port}`);
   server.listen({
     port,
-    host: "0.0.0.0",
-    reusePort: true,
+    host: "0.0.0.0"
   }, () => {
     log(`serving on port ${port}`);
   });
