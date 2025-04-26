@@ -1,6 +1,28 @@
 import mongoose from 'mongoose';
 import { z } from 'zod';
 
+// Check if in Replit environment
+const isReplitEnv = process.env.REPLIT_DB_URL ? true : false;
+
+// Patch mongoose model function for Replit environment
+if (isReplitEnv) {
+  console.log('Patching mongoose models for Replit environment');
+  
+  // Save the original model function
+  const originalModel = mongoose.model.bind(mongoose);
+  
+  // Override the model function to avoid recreating models
+  mongoose.model = function(name: string, schema?: mongoose.Schema): mongoose.Model<any> {
+    try {
+      // First try to get existing model to avoid OverwriteModelError
+      return mongoose.models[name] || originalModel(name, schema);
+    } catch (error) {
+      // If error, create new model
+      return originalModel(name, schema);
+    }
+  };
+}
+
 // User Schema
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },

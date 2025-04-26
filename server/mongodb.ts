@@ -6,6 +6,30 @@ dotenv.config();
 // Check if running in Replit environment
 const isReplitEnv = process.env.REPLIT_DB_URL ? true : false;
 
+// MONKEY PATCH FOR REPLIT ENVIRONMENT
+// This completely bypasses MongoDB connections in Replit
+if (isReplitEnv) {
+  console.log('🐒 Monkey-patching mongoose for Replit environment');
+  
+  // Override the connect method to prevent actual connection attempts
+  const originalConnect = mongoose.connect;
+  mongoose.connect = async function() {
+    console.log('⚠️ Mongoose connect bypassed in Replit environment');
+    return mongoose as any;
+  };
+  
+  // Override other methods that might cause connection attempts
+  // @ts-ignore
+  mongoose.createConnection = function() {
+    console.log('⚠️ Mongoose createConnection bypassed in Replit environment');
+    return {
+      model: function() { return {}; },
+      on: function() { return this; },
+      once: function() { return this; }
+    };
+  };
+}
+
 // Get MongoDB connection string
 const MONGODB_URI = isReplitEnv 
   ? process.env.MONGODB_URI || 'mongodb://localhost:27017/quickrent_furnish'
@@ -42,10 +66,22 @@ console.log(`Connection source: ${connectionSource}`);
 
 // Connect to MongoDB
 export async function connectToDatabase() {
-  // Always return null when in Replit environment to use in-memory storage
+  // For Replit environment, return a mock connection that doesn't actually connect
   if (isReplitEnv) {
     console.log('Running in Replit environment - using in-memory storage instead of MongoDB');
-    return null; // Return null to indicate we're using in-memory storage
+    
+    // Set up mock schemas without actual connection
+    try {
+      // In Replit environment, monkey-patch the mongoose module to avoid actual connection
+      // Replace the models in shared/schema with mock models from mock-schema
+      require('./mock-schema');
+      console.log('✅ Mock MongoDB setup complete for Replit environment');
+    } catch (error) {
+      console.warn('⚠️ Warning: Failed to load mock schemas for Replit environment:', error);
+      console.error(error);
+    }
+    
+    return Promise.resolve({ db: { databaseName: 'mock_db' } });
   }
 
   try {
@@ -91,6 +127,12 @@ export async function connectToDatabase() {
 
 // Disconnect from MongoDB
 export async function disconnectFromDatabase() {
+  // For Replit environment, skip disconnection
+  if (isReplitEnv) {
+    console.log('Mock disconnection from MongoDB in Replit environment');
+    return;
+  }
+  
   try {
     await mongoose.disconnect();
     console.log('Disconnected from MongoDB');
