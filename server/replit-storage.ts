@@ -1,6 +1,5 @@
 import session from 'express-session';
 import { IStorage } from './storage';
-import MemoryStore from 'memorystore';
 
 // Simple in-memory storage implementation for Replit environment
 export class ReplitStorage implements IStorage {
@@ -14,10 +13,8 @@ export class ReplitStorage implements IStorage {
 
   constructor() {
     console.log('Initializing in-memory storage for Replit environment');
-    const MemoryStoreSession = MemoryStore(session);
-    this.sessionStore = new MemoryStoreSession({
-      checkPeriod: 86400000 // prune expired entries every 24h
-    });
+    // Using built-in express-session memory store for simplicity
+    this.sessionStore = new session.MemoryStore();
     
     // Initialize with sample data
     this.seedSampleData();

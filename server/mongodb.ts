@@ -11,23 +11,44 @@ const isReplitEnv = process.env.REPLIT_DB_URL ? true : false;
 if (isReplitEnv) {
   console.log('🐒 Monkey-patching mongoose for Replit environment');
   
-  // Override the connect method to prevent actual connection attempts
+  // Create mock connection object
+  const mockConnection = {
+    db: { 
+      databaseName: 'mock_db',
+      collections: () => Promise.resolve([]),
+      collection: () => ({})
+    },
+    on: function() { return this; },
+    once: function() { return this; },
+    model: function() { return {}; }
+  };
+  
+  // Override connect method with mock implementation that returns immediately
   const originalConnect = mongoose.connect;
   mongoose.connect = async function() {
     console.log('⚠️ Mongoose connect bypassed in Replit environment');
-    return mongoose as any;
+    return Promise.resolve(mongoose as any);
   };
   
-  // Override other methods that might cause connection attempts
+  // @ts-ignore - Override mongoose.connection with mock
+  mongoose.connection = mockConnection;
+  
+  // Override createConnection to return our mock
   // @ts-ignore
   mongoose.createConnection = function() {
     console.log('⚠️ Mongoose createConnection bypassed in Replit environment');
-    return {
-      model: function() { return {}; },
-      on: function() { return this; },
-      once: function() { return this; }
-    };
+    return mockConnection;
   };
+  
+  // Override Mongoose's internal MongoClient to prevent any attempt to connect
+  try {
+    // @ts-ignore - Attempt to patch MongoClient if possible
+    mongoose.MongoClient = {
+      connect: () => Promise.resolve({ db: () => mockConnection.db })
+    };
+  } catch (err) {
+    console.warn('⚠️ Could not fully patch MongoClient');
+  }
 }
 
 // Get MongoDB connection string
@@ -74,7 +95,8 @@ export async function connectToDatabase() {
     try {
       // In Replit environment, monkey-patch the mongoose module to avoid actual connection
       // Replace the models in shared/schema with mock models from mock-schema
-      require('./mock-schema');
+      // For ES modules, we dynamically import instead of using require
+      await import('./mock-schema');
       console.log('✅ Mock MongoDB setup complete for Replit environment');
     } catch (error) {
       console.warn('⚠️ Warning: Failed to load mock schemas for Replit environment:', error);

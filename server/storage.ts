@@ -65,9 +65,8 @@ export class MemStorage implements IStorage {
 
   constructor() {
     console.log('Initializing in-memory storage for Replit environment');
-    this.sessionStore = new MemoryStoreSession({
-      checkPeriod: 86400000 // prune expired entries every 24h
-    });
+    // Using built-in express-session memory store for simplicity
+    this.sessionStore = new session.MemoryStore();
     
     // Initialize with sample data
     this.seedSampleData();

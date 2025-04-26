@@ -17,6 +17,21 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// Add MIME type configuration middleware
+app.use((req, res, next) => {
+  const path = req.path;
+  
+  // Properly set Content-Type for JavaScript module files
+  if (path.endsWith('.js') || path.endsWith('.jsx') || path.endsWith('.ts') || path.endsWith('.tsx')) {
+    res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
+  } else if (path.endsWith('.css')) {
+    res.setHeader('Content-Type', 'text/css; charset=utf-8');
+  } else if (path.endsWith('.json')) {
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  }
+  next();
+});
+
 // Serve static assets
 app.use('/src/assets', express.static(path.join(__dirname, '../client/src/assets')));
 
@@ -54,18 +69,20 @@ app.use((req, res, next) => {
   // Check if in Replit environment
   const isReplitEnv = process.env.REPLIT_DB_URL ? true : false;
   
-  if (isReplitEnv) {
-    console.log('Running in Replit environment - using in-memory storage');
-    // Skip MongoDB connection in Replit environment and continue application startup
-  } else {
-    // Only try to connect to MongoDB if not in Replit
-    try {
-      // Connect to MongoDB database
-      await connectToDatabase();
+  try {
+    // Always call connectToDatabase() which has special handling for Replit environment
+    await connectToDatabase();
+    
+    if (isReplitEnv) {
+      console.log('Running in Replit environment - using in-memory storage');
+    } else {
       console.log('MongoDB connection successful');
-    } catch (error) {
-      console.error('Failed to connect to MongoDB:', error);
-      
+    }
+  } catch (error) {
+    console.error('Failed to connect to MongoDB:', error);
+    
+    // If not in Replit and connection fails, handle accordingly
+    if (!isReplitEnv) {
       // In development mode, we'll allow the app to start without MongoDB
       if (process.env.NODE_ENV === 'development') {
         console.warn('⚠️ Running in development mode without MongoDB. Some features will not work.');
@@ -74,7 +91,7 @@ app.use((req, res, next) => {
         console.warn('   2. Create a database named "quickrent_furnish" in MongoDB Compass');
         console.warn('   3. Run the seed script: npx tsx scripts/seed-mongodb.ts');
       } else {
-        // In production, MongoDB is required
+        // In production and not Replit, MongoDB is required
         throw new Error('MongoDB connection is required - application cannot start without it');
       }
     }
