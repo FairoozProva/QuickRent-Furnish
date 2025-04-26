@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CreativeCanvas Navigation Test</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+        Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f8f9fa;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    header {
+      background-color: white;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      padding: 15px 0;
+    }
+    
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #333;
+    }
+    
+    .nav-links {
+      display: flex;
+      list-style: none;
+    }
+    
+    .nav-links li {
+      margin: 0 15px;
+    }
+    
+    .nav-links a {
+      text-decoration: none;
+      color: #555;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: #007BFF;
+    }
+    
+    .hero {
+      padding: 60px 20px;
+      text-align: center;
+      background-color: #e9ecef;
+      margin-bottom: 40px;
+    }
+    
+    .hero h1 {
+      font-size: 48px;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    
+    .hero p {
+      font-size: 20px;
+      color: #555;
+      max-width: 800px;
+      margin: 0 auto 30px;
+    }
+    
+    .categories {
+      padding: 40px 0;
+    }
+    
+    .categories h2 {
+      text-align: center;
+      margin-bottom: 40px;
+      font-size: 36px;
+      color: #333;
+    }
+    
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 30px;
+    }
+    
+    .category-card {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .category-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .category-image {
+      height: 200px;
+      background-size: cover;
+      background-position: center;
+    }
+    
+    .category-content {
+      padding: 20px;
+    }
+    
+    .category-content h3 {
+      margin-top: 0;
+      font-size: 24px;
+      color: #333;
+    }
+    
+    .category-content p {
+      color: #666;
+      margin-bottom: 20px;
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #007BFF;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: 500;
+      transition: background-color 0.3s;
+    }
+    
+    .btn:hover {
+      background-color: #0069d9;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="logo">CreativeCanvas</div>
+      <ul class="nav-links">
+        <li><a href="/" class="active">Home</a></li>
+        <li><a href="/products">Products</a></li>
+        <li><a href="/categories">Categories</a></li>
+        <li><a href="/how-it-works">How It Works</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <h1>Rent Premium Furniture</h1>
+        <p>Transform your space without the commitment of buying. Choose from our wide selection of high-quality furniture.</p>
+        <a href="/products" class="btn">Browse Collection</a>
+      </div>
+    </section>
+
+    <section class="categories">
+      <div class="container">
+        <h2>Shop By Categories</h2>
+        <div class="category-grid">
+          <div class="category-card">
+            <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1486304873000-235643847519?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=400&q=80');"></div>
+            <div class="category-content">
+              <h3>Living Room</h3>
+              <p>Find comfortable sofas, coffee tables, and more for your living space.</p>
+              <a href="/category/living-room" class="btn">View Products</a>
+            </div>
+          </div>
+          
+          <div class="category-card">
+            <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1600585154526-990dced4db0d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=400&q=80');"></div>
+            <div class="category-content">
+              <h3>Bedroom</h3>
+              <p>Discover beds, nightstands, and dressers for a peaceful bedroom.</p>
+              <a href="/category/bedroom" class="btn">View Products</a>
+            </div>
+          </div>
+          
+          <div class="category-card">
+            <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1615968679312-9b7ed9f04e79?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=400&q=80');"></div>
+            <div class="category-content">
+              <h3>Dining Room</h3>
+              <p>Explore dining tables, chairs, and more for memorable meals.</p>
+              <a href="/category/dining-room" class="btn">View Products</a>
+            </div>
+          </div>
+          
+          <div class="category-card">
+            <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=400&q=80');"></div>
+            <div class="category-content">
+              <h3>Office</h3>
+              <p>Find desks, chairs, and storage for a productive workspace.</p>
+              <a href="/category/office" class="btn">View Products</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Simple client-side routing
+    document.addEventListener('DOMContentLoaded', function() {
+      const navLinks = document.querySelectorAll('.nav-links a');
+      
+      navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          const path = this.getAttribute('href');
+          
+          // Update active state
+          navLinks.forEach(l => l.classList.remove('active'));
+          this.classList.add('active');
+          
+          // In a real app, this would update the view or navigate
+          console.log('Navigating to:', path);
+        });
+      });
+    });
+  </script>
+</body>
+</html>
