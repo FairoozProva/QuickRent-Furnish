@@ -1,12 +1,10 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
-import { MongoDBStorage } from "./mongo-storage";
+import { storage } from "./storage";
 import { Product } from "../shared/schema"; // Adjusted the path to match the project structure
 import { setupAuth } from "./auth";
 import { firebaseAuth, FirebaseUser } from "./firebase-admin";
 import { z } from "zod";
-
-const storage = new MongoDBStorage();
 
 // Define local schemas since we're not using MongoDB
 const insertWishlistSchema = z.object({

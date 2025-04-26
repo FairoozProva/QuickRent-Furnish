@@ -39,6 +39,15 @@ console.log(`Connection source: ${connectionSource}`);
 
 // Connect to MongoDB
 export async function connectToDatabase() {
+  // Check if in Replit environment
+  const isReplitEnv = process.env.REPLIT_DB_URL ? true : false;
+  
+  if (isReplitEnv) {
+    console.log('Running in Replit environment - skipping MongoDB connection');
+    console.log('Using in-memory storage instead');
+    return null; // No connection in Replit
+  }
+  
   try {
     console.log('Attempting to connect to MongoDB...');
     await mongoose.connect(MONGODB_URI, mongooseConfig);
@@ -82,6 +91,14 @@ export async function connectToDatabase() {
 
 // Disconnect from MongoDB
 export async function disconnectFromDatabase() {
+  // Check if in Replit environment
+  const isReplitEnv = process.env.REPLIT_DB_URL ? true : false;
+  
+  if (isReplitEnv) {
+    console.log('Running in Replit environment - no MongoDB connection to disconnect');
+    return;
+  }
+  
   try {
     await mongoose.disconnect();
     console.log('Disconnected from MongoDB');

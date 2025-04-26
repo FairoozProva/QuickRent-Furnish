@@ -3,9 +3,15 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+// Check if running in Replit environment
+const isReplitEnv = process.env.REPLIT_DB_URL ? true : false;
+
 // Get MongoDB connection string
-const MONGODB_URI = 'mongodb://localhost:27017/quickrent_furnish';
-const connectionSource = 'Local MongoDB';
+const MONGODB_URI = isReplitEnv 
+  ? process.env.MONGODB_URI || 'mongodb://localhost:27017/quickrent_furnish'
+  : 'mongodb://localhost:27017/quickrent_furnish';
+
+const connectionSource = isReplitEnv ? 'Replit Environment' : 'Local MongoDB';
 
 // MongoDB configuration options for VSCode compatibility
 const mongooseConfig: mongoose.ConnectOptions = {
@@ -36,6 +42,12 @@ console.log(`Connection source: ${connectionSource}`);
 
 // Connect to MongoDB
 export async function connectToDatabase() {
+  // Always return null when in Replit environment to use in-memory storage
+  if (isReplitEnv) {
+    console.log('Running in Replit environment - using in-memory storage instead of MongoDB');
+    return null; // Return null to indicate we're using in-memory storage
+  }
+
   try {
     console.log('Attempting to connect to MongoDB...');
     await mongoose.connect(MONGODB_URI, mongooseConfig);

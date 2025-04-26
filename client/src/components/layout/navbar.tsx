@@ -67,8 +67,8 @@ export default function Navbar() {
               <Link href="/products" className={`${isActive('/products') ? 'border-b-2 border-primary text-gray-900' : 'border-transparent border-b-2 hover:border-gray-300 text-gray-500 hover:text-gray-800'} px-1 pt-1 font-medium`}>
                 Products
               </Link>
-              <Link href="/about" className={`${isActive('/about') ? 'border-b-2 border-primary text-gray-900' : 'border-transparent border-b-2 hover:border-gray-300 text-gray-500 hover:text-gray-800'} px-1 pt-1 font-medium`}>
-                About
+              <Link href="/categories" className={`${isActive('/categories') ? 'border-b-2 border-primary text-gray-900' : 'border-transparent border-b-2 hover:border-gray-300 text-gray-500 hover:text-gray-800'} px-1 pt-1 font-medium`}>
+                Categories
               </Link>
               <Link href="/how-it-works" className={`${isActive('/how-it-works') ? 'border-b-2 border-primary text-gray-900' : 'border-transparent border-b-2 hover:border-gray-300 text-gray-500 hover:text-gray-800'} px-1 pt-1 font-medium`}>
                 How It Works
@@ -154,8 +154,8 @@ export default function Navbar() {
             <Link href="/products" className={`${isActive('/products') ? 'bg-primary-50 text-primary' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-800'} block px-3 py-2 rounded-md font-medium`}>
               Products
             </Link>
-            <Link href="/about" className={`${isActive('/about') ? 'bg-primary-50 text-primary' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-800'} block px-3 py-2 rounded-md font-medium`}>
-              About
+            <Link href="/categories" className={`${isActive('/categories') ? 'bg-primary-50 text-primary' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-800'} block px-3 py-2 rounded-md font-medium`}>
+              Categories
             </Link>
             <Link href="/how-it-works" className={`${isActive('/how-it-works') ? 'bg-primary-50 text-primary' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-800'} block px-3 py-2 rounded-md font-medium`}>
               How It Works

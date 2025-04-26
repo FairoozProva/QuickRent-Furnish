@@ -1,60 +1,9 @@
 import session from 'express-session';
-import { MongoDBStorage } from './mongo-storage';
-import { ReplitStorage } from './replit-storage';
-
-// Check if in Replit environment
-const isReplitEnv = process.env.REPLIT_DB_URL ? true : false;
-
-export interface IStorage {
-  sessionStore: session.Store;
-  
-  // User methods
-  getUser(id: string): Promise<any | null>;
-  getUserByUsername(username: string): Promise<any | null>;
-  getUserByFirebaseId(firebaseId: string): Promise<any | null>;
-  createUser(user: any): Promise<any>;
-  updateUser(id: string, userData: Partial<any>): Promise<any | null>;
-  updateUserByFirebaseId(firebaseId: string, userData: Partial<any>): Promise<any | null>;
-
-  // Category methods
-  getCategories(): Promise<any[]>;
-  getCategory(id: string): Promise<any | null>;
-  getCategoryBySlug(slug: string): Promise<any | null>;
-  createCategory(category: any): Promise<any>;
-
-  // Product methods
-  getProducts(filters?: {
-    categoryId?: string;
-    trending?: boolean;
-    isNewProduct?: boolean;
-  }): Promise<any[]>;
-  getProduct(id: string): Promise<any | null>;
-  getProductBySku(sku: string): Promise<any | null>;
-  createProduct(product: any): Promise<any>;
-
-  // Rental methods
-  getRentals(userId: string): Promise<any[]>;
-  getRental(id: string): Promise<any | null>;
-  createRental(rental: any): Promise<any>;
-  updateRental(id: string, rentalData: Partial<any>): Promise<any | null>;
-
-  // Wishlist methods
-  getWishlistItems(userId: string): Promise<any[]>;
-  addToWishlist(wishlistItem: any): Promise<any>;
-  removeFromWishlist(userId: string, productId: string): Promise<void>;
-  isInWishlist(userId: string, productId: string): Promise<boolean>;
-
-  // Cart methods
-  getCartItems(userId: string): Promise<any[]>;
-  addToCart(cartItem: any): Promise<any>;
-  updateCartItem(userId: string, productId: string, duration: number): Promise<any | null>;
-  removeFromCart(userId: string, productId: string): Promise<void>;
-  clearCart(userId: string): Promise<void>;
-  isInCart(userId: string, productId: string): Promise<boolean>;
-}
+import { IStorage } from './storage';
+import MemoryStore from 'memorystore';
 
 // Simple in-memory storage implementation for Replit environment
-export class MemStorage implements IStorage {
+export class ReplitStorage implements IStorage {
   private users: Map<string, any> = new Map();
   private categories: Map<string, any> = new Map();
   private products: Map<string, any> = new Map();
@@ -65,6 +14,7 @@ export class MemStorage implements IStorage {
 
   constructor() {
     console.log('Initializing in-memory storage for Replit environment');
+    const MemoryStoreSession = MemoryStore(session);
     this.sessionStore = new MemoryStoreSession({
       checkPeriod: 86400000 // prune expired entries every 24h
     });
@@ -190,7 +140,11 @@ export class MemStorage implements IStorage {
   }
 
   // Product methods
-  async getProducts(filters?: { categoryId?: string; trending?: boolean; isNewProduct?: boolean; }): Promise<any[]> {
+  async getProducts(filters?: { 
+    categoryId?: string; 
+    trending?: boolean; 
+    isNewProduct?: boolean; 
+  }): Promise<any[]> {
     let results = Array.from(this.products.values());
     
     if (filters) {
@@ -233,7 +187,12 @@ export class MemStorage implements IStorage {
 
   // Rental methods
   async getRentals(userId: string): Promise<any[]> {
-    return Array.from(this.rentals.values()).filter(rental => rental.userId === userId);
+    return Array.from(this.rentals.values())
+      .filter(rental => rental.userId === userId)
+      .map(rental => {
+        const product = this.products.get(rental.productId);
+        return { ...rental, productId: product };
+      });
   }
 
   async getRental(id: string): Promise<any | null> {
@@ -328,9 +287,3 @@ export class MemStorage implements IStorage {
     return this.cartItems.has(key);
   }
 }
-
-// Create and export the storage instance
-// Use MongoDB storage in normal environment, but in Replit we'll use special storage
-export const storage: IStorage = isReplitEnv 
-  ? new ReplitStorage() 
-  : new MongoDBStorage();

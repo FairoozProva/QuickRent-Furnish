@@ -469,5 +469,10 @@ export class MemStorage implements IStorage {
 // Import MongoDB storage
 import { MongoDBStorage } from './mongo-storage';
 
-// Use MongoDB storage exclusively as per requirement
-export const storage = new MongoDBStorage();
+// Check if we're in Replit environment
+const isReplitEnv = process.env.REPLIT_DB_URL ? true : false;
+
+// Use in-memory storage in Replit and MongoDB otherwise
+export const storage = isReplitEnv 
+  ? new MemStorage() 
+  : new MongoDBStorage();
