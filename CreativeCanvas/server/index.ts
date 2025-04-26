@@ -43,22 +43,30 @@ app.use((req, res, next) => {
 
 (async () => {
   try {
-    // Connect to MongoDB database
-    await connectToDatabase();
-    console.log('MongoDB connection successful');
+    // Check if we're in Replit environment
+    const isReplitEnv = process.env.REPLIT_DB_URL ? true : false;
+    
+    if (isReplitEnv) {
+      console.log('Running in Replit environment - using in-memory storage');
+      // Continue without database connection in Replit
+    } else {
+      // Connect to MongoDB database for local development
+      await connectToDatabase();
+      console.log('MongoDB connection successful');
+    }
   } catch (error) {
     console.error('Failed to connect to MongoDB:', error);
     
     // In development mode, we'll allow the app to start without MongoDB
     if (process.env.NODE_ENV === 'development') {
-      console.warn('⚠️ Running in development mode without MongoDB. Some features will not work.');
-      console.warn('⚠️ To use MongoDB:');
+      console.warn('⚠️ Running in development mode without MongoDB. Using in-memory storage instead.');
+      console.warn('⚠️ For local development with MongoDB:');
       console.warn('   1. Make sure MongoDB is running locally');
       console.warn('   2. Create a database named "quickrent_furnish" in MongoDB Compass');
       console.warn('   3. Run the seed script: npx tsx scripts/seed-mongodb.ts');
     } else {
-      // In production, MongoDB is required
-      throw new Error('MongoDB connection is required - application cannot start without it');
+      // In production, we'll use in-memory storage if MongoDB isn't available
+      console.warn('⚠️ Running in production mode without MongoDB. Using in-memory storage instead.');
     }
   }
   

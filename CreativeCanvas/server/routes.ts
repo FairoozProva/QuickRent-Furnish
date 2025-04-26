@@ -1,6 +1,6 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
-import { storage } from "./storage";
+import { MemStorage, storage } from "./storage";
 import { setupAuth } from "./auth";
 import { firebaseAuth, FirebaseUser } from "./firebase-admin";
 import { z } from "zod";

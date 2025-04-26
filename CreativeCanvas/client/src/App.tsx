@@ -8,18 +8,18 @@ import { FirebaseAuthProvider } from "@/hooks/use-firebase-auth";
 import { ProtectedRoute } from "./lib/protected-route";
 
 // Pages
-import HomePage from "@/pages/home-page";
-import AuthPage from "@/pages/auth-page";
-import FirebaseAuthPage from "@/pages/firebase-auth-page";
-import ProductsPage from "@/pages/products-page";
-import ProductDetailPage from "@/pages/product-detail-page";
-import CartPage from "@/pages/cart-page";
-import WishlistPage from "@/pages/wishlist-page";
-import CategoryPage from "@/pages/category-page";
-import HowItWorksPage from "@/pages/how-it-works-page";
-import RentalsPage from "@/pages/rentals-page";
-import RentalAgreementPage from "@/pages/rental-agreement-page";
-import NotFound from "@/pages/not-found";
+import HomePage from "./pages/home-page";
+import AuthPage from "./pages/auth-page";
+import FirebaseAuthPage from "./pages/firebase-auth-page";
+import ProductsPage from "./pages/products-page";
+import ProductDetailPage from "./pages/product-detail-page";
+import CartPage from "./pages/cart-page";
+import WishlistPage from "./pages/wishlist-page";
+import CategoryPage from "./pages/category-page";
+import HowItWorksPage from "./pages/how-it-works-page";
+import RentalsPage from "./pages/rentals-page";
+import RentalAgreementPage from "./pages/rental-agreement-page";
+import NotFound from "./pages/not-found";
 
 function Router() {
   return (

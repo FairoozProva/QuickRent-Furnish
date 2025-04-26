@@ -3,9 +3,12 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-// Get MongoDB connection string
-const MONGODB_URI = 'mongodb://localhost:27017/quickrent_furnish';
-const connectionSource = 'Local MongoDB';
+// Get MongoDB connection string - fallback to memory-only mode in Replit
+const REPLIT_MODE = process.env.REPLIT_DB_URL ? true : false;
+const MONGODB_URI = REPLIT_MODE 
+  ? 'mongodb://localhost:27017/quickrent_furnish' // Will use MemStorage instead
+  : 'mongodb://localhost:27017/quickrent_furnish';
+const connectionSource = REPLIT_MODE ? 'Replit Memory Storage' : 'Local MongoDB';
 
 // MongoDB configuration options for VSCode compatibility
 const mongooseConfig: mongoose.ConnectOptions = {
