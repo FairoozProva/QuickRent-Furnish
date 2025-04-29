@@ -4,17 +4,16 @@ import { Express } from "express";
 import session from "express-session";
 import { scrypt, randomBytes, timingSafeEqual } from "crypto";
 import { promisify } from "util";
-import { MongoDBStorage } from "./mongo-storage";
-
-const storage = new MongoDBStorage();
+import { storage } from "./storage";
 
 declare global {
   namespace Express {
     interface User {
-      _id: string;
+      _id?: string;
+      id?: string;
       username: string;
-      name: string;
-      email: string;
+      name?: string;
+      email?: string;
       password: string;
       createdAt: Date;
     }
@@ -127,7 +126,7 @@ export function setupAuth(app: Express) {
     if (!req.isAuthenticated()) return res.sendStatus(401);
     
     // Remove password from response
-    const userResponse = { ...req.user };
+    const userResponse = { ...req.user } as any;
     delete userResponse.password;
     
     res.json(userResponse);

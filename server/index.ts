@@ -16,18 +16,24 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Add MIME type configuration middleware
+// Enhanced MIME type configuration middleware
 app.use((req, res, next) => {
   const path = req.path;
   
   // Properly set Content-Type for JavaScript module files
-  if (path.endsWith('.js') || path.endsWith('.jsx') || path.endsWith('.ts') || path.endsWith('.tsx')) {
+  if (path.endsWith('.js') || path.endsWith('.jsx') || path.endsWith('.mjs')) {
     res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
+  } else if (path.endsWith('.ts') || path.endsWith('.tsx')) {
+    res.setHeader('Content-Type', 'application/typescript; charset=utf-8');
   } else if (path.endsWith('.css')) {
     res.setHeader('Content-Type', 'text/css; charset=utf-8');
   } else if (path.endsWith('.json')) {
     res.setHeader('Content-Type', 'application/json; charset=utf-8');
   }
+  
+  // Add security and caching headers for better performance
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  
   next();
 });
 

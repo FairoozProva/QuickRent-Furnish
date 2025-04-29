@@ -324,5 +324,5 @@ export class MemStorage implements IStorage {
   }
 }
 
-// Create and export the MongoDB storage instance
-export const storage: IStorage = new MongoDBStorage();
+// Create and export the storage instance - using MemStorage temporarily
+export const storage: IStorage = new MemStorage();

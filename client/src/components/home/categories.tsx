@@ -24,21 +24,32 @@ interface ProductSection {
   category: string;
 }
 
+// Import image assets properly using the @assets alias
+import sofaSet1 from "@assets/Sofa Set 1.jpeg";
+import bed1 from "@assets/Bed 1.jpeg";
+import diningTable from "@assets/Dining Table.jpeg";
+import studyTable1 from "@assets/Study Table 1.jpeg";
+import kitchen from "@assets/kitchen.jpeg";
+import officeRoom from "@assets/Office Room Setup.jpeg";
+import sofaSet5 from "@assets/Sofa Set 5.jpeg";
+import bed4 from "@assets/Bed 4.jpeg";
+import studyTable3 from "@assets/Study Table 3.jpeg";
+
 const productSections: ProductSection[] = [
-  { title: "Sofa Sets", description: "Comfortable and stylish living room furniture", imageUrl: "/src/assets/Sofa Set 1.jpeg", category: "sofa-set" },
-  { title: "Bedroom", description: "Cozy and elegant bedroom furniture", imageUrl: "/src/assets/Bed 1.jpeg", category: "bedroom" },
-  { title: "Dining", description: "Beautiful dining room collections", imageUrl: "/src/assets/Dining Table.jpeg", category: "dining" },
-  { title: "Study", description: "Functional study and office furniture", imageUrl: "/src/assets/Study Table 1.jpeg", category: "study" },
-  { title: "Kitchen", description: "Essential kitchen furniture and storage", imageUrl: "/src/assets/kitchen.jpeg", category: "kitchen" },
-  { title: "Office", description: "Professional office furniture solutions", imageUrl: "/src/assets/Office Room Setup.jpeg", category: "office" }
+  { title: "Sofa Sets", description: "Comfortable and stylish living room furniture", imageUrl: sofaSet1, category: "sofa-set" },
+  { title: "Bedroom", description: "Cozy and elegant bedroom furniture", imageUrl: bed1, category: "bedroom" },
+  { title: "Dining", description: "Beautiful dining room collections", imageUrl: diningTable, category: "dining" },
+  { title: "Study", description: "Functional study and office furniture", imageUrl: studyTable1, category: "study" },
+  { title: "Kitchen", description: "Essential kitchen furniture and storage", imageUrl: kitchen, category: "kitchen" },
+  { title: "Office", description: "Professional office furniture solutions", imageUrl: officeRoom, category: "office" }
 ];
 const predefinedCategories: PredefinedCategory[] = [
-  { id: 1, name: "Living Room", slug: "living-room", imageUrl: "/src/assets/Sofa Set 5.jpeg" },
-  { id: 2, name: "Bedroom", slug: "bedroom", imageUrl: "/src/assets/Bed 4.jpeg" },
-  { id: 3, name: "Dining", slug: "dining", imageUrl: "/src/assets/Dining Table.jpeg" },
-  { id: 4, name: "Office", slug: "office", imageUrl: "/src/assets/Office Room Setup.jpeg" },
-  { id: 5, name: "Kitchen", slug: "kitchen", imageUrl: "/src/assets/kitchen.jpeg" },
-  { id: 6, name: "Study", slug: "study", imageUrl: "/src/assets/Study Table 3.jpeg" }
+  { id: 1, name: "Living Room", slug: "living-room", imageUrl: sofaSet5 },
+  { id: 2, name: "Bedroom", slug: "bedroom", imageUrl: bed4 },
+  { id: 3, name: "Dining", slug: "dining", imageUrl: diningTable },
+  { id: 4, name: "Office", slug: "office", imageUrl: officeRoom },
+  { id: 5, name: "Kitchen", slug: "kitchen", imageUrl: kitchen },
+  { id: 6, name: "Study", slug: "study", imageUrl: studyTable3 }
 ];
 
 interface AboutSection {
@@ -48,12 +59,12 @@ interface AboutSection {
 }
 
 const aboutSections: AboutSection[] = [
-  { title: "Our Mission", imageUrl: "/src/assets/Sofa Set 5.jpeg", description: "We provide high-quality furniture rentals" },
-  { title: "Quality First", imageUrl: "/src/assets/Bed 4.jpeg", description: "Premium furniture for every home" },
-  { title: "Easy Process", imageUrl: "/src/assets/Dining Table.jpeg", description: "Simple rental process for your convenience" },
-  { title: "Customer Care", imageUrl: "/src/assets/Office Room Setup.jpeg", description: "24/7 support for all your needs" },
-  { title: "Affordable", imageUrl: "/src/assets/kitchen.jpeg", description: "Budget-friendly rental options" },
-  { title: "Fast Delivery", imageUrl: "/src/assets/Study Table 3.jpeg", description: "Quick and reliable delivery service" }
+  { title: "Our Mission", imageUrl: sofaSet5, description: "We provide high-quality furniture rentals" },
+  { title: "Quality First", imageUrl: bed4, description: "Premium furniture for every home" },
+  { title: "Easy Process", imageUrl: diningTable, description: "Simple rental process for your convenience" },
+  { title: "Customer Care", imageUrl: officeRoom, description: "24/7 support for all your needs" },
+  { title: "Affordable", imageUrl: kitchen, description: "Budget-friendly rental options" },
+  { title: "Fast Delivery", imageUrl: studyTable3, description: "Quick and reliable delivery service" }
 ];
 
 type MergedCategory = PredefinedCategory | Category;
