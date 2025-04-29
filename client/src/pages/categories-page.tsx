@@ -39,8 +39,7 @@ export default function CategoriesPage() {
                   </div>
                   <h3 className="text-xl font-semibold mb-2">{category.name}</h3>
                   <p className="text-gray-600 mb-4 flex-grow">{category.description}</p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-500">{category.itemCount} items</span>
+                  <div className="flex items-center justify-end">
                     <div className="flex items-center text-primary">
                       <span className="mr-2">View Products</span>
                       <ArrowRight size={16} />
