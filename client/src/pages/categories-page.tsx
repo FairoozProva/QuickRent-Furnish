@@ -3,49 +3,44 @@ import { Link } from "wouter";
 import { ArrowRight } from "lucide-react";
 
 export default function CategoriesPage() {
-  // Define some sample categories with images
+
+  // Define some sample categories
   const categories = [
     { 
       id: 1, 
       name: "Living Room", 
       slug: "living-room", 
-      description: "Comfortable sofas, coffee tables, and more for your living room", 
-      imageUrl: "/attached_assets/image_1745943012980.png" 
+      description: "Comfortable sofas, coffee tables, and more for your living room"
     },
     { 
       id: 2, 
       name: "Bedroom", 
       slug: "bedroom", 
-      description: "Beds, nightstands, and other bedroom essentials", 
-      imageUrl: "/attached_assets/image_1745943307745.png" 
+      description: "Beds, nightstands, and other bedroom essentials"
     },
     { 
       id: 3, 
       name: "Dining", 
       slug: "dining", 
-      description: "Dining tables, chairs, and dining room accessories", 
-      imageUrl: "/attached_assets/image_1745943673036.png" 
+      description: "Dining tables, chairs, and dining room accessories"
     },
     { 
       id: 4, 
       name: "Office", 
       slug: "office", 
-      description: "Desks, office chairs, and work-from-home solutions", 
-      imageUrl: "/attached_assets/image_1745943739669.png" 
+      description: "Desks, office chairs, and work-from-home solutions"
     },
     { 
       id: 5, 
       name: "Study", 
       slug: "study", 
-      description: "Bookshelves, reading desks, and study room accessories", 
-      imageUrl: "/attached_assets/image_1745943903821.png" 
+      description: "Bookshelves, reading desks, and study room accessories"
     },
     { 
       id: 6, 
       name: "Kids", 
       slug: "kids", 
-      description: "Furniture for children's rooms and play areas", 
-      imageUrl: "/attached_assets/image_1745945403668.png" 
+      description: "Furniture for children's rooms and play areas"
     },
   ];
 
