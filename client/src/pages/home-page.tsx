@@ -46,7 +46,7 @@ export default function HomePage() {
       name: "Kids", 
       slug: "kids", 
       description: "Furniture for children's rooms and play areas",
-      imageUrl: "/src/assets/Bed 1.jpeg" 
+      imageUrl: "/attached_assets/image_1745945403668.png" 
     },
   ];
 
@@ -76,8 +76,8 @@ export default function HomePage() {
             </div>
             <div className="flex-1 flex justify-center">
               <img 
-                src="/attached_assets/image_1745942846416.png" 
-                alt="Quick Rental Process" 
+                src="/attached_assets/image_1745945348014.png" 
+                alt="Comfortable Sofa" 
                 className="w-full max-w-md rounded-lg shadow-lg"
               />
             </div>

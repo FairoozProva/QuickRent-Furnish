@@ -45,7 +45,7 @@ export default function CategoriesPage() {
       name: "Kids", 
       slug: "kids", 
       description: "Furniture for children's rooms and play areas", 
-      imageUrl: "/src/assets/Bed 1.jpeg" 
+      imageUrl: "/attached_assets/image_1745945403668.png" 
     },
   ];
 
