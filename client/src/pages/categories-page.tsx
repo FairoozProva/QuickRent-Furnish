@@ -1,78 +1,99 @@
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import Navbar from "@/components/ui/navbar";
 import { Link } from "wouter";
-import MainLayout from "@/components/layout/main-layout";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
-
-type Category = {
-  _id: string;
-  name: string;
-  slug: string;
-  description: string;
-  imageUrl: string;
-};
+import { ArrowRight } from "lucide-react";
 
 export default function CategoriesPage() {
-  const { data: categories, isLoading, error } = useQuery<Category[]>({
-    queryKey: ['/api/categories'],
-  });
+  // Define some sample categories
+  const categories = [
+    { id: 1, name: "Living Room", slug: "living-room", description: "Comfortable sofas, coffee tables, and more for your living room", itemCount: 24 },
+    { id: 2, name: "Bedroom", slug: "bedroom", description: "Beds, nightstands, and other bedroom essentials", itemCount: 18 },
+    { id: 3, name: "Dining", slug: "dining", description: "Dining tables, chairs, and dining room accessories", itemCount: 15 },
+    { id: 4, name: "Office", slug: "office", description: "Desks, office chairs, and work-from-home solutions", itemCount: 22 },
+    { id: 5, name: "Outdoor", slug: "outdoor", description: "Patio furniture, outdoor dining sets, and garden accessories", itemCount: 12 },
+    { id: 6, name: "Kids", slug: "kids", description: "Furniture for children's rooms and play areas", itemCount: 14 },
+    { id: 7, name: "Storage", slug: "storage", description: "Bookcases, shelves, and storage solutions", itemCount: 19 },
+    { id: 8, name: "Decor", slug: "decor", description: "Lamps, rugs, mirrors, and decorative items", itemCount: 31 },
+  ];
 
   return (
-    <MainLayout>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="text-center mb-10">
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-gray-900 mb-4">
-            Browse by Category
-          </h1>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Explore our furniture collection by category to find the perfect pieces for your home or office space.
+    <div className="flex flex-col min-h-screen">
+      <Navbar />
+      
+      {/* Header */}
+      <div className="bg-gradient-to-r from-blue-100 to-indigo-100 py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">All Categories</h1>
+          <p className="text-lg text-gray-700">
+            Browse our complete range of furniture categories to find what you're looking for
           </p>
         </div>
-
-        {error ? (
-          <div className="bg-red-50 border border-red-200 text-red-700 p-4 rounded-lg">
-            <p>Failed to load categories. Please try again later.</p>
-          </div>
-        ) : isLoading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[...Array(6)].map((_, index) => (
-              <div key={index} className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
-                <Skeleton className="h-48 w-full" />
-                <div className="p-4">
-                  <Skeleton className="h-6 w-2/3 mb-2" />
-                  <Skeleton className="h-4 w-full mb-4" />
-                  <Skeleton className="h-9 w-28" />
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {categories?.map((category) => (
-              <Card key={category._id} className="overflow-hidden hover:shadow-md transition-shadow">
-                <div className="relative h-48 overflow-hidden">
-                  <img 
-                    src={category.imageUrl} 
-                    alt={category.name} 
-                    className="w-full h-full object-cover object-center transform hover:scale-105 transition-transform duration-300"
-                  />
-                </div>
-                <CardContent className="p-5">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">{category.name}</h3>
-                  <p className="text-gray-600 mb-4 line-clamp-2">{category.description}</p>
-                  <Button asChild className="w-full">
-                    <Link href={`/category/${category.slug}`}>
-                      View Products
-                    </Link>
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        )}
       </div>
-    </MainLayout>
+      
+      {/* Categories Grid */}
+      <div className="py-12 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {categories.map((category) => (
+              <Link href={`/category/${category.slug}`} key={category.id}>
+                <div className="bg-gray-50 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow cursor-pointer h-full flex flex-col">
+                  <div className="h-48 bg-gray-200 rounded-md mb-4 flex items-center justify-center">
+                    <span className="text-gray-500 font-medium">{category.name}</span>
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2">{category.name}</h3>
+                  <p className="text-gray-600 mb-4 flex-grow">{category.description}</p>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-500">{category.itemCount} items</span>
+                    <div className="flex items-center text-primary">
+                      <span className="mr-2">View Products</span>
+                      <ArrowRight size={16} />
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+      
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white py-12 mt-auto">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row justify-between">
+            <div className="mb-8 md:mb-0">
+              <h2 className="text-xl font-bold mb-4">QuickRent Furnish</h2>
+              <p className="text-gray-400 max-w-xs">
+                Premium furniture rental solutions for homes and offices
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
+              <div>
+                <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+                <ul className="space-y-2">
+                  <li><Link href="/" className="text-gray-400 hover:text-white transition-colors">Home</Link></li>
+                  <li><Link href="/products" className="text-gray-400 hover:text-white transition-colors">Products</Link></li>
+                  <li><Link href="/categories" className="text-gray-400 hover:text-white transition-colors">Categories</Link></li>
+                  <li><Link href="/how-it-works" className="text-gray-400 hover:text-white transition-colors">How It Works</Link></li>
+                </ul>
+              </div>
+              
+              <div>
+                <h3 className="text-lg font-semibold mb-4">Support</h3>
+                <ul className="space-y-2">
+                  <li><Link href="#" className="text-gray-400 hover:text-white transition-colors">FAQ</Link></li>
+                  <li><Link href="#" className="text-gray-400 hover:text-white transition-colors">Contact Us</Link></li>
+                  <li><Link href="#" className="text-gray-400 hover:text-white transition-colors">Terms of Service</Link></li>
+                  <li><Link href="#" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</Link></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <div className="border-t border-gray-800 mt-8 pt-8 text-center md:text-left">
+            <p className="text-gray-400">© 2023 QuickRent Furnish. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
+    </div>
   );
 }

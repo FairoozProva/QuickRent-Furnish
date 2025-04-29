@@ -1,47 +1,11 @@
-import { Switch, Route, Link } from "wouter";
+import { Switch, Route } from "wouter";
 
-// Simple page components for testing navigation
-function SimplePage({ title }: { title: string }) {
-  return (
-    <div style={{ padding: "20px" }}>
-      <h1>{title}</h1>
-      <SimpleNavigation />
-    </div>
-  );
-}
-
-function SimpleNavigation() {
-  return (
-    <nav style={{ marginBottom: "20px" }}>
-      <ul style={{ display: "flex", gap: "20px", listStyle: "none", padding: 0 }}>
-        <li><Link href="/">Home</Link></li>
-        <li><Link href="/products">Products</Link></li>
-        <li><Link href="/categories">Categories</Link></li>
-        <li><Link href="/how-it-works">How It Works</Link></li>
-      </ul>
-    </nav>
-  );
-}
-
-function HomePage() {
-  return <SimplePage title="Home Page" />;
-}
-
-function ProductsPage() {
-  return <SimplePage title="Products Page" />;
-}
-
-function CategoriesPage() {
-  return <SimplePage title="Categories Page" />;
-}
-
-function HowItWorksPage() {
-  return <SimplePage title="How It Works Page" />;
-}
-
-function NotFound() {
-  return <SimplePage title="404 - Page Not Found" />;
-}
+// Import our pages
+import HomePage from "./pages/home-page";
+import ProductsPage from "./pages/products-page";
+import CategoriesPage from "./pages/categories-page";
+import HowItWorksPage from "./pages/how-it-works-page";
+import NotFound from "./pages/not-found";
 
 function App() {
   return (
