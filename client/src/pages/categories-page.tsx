@@ -4,49 +4,49 @@ import { ArrowRight } from "lucide-react";
 
 export default function CategoriesPage() {
 
-  // Define some sample categories with colors instead of images
+  // Define some sample categories with image URLs
   const categories = [
     { 
       id: 1, 
       name: "Living Room", 
       slug: "living-room", 
       description: "Comfortable sofas, coffee tables, and more for your living room",
-      color: "bg-blue-100"
+      imageUrl: "/images/Sofa Set 1.jpeg"
     },
     { 
       id: 2, 
       name: "Bedroom", 
       slug: "bedroom", 
       description: "Beds, nightstands, and other bedroom essentials",
-      color: "bg-green-100"
+      imageUrl: "/images/Bed 3.jpeg"
     },
     { 
       id: 3, 
       name: "Dining", 
       slug: "dining", 
       description: "Dining tables, chairs, and dining room accessories",
-      color: "bg-yellow-100"
+      imageUrl: "/images/Dining Table.jpeg"
     },
     { 
       id: 4, 
       name: "Office", 
       slug: "office", 
       description: "Desks, office chairs, and work-from-home solutions",
-      color: "bg-red-100"
+      imageUrl: "/images/Office Room Setup.jpeg"
     },
     { 
       id: 5, 
       name: "Study", 
       slug: "study", 
       description: "Bookshelves, reading desks, and study room accessories",
-      color: "bg-purple-100"
+      imageUrl: "/images/Study Table 3.jpeg"
     },
     { 
       id: 6, 
       name: "Kids", 
       slug: "kids", 
       description: "Furniture for children's rooms and play areas",
-      color: "bg-pink-100"
+      imageUrl: "/images/Bed 1.jpeg"
     },
   ];
 
@@ -71,8 +71,12 @@ export default function CategoriesPage() {
             {categories.map((category) => (
               <Link href={`/category/${category.slug}`} key={category.id}>
                 <div className="bg-gray-50 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow cursor-pointer h-full flex flex-col">
-                  <div className={`h-48 ${category.color} rounded-md mb-4 flex items-center justify-center overflow-hidden`}>
-                    <h2 className="text-xl font-bold text-gray-800">{category.name}</h2>
+                  <div className="h-48 rounded-md mb-4 overflow-hidden">
+                    <img 
+                      src={category.imageUrl} 
+                      alt={category.name} 
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                   <h3 className="text-xl font-semibold mb-2">{category.name}</h3>
                   <p className="text-gray-600 mb-4 flex-grow">{category.description}</p>

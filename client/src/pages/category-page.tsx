@@ -8,48 +8,48 @@ export default function CategoryPage() {
   const [, params] = useRoute("/category/:slug");
   const slug = params?.slug;
 
-  // Define sample products for all categories with colored backgrounds instead of images
+  // Define sample products for all categories with image URLs
   const allProducts = {
     'living-room': [
-      { id: 1, name: "Modern Sofa", category: "Living Room", price: 45, duration: "per month", sku: "LV-S001", color: "bg-blue-100" },
-      { id: 2, name: "L-Shaped Sofa", category: "Living Room", price: 55, duration: "per month", sku: "LV-S002", color: "bg-blue-200" },
-      { id: 3, name: "Corner Sofa", category: "Living Room", price: 60, duration: "per month", sku: "LV-CS001", color: "bg-blue-300" },
-      { id: 4, name: "Sectional Sofa", category: "Living Room", price: 50, duration: "per month", sku: "LV-S003", color: "bg-blue-100" },
-      { id: 5, name: "Comfortable Sofa", category: "Living Room", price: 48, duration: "per month", sku: "LV-S004", color: "bg-blue-200" },
-      { id: 6, name: "Double Sofa", category: "Living Room", price: 52, duration: "per month", sku: "LV-S005", color: "bg-blue-300" },
+      { id: 1, name: "Modern Sofa", category: "Living Room", price: 45, duration: "per month", sku: "LV-S001", imageUrl: "/images/Sofa Set 1.jpeg" },
+      { id: 2, name: "L-Shaped Sofa", category: "Living Room", price: 55, duration: "per month", sku: "LV-S002", imageUrl: "/images/Sofa Set 2.jpeg" },
+      { id: 3, name: "Corner Sofa", category: "Living Room", price: 60, duration: "per month", sku: "LV-CS001", imageUrl: "/images/Sofa Set 3.jpeg" },
+      { id: 4, name: "Sectional Sofa", category: "Living Room", price: 50, duration: "per month", sku: "LV-S003", imageUrl: "/images/Sofa Set 4.jpeg" },
+      { id: 5, name: "Comfortable Sofa", category: "Living Room", price: 48, duration: "per month", sku: "LV-S004", imageUrl: "/images/Sofa Set 5.jpeg" },
+      { id: 6, name: "Double Sofa", category: "Living Room", price: 52, duration: "per month", sku: "LV-S005", imageUrl: "/images/Sofa Set 6.jpeg" },
     ],
     'bedroom': [
-      { id: 7, name: "Kid's Bed", category: "Bedroom", price: 30, duration: "per month", sku: "BD-B001", color: "bg-green-100" },
-      { id: 8, name: "Single Bed", category: "Bedroom", price: 28, duration: "per month", sku: "BD-B002", color: "bg-green-200" },
-      { id: 9, name: "Double Bed", category: "Bedroom", price: 35, duration: "per month", sku: "BD-B003", color: "bg-green-300" },
-      { id: 10, name: "Queen Bed Frame", category: "Bedroom", price: 42, duration: "per month", sku: "BD-B004", color: "bg-green-100" },
-      { id: 11, name: "Boho Bed", category: "Bedroom", price: 45, duration: "per month", sku: "BD-B005", color: "bg-green-200" },
+      { id: 7, name: "Kid's Bed", category: "Bedroom", price: 30, duration: "per month", sku: "BD-B001", imageUrl: "/images/Bed 1.jpeg" },
+      { id: 8, name: "Single Bed", category: "Bedroom", price: 28, duration: "per month", sku: "BD-B002", imageUrl: "/images/Bed 2.jpeg" },
+      { id: 9, name: "Double Bed", category: "Bedroom", price: 35, duration: "per month", sku: "BD-B003", imageUrl: "/images/Bed 3.jpeg" },
+      { id: 10, name: "Queen Bed Frame", category: "Bedroom", price: 42, duration: "per month", sku: "BD-B004", imageUrl: "/images/Bed 4.jpeg" },
+      { id: 11, name: "Boho Bed", category: "Bedroom", price: 45, duration: "per month", sku: "BD-B005", imageUrl: "/images/Boho Bed.jpeg" },
     ],
     'dining': [
-      { id: 12, name: "Dining Table", category: "Dining", price: 38, duration: "per month", sku: "DN-T001", color: "bg-yellow-100" },
-      { id: 13, name: "Round Dining Table", category: "Dining", price: 42, duration: "per month", sku: "DN-T002", color: "bg-yellow-200" },
-      { id: 14, name: "Boho Dining Table", category: "Dining", price: 45, duration: "per month", sku: "DN-T003", color: "bg-yellow-300" },
-      { id: 15, name: "Dark Wood Dining Table", category: "Dining", price: 48, duration: "per month", sku: "DN-T004", color: "bg-yellow-100" },
+      { id: 12, name: "Dining Table", category: "Dining", price: 38, duration: "per month", sku: "DN-T001", imageUrl: "/images/Dining Table.jpeg" },
+      { id: 13, name: "Round Dining Table", category: "Dining", price: 42, duration: "per month", sku: "DN-T002", imageUrl: "/images/Round Dining Table.jpeg" },
+      { id: 14, name: "Boho Dining Table", category: "Dining", price: 45, duration: "per month", sku: "DN-T003", imageUrl: "/images/Modern Boho Dining Table.jpeg" },
+      { id: 15, name: "Dark Wood Dining Table", category: "Dining", price: 48, duration: "per month", sku: "DN-T004", imageUrl: "/images/Stunning Dark Dining Wood Table.jpeg" },
     ],
     'office': [
-      { id: 16, name: "Office Setup", category: "Office", price: 80, duration: "per month", sku: "OF-S001", color: "bg-red-100" },
-      { id: 17, name: "Modern Office Chair", category: "Office", price: 35, duration: "per month", sku: "OF-C001", color: "bg-red-200" },
-      { id: 18, name: "Neutral Office Chair", category: "Office", price: 32, duration: "per month", sku: "OF-C002", color: "bg-red-300" },
-      { id: 19, name: "Laptop Chair", category: "Office", price: 28, duration: "per month", sku: "OF-C003", color: "bg-red-100" },
-      { id: 20, name: "Executive Desk", category: "Office", price: 50, duration: "per month", sku: "OF-D001", color: "bg-red-200" },
+      { id: 16, name: "Office Setup", category: "Office", price: 80, duration: "per month", sku: "OF-S001", imageUrl: "/images/Office Room Setup.jpeg" },
+      { id: 17, name: "Modern Office Chair", category: "Office", price: 35, duration: "per month", sku: "OF-C001", imageUrl: "/images/Modern Office Chair.jpeg" },
+      { id: 18, name: "Neutral Office Chair", category: "Office", price: 32, duration: "per month", sku: "OF-C002", imageUrl: "/images/Neutral Office Chair.jpeg" },
+      { id: 19, name: "Laptop Chair", category: "Office", price: 28, duration: "per month", sku: "OF-C003", imageUrl: "/images/Comfortable Office Chairs for Laptop Users.jpeg" },
+      { id: 20, name: "Executive Desk", category: "Office", price: 50, duration: "per month", sku: "OF-D001", imageUrl: "/images/Large Executive Desk With File Cabinet.jpeg" },
     ],
     'study': [
-      { id: 21, name: "Study Table 1", category: "Study", price: 35, duration: "per month", sku: "ST-T001", color: "bg-purple-100" },
-      { id: 22, name: "Study Table 2", category: "Study", price: 38, duration: "per month", sku: "ST-T002", color: "bg-purple-200" },
-      { id: 23, name: "Study Table 3", category: "Study", price: 32, duration: "per month", sku: "ST-T003", color: "bg-purple-300" },
-      { id: 24, name: "Study Table 4", category: "Study", price: 30, duration: "per month", sku: "ST-T004", color: "bg-purple-100" },
-      { id: 25, name: "Study Table 5", category: "Study", price: 36, duration: "per month", sku: "ST-T005", color: "bg-purple-200" },
+      { id: 21, name: "Study Table 1", category: "Study", price: 35, duration: "per month", sku: "ST-T001", imageUrl: "/images/Study Table 1.jpeg" },
+      { id: 22, name: "Study Table 2", category: "Study", price: 38, duration: "per month", sku: "ST-T002", imageUrl: "/images/Study Table 2.jpeg" },
+      { id: 23, name: "Study Table 3", category: "Study", price: 32, duration: "per month", sku: "ST-T003", imageUrl: "/images/Study Table 3.jpeg" },
+      { id: 24, name: "Study Table 4", category: "Study", price: 30, duration: "per month", sku: "ST-T004", imageUrl: "/images/Study Table 4.jpeg" },
+      { id: 25, name: "Study Table 5", category: "Study", price: 36, duration: "per month", sku: "ST-T005", imageUrl: "/images/Study Table 5.jpeg" },
     ],
     'kids': [
-      { id: 26, name: "Kid's Bed", category: "Kids", price: 30, duration: "per month", sku: "KD-B001", color: "bg-pink-100" },
-      { id: 27, name: "Study Desk for Kids", category: "Kids", price: 25, duration: "per month", sku: "KD-SD001", color: "bg-pink-200" },
-      { id: 28, name: "Kid's Bed with Storage", category: "Kids", price: 35, duration: "per month", sku: "KD-B002", color: "bg-pink-300" },
-      { id: 30, name: "Kid's Study Table", category: "Kids", price: 22, duration: "per month", sku: "KD-SD002", color: "bg-pink-100" },
+      { id: 26, name: "Kid's Bed", category: "Kids", price: 30, duration: "per month", sku: "KD-B001", imageUrl: "/images/Bed 1.jpeg" },
+      { id: 27, name: "Study Desk for Kids", category: "Kids", price: 25, duration: "per month", sku: "KD-SD001", imageUrl: "/images/Study Table 1.jpeg" },
+      { id: 28, name: "Kid's Bed with Storage", category: "Kids", price: 35, duration: "per month", sku: "KD-B002", imageUrl: "/images/Bed 2.jpeg" },
+      { id: 30, name: "Kid's Study Table", category: "Kids", price: 22, duration: "per month", sku: "KD-SD002", imageUrl: "/images/Study Table 2.jpeg" },
     ],
   };
   
@@ -106,8 +106,12 @@ export default function CategoryPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {products.map((product) => (
                 <div key={product.id} className="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden">
-                  <div className={`h-48 ${product.color} flex items-center justify-center overflow-hidden`}>
-                    <h2 className="text-xl font-bold text-gray-800">{product.name}</h2>
+                  <div className="h-48 overflow-hidden">
+                    <img 
+                      src={product.imageUrl} 
+                      alt={product.name} 
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                   <div className="p-4">
                     <h3 className="text-lg font-semibold mb-1">{product.name}</h3>
