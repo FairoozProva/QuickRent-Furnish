@@ -2,51 +2,52 @@ import Navbar from "@/components/ui/navbar";
 import { Link } from "wouter";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { imageUrls } from "../lib/image-urls";
 
 export default function HomePage() {
-  // Define some sample categories for the home page with images
+  // Define categories with images for the home page
   const categories = [
-    { 
-      id: 1, 
-      name: "Living Room", 
-      slug: "living-room", 
+    {
+      id: 1,
+      name: "Living Room",
+      slug: "living-room",
       description: "Comfortable sofas, coffee tables, and more",
-      imageUrl: "/src/assets/Sofa Set 4.jpeg" 
+      imageUrl: imageUrls.sofaImage4
     },
-    { 
-      id: 2, 
-      name: "Bedroom", 
-      slug: "bedroom", 
+    {
+      id: 2,
+      name: "Bedroom",
+      slug: "bedroom",
       description: "Beds, nightstands, and other bedroom essentials",
-      imageUrl: "/src/assets/Boho Bed.jpeg" 
+      imageUrl: imageUrls.bohoBedImage
     },
-    { 
-      id: 3, 
-      name: "Dining", 
-      slug: "dining", 
+    {
+      id: 3,
+      name: "Dining",
+      slug: "dining",
       description: "Dining tables, chairs, and dining room accessories",
-      imageUrl: "/src/assets/Modern Boho Dining Table.jpeg" 
+      imageUrl: imageUrls.bohoDiningTableImage
     },
-    { 
-      id: 4, 
-      name: "Office", 
-      slug: "office", 
+    {
+      id: 4,
+      name: "Office",
+      slug: "office",
       description: "Desks, office chairs, and work-from-home solutions",
-      imageUrl: "/src/assets/Office Room Setup.jpeg" 
+      imageUrl: imageUrls.officeSetupImage
     },
-    { 
-      id: 5, 
-      name: "Study", 
-      slug: "study", 
+    {
+      id: 5,
+      name: "Study",
+      slug: "study",
       description: "Bookshelves, reading desks, and study room accessories",
-      imageUrl: "/src/assets/Study Table 1.jpeg" 
+      imageUrl: imageUrls.studyTable1Image
     },
-    { 
-      id: 6, 
-      name: "Kids", 
-      slug: "kids", 
+    {
+      id: 6,
+      name: "Kids",
+      slug: "kids",
       description: "Furniture for children's rooms and play areas",
-      imageUrl: "/src/assets/Bed 1.jpeg" 
+      imageUrl: imageUrls.bed1Image
     },
   ];
 

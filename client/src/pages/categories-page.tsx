@@ -1,6 +1,7 @@
 import Navbar from "@/components/ui/navbar";
 import { Link } from "wouter";
 import { ArrowRight } from "lucide-react";
+import { imageUrls } from "../lib/image-urls";
 
 export default function CategoriesPage() {
   // Define some sample categories with images
@@ -10,42 +11,42 @@ export default function CategoriesPage() {
       name: "Living Room", 
       slug: "living-room", 
       description: "Comfortable sofas, coffee tables, and more for your living room", 
-      imageUrl: "/src/assets/Sofa Set 4.jpeg" 
+      imageUrl: imageUrls.sofaImage4 
     },
     { 
       id: 2, 
       name: "Bedroom", 
       slug: "bedroom", 
       description: "Beds, nightstands, and other bedroom essentials", 
-      imageUrl: "/src/assets/Boho Bed.jpeg" 
+      imageUrl: imageUrls.bohoBedImage 
     },
     { 
       id: 3, 
       name: "Dining", 
       slug: "dining", 
       description: "Dining tables, chairs, and dining room accessories", 
-      imageUrl: "/src/assets/Modern Boho Dining Table.jpeg" 
+      imageUrl: imageUrls.bohoDiningTableImage 
     },
     { 
       id: 4, 
       name: "Office", 
       slug: "office", 
       description: "Desks, office chairs, and work-from-home solutions", 
-      imageUrl: "/src/assets/Office Room Setup.jpeg" 
+      imageUrl: imageUrls.officeSetupImage 
     },
     { 
       id: 5, 
       name: "Study", 
       slug: "study", 
       description: "Bookshelves, reading desks, and study room accessories", 
-      imageUrl: "/src/assets/Study Table 1.jpeg" 
+      imageUrl: imageUrls.studyTable1Image 
     },
     { 
       id: 6, 
       name: "Kids", 
       slug: "kids", 
       description: "Furniture for children's rooms and play areas", 
-      imageUrl: "/src/assets/Bed 1.jpeg" 
+      imageUrl: imageUrls.bed1Image 
     },
   ];
 
