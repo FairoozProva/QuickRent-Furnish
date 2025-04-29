@@ -39,11 +39,9 @@ export default function HomePage() {
               </div>
             </div>
             <div className="flex-1 flex justify-center">
-              <img 
-                src="/attached_assets/image_1745945348014.png" 
-                alt="Comfortable Sofa" 
-                className="w-full max-w-md rounded-lg shadow-lg"
-              />
+              <div className="w-full max-w-md h-80 rounded-lg shadow-lg bg-indigo-100 flex items-center justify-center">
+                <h3 className="text-2xl font-bold text-indigo-800">Premium Furniture</h3>
+              </div>
             </div>
           </div>
         </div>

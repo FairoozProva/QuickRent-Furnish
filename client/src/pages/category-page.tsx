@@ -107,7 +107,9 @@ export default function CategoryPage() {
               {products.map((product) => (
                 <div key={product.id} className="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden">
                   <div className="h-48 bg-gray-200 flex items-center justify-center overflow-hidden">
-                    <img src={product.imageUrl} alt={product.name} className="object-cover w-full h-full" />
+                    <div className="flex items-center justify-center h-full w-full">
+                      <h2 className="text-xl font-bold">{product.name}</h2>
+                    </div>
                   </div>
                   <div className="p-4">
                     <h3 className="text-lg font-semibold mb-1">{product.name}</h3>

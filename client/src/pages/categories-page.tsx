@@ -66,7 +66,7 @@ export default function CategoriesPage() {
               <Link href={`/category/${category.slug}`} key={category.id}>
                 <div className="bg-gray-50 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow cursor-pointer h-full flex flex-col">
                   <div className="h-48 bg-gray-200 rounded-md mb-4 flex items-center justify-center overflow-hidden">
-                    <img src={category.imageUrl} alt={category.name} className="object-cover w-full h-full" />
+                    <h2 className="text-xl font-bold">{category.name}</h2>
                   </div>
                   <h3 className="text-xl font-semibold mb-2">{category.name}</h3>
                   <p className="text-gray-600 mb-4 flex-grow">{category.description}</p>
