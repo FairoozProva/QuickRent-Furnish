@@ -72,8 +72,8 @@ export default function ProductsPage() {
                     />
                   </div>
                   <div className="flex justify-between text-sm text-gray-500 mt-1">
-                    <span>$0</span>
-                    <span>$100</span>
+                    <span>৳0</span>
+                    <span>৳100</span>
                   </div>
                 </div>
                 
@@ -100,7 +100,7 @@ export default function ProductsPage() {
                         </button>
                       </div>
                       <div className="flex justify-between items-center mt-3">
-                        <p className="text-xl font-bold">${product.price} <span className="text-sm font-normal text-gray-500">{product.duration}</span></p>
+                        <p className="text-xl font-bold">৳{product.price} <span className="text-sm font-normal text-gray-500">{product.duration}</span></p>
                         <Link href={`/product/${product.id}`}>
                           <Button size="sm">View Details</Button>
                         </Link>

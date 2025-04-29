@@ -37,27 +37,11 @@ export default function HomePage() {
               </div>
             </div>
             <div className="flex-1 flex justify-center">
-              <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-                <h3 className="text-xl font-semibold mb-2">Quick Rental Process</h3>
-                <ul className="space-y-3">
-                  <li className="flex items-start gap-2">
-                    <span className="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0 mt-0.5">1</span>
-                    <span>Browse and select your furniture</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0 mt-0.5">2</span>
-                    <span>Choose your rental period</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0 mt-0.5">3</span>
-                    <span>Delivery and setup at your location</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0 mt-0.5">4</span>
-                    <span>Return or extend your rental</span>
-                  </li>
-                </ul>
-              </div>
+              <img 
+                src="/attached_assets/image_1745942846416.png" 
+                alt="Quick Rental Process" 
+                className="w-full max-w-md rounded-lg shadow-lg"
+              />
             </div>
           </div>
         </div>
