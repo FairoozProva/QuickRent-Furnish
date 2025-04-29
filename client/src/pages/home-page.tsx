@@ -11,42 +11,42 @@ export default function HomePage() {
       name: "Living Room", 
       slug: "living-room", 
       description: "Comfortable sofas, coffee tables, and more",
-      imageUrl: "/src/assets/Sofa Set 4.jpeg" 
+      imageUrl: "https://static.replit.com/hosted-assets/attached_assets/image_1745943012980.png" 
     },
     { 
       id: 2, 
       name: "Bedroom", 
       slug: "bedroom", 
       description: "Beds, nightstands, and other bedroom essentials",
-      imageUrl: "/src/assets/Boho Bed.jpeg" 
+      imageUrl: "https://static.replit.com/hosted-assets/attached_assets/image_1745943307745.png" 
     },
     { 
       id: 3, 
       name: "Dining", 
       slug: "dining", 
       description: "Dining tables, chairs, and dining room accessories",
-      imageUrl: "/src/assets/Modern Boho Dining Table.jpeg" 
+      imageUrl: "https://static.replit.com/hosted-assets/attached_assets/image_1745943673036.png" 
     },
     { 
       id: 4, 
       name: "Office", 
       slug: "office", 
       description: "Desks, office chairs, and work-from-home solutions",
-      imageUrl: "/src/assets/Office Room Setup.jpeg" 
+      imageUrl: "https://static.replit.com/hosted-assets/attached_assets/image_1745943739669.png" 
     },
     { 
       id: 5, 
       name: "Study", 
       slug: "study", 
       description: "Bookshelves, reading desks, and study room accessories",
-      imageUrl: "/src/assets/Study Table 1.jpeg" 
+      imageUrl: "https://static.replit.com/hosted-assets/attached_assets/image_1745943903821.png" 
     },
     { 
       id: 6, 
       name: "Kids", 
       slug: "kids", 
       description: "Furniture for children's rooms and play areas",
-      imageUrl: "/attached_assets/image_1745945403668.png" 
+      imageUrl: "https://static.replit.com/hosted-assets/attached_assets/image_1745945403668.png" 
     },
   ];
 
@@ -76,7 +76,7 @@ export default function HomePage() {
             </div>
             <div className="flex-1 flex justify-center">
               <img 
-                src="/attached_assets/image_1745945348014.png" 
+                src="https://static.replit.com/hosted-assets/attached_assets/image_1745945348014.png" 
                 alt="Comfortable Sofa" 
                 className="w-full max-w-md rounded-lg shadow-lg"
               />
