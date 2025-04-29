@@ -4,43 +4,49 @@ import { ArrowRight } from "lucide-react";
 
 export default function CategoriesPage() {
 
-  // Define some sample categories
+  // Define some sample categories with colors instead of images
   const categories = [
     { 
       id: 1, 
       name: "Living Room", 
       slug: "living-room", 
-      description: "Comfortable sofas, coffee tables, and more for your living room"
+      description: "Comfortable sofas, coffee tables, and more for your living room",
+      color: "bg-blue-100"
     },
     { 
       id: 2, 
       name: "Bedroom", 
       slug: "bedroom", 
-      description: "Beds, nightstands, and other bedroom essentials"
+      description: "Beds, nightstands, and other bedroom essentials",
+      color: "bg-green-100"
     },
     { 
       id: 3, 
       name: "Dining", 
       slug: "dining", 
-      description: "Dining tables, chairs, and dining room accessories"
+      description: "Dining tables, chairs, and dining room accessories",
+      color: "bg-yellow-100"
     },
     { 
       id: 4, 
       name: "Office", 
       slug: "office", 
-      description: "Desks, office chairs, and work-from-home solutions"
+      description: "Desks, office chairs, and work-from-home solutions",
+      color: "bg-red-100"
     },
     { 
       id: 5, 
       name: "Study", 
       slug: "study", 
-      description: "Bookshelves, reading desks, and study room accessories"
+      description: "Bookshelves, reading desks, and study room accessories",
+      color: "bg-purple-100"
     },
     { 
       id: 6, 
       name: "Kids", 
       slug: "kids", 
-      description: "Furniture for children's rooms and play areas"
+      description: "Furniture for children's rooms and play areas",
+      color: "bg-pink-100"
     },
   ];
 
@@ -65,8 +71,8 @@ export default function CategoriesPage() {
             {categories.map((category) => (
               <Link href={`/category/${category.slug}`} key={category.id}>
                 <div className="bg-gray-50 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow cursor-pointer h-full flex flex-col">
-                  <div className="h-48 bg-gray-200 rounded-md mb-4 flex items-center justify-center overflow-hidden">
-                    <h2 className="text-xl font-bold">{category.name}</h2>
+                  <div className={`h-48 ${category.color} rounded-md mb-4 flex items-center justify-center overflow-hidden`}>
+                    <h2 className="text-xl font-bold text-gray-800">{category.name}</h2>
                   </div>
                   <h3 className="text-xl font-semibold mb-2">{category.name}</h3>
                   <p className="text-gray-600 mb-4 flex-grow">{category.description}</p>

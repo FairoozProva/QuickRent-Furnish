@@ -4,14 +4,14 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function HomePage() {
-  // Define some sample categories for the home page with images
+  // Define some sample categories for the home page
   const categories = [
-    { id: 1, name: "Living Room", slug: "living-room", description: "Comfortable sofas, coffee tables, and more", imageUrl: "/attached_assets/image_1745943012980.png" },
-    { id: 2, name: "Bedroom", slug: "bedroom", description: "Beds, nightstands, and other bedroom essentials", imageUrl: "/attached_assets/image_1745943307745.png" },
-    { id: 3, name: "Dining", slug: "dining", description: "Dining tables, chairs, and dining room accessories", imageUrl: "/attached_assets/image_1745943673036.png" },
-    { id: 4, name: "Office", slug: "office", description: "Desks, office chairs, and work-from-home solutions", imageUrl: "/attached_assets/image_1745943739669.png" },
-    { id: 5, name: "Study", slug: "study", description: "Bookshelves, reading desks, and study room accessories", imageUrl: "/attached_assets/image_1745943903821.png" },
-    { id: 6, name: "Kids", slug: "kids", description: "Furniture for children's rooms and play areas", imageUrl: "/attached_assets/image_1745945403668.png" },
+    { id: 1, name: "Living Room", slug: "living-room", description: "Comfortable sofas, coffee tables, and more", color: "bg-blue-100" },
+    { id: 2, name: "Bedroom", slug: "bedroom", description: "Beds, nightstands, and other bedroom essentials", color: "bg-green-100" },
+    { id: 3, name: "Dining", slug: "dining", description: "Dining tables, chairs, and dining room accessories", color: "bg-yellow-100" },
+    { id: 4, name: "Office", slug: "office", description: "Desks, office chairs, and work-from-home solutions", color: "bg-red-100" },
+    { id: 5, name: "Study", slug: "study", description: "Bookshelves, reading desks, and study room accessories", color: "bg-purple-100" },
+    { id: 6, name: "Kids", slug: "kids", description: "Furniture for children's rooms and play areas", color: "bg-pink-100" },
   ];
 
   return (
@@ -61,8 +61,8 @@ export default function HomePage() {
             {categories.map((category) => (
               <Link href={`/category/${category.slug}`} key={category.id}>
                 <div className="bg-gray-50 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow cursor-pointer h-full flex flex-col">
-                  <div className="h-40 bg-gray-200 rounded-md mb-4 flex items-center justify-center">
-                    <span className="text-gray-800 font-semibold text-xl">{category.name}</span>
+                  <div className={`h-40 ${category.color} rounded-md mb-4 flex items-center justify-center overflow-hidden`}>
+                    <h2 className="text-xl font-bold text-gray-800">{category.name}</h2>
                   </div>
                   <h3 className="text-xl font-semibold mb-2">{category.name}</h3>
                   <p className="text-gray-600 mb-4 flex-grow">{category.description}</p>
