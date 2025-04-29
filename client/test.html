@@ -3,233 +3,353 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CreativeCanvas Navigation Test</title>
+  <title>Creative Canvas - Furniture Rental</title>
   <style>
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-        Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #f8f9fa;
+      line-height: 1.6;
+      color: #333;
     }
-    
     .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-    
-    header {
-      background-color: white;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      padding: 15px 0;
-    }
-    
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 20px;
     }
-    
+    header {
+      background-color: #fff;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 0;
+    }
     .logo {
       font-size: 24px;
       font-weight: bold;
-      color: #333;
+      color: #3f51b5;
+      text-decoration: none;
     }
-    
-    .nav-links {
+    nav ul {
       display: flex;
       list-style: none;
+      margin: 0;
+      padding: 0;
     }
-    
-    .nav-links li {
-      margin: 0 15px;
+    nav ul li {
+      margin-left: 20px;
     }
-    
-    .nav-links a {
+    nav ul li a {
+      color: #333;
       text-decoration: none;
-      color: #555;
       font-weight: 500;
-      transition: color 0.3s;
+      padding: 5px 10px;
+      border-radius: 4px;
+      transition: all 0.3s ease;
     }
-    
-    .nav-links a:hover,
-    .nav-links a.active {
-      color: #007BFF;
+    nav ul li a:hover {
+      background-color: #f5f5f5;
+      color: #3f51b5;
     }
-    
+    .active {
+      color: #3f51b5;
+      font-weight: bold;
+    }
     .hero {
-      padding: 60px 20px;
+      background-color: #f9f9f9;
+      padding: 60px 0;
       text-align: center;
-      background-color: #e9ecef;
-      margin-bottom: 40px;
     }
-    
-    .hero h1 {
-      font-size: 48px;
-      margin-bottom: 20px;
-      color: #333;
-    }
-    
-    .hero p {
-      font-size: 20px;
-      color: #555;
-      max-width: 800px;
-      margin: 0 auto 30px;
-    }
-    
-    .categories {
-      padding: 40px 0;
-    }
-    
-    .categories h2 {
-      text-align: center;
-      margin-bottom: 40px;
+    h1 {
       font-size: 36px;
-      color: #333;
+      margin-bottom: 20px;
+      color: #2c3e50;
     }
-    
-    .category-grid {
+    .subtitle {
+      font-size: 18px;
+      color: #7f8c8d;
+      margin-bottom: 30px;
+    }
+    .btn {
+      display: inline-block;
+      background-color: #3f51b5;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: background-color 0.3s ease;
+    }
+    .btn:hover {
+      background-color: #303f9f;
+    }
+    .features {
+      padding: 60px 0;
+    }
+    .section-title {
+      text-align: center;
+      font-size: 28px;
+      margin-bottom: 50px;
+      color: #2c3e50;
+    }
+    .categories {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 30px;
+      margin-top: 30px;
     }
-    
     .category-card {
-      background: white;
       border-radius: 8px;
       overflow: hidden;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s, box-shadow 0.3s;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
     }
-    
     .category-card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
     }
-    
-    .category-image {
+    .category-img {
       height: 200px;
       background-size: cover;
       background-position: center;
     }
-    
     .category-content {
       padding: 20px;
     }
-    
-    .category-content h3 {
-      margin-top: 0;
-      font-size: 24px;
-      color: #333;
+    .category-title {
+      font-size: 20px;
+      margin-bottom: 10px;
+      color: #2c3e50;
     }
-    
-    .category-content p {
-      color: #666;
+    .category-description {
+      color: #7f8c8d;
+      margin-bottom: 15px;
+    }
+    footer {
+      background-color: #2c3e50;
+      color: #ecf0f1;
+      padding: 40px 0;
+    }
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+    }
+    .footer-column h3 {
+      font-size: 18px;
       margin-bottom: 20px;
+      color: #3498db;
     }
-    
-    .btn {
-      display: inline-block;
-      padding: 10px 20px;
-      background-color: #007BFF;
-      color: white;
+    .footer-column ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .footer-column ul li {
+      margin-bottom: 10px;
+    }
+    .footer-column a {
+      color: #ecf0f1;
       text-decoration: none;
-      border-radius: 4px;
-      font-weight: 500;
-      transition: background-color 0.3s;
+      transition: color 0.3s ease;
     }
-    
-    .btn:hover {
-      background-color: #0069d9;
+    .footer-column a:hover {
+      color: #3498db;
+    }
+    .copyright {
+      text-align: center;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    #main-content {
+      min-height: 400px;
+      padding: 40px 0;
     }
   </style>
 </head>
 <body>
   <header>
-    <nav class="navbar">
-      <div class="logo">CreativeCanvas</div>
-      <ul class="nav-links">
-        <li><a href="/" class="active">Home</a></li>
-        <li><a href="/products">Products</a></li>
-        <li><a href="/categories">Categories</a></li>
-        <li><a href="/how-it-works">How It Works</a></li>
-      </ul>
-    </nav>
+    <div class="container">
+      <div class="header-content">
+        <a href="/" class="logo">CreativeCanvas</a>
+        <nav>
+          <ul>
+            <li><a href="/" class="active">Home</a></li>
+            <li><a href="/categories">Categories</a></li>
+            <li><a href="/products">Products</a></li>
+            <li><a href="/how-it-works">How It Works</a></li>
+            <li><a href="/auth">Login</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
   </header>
 
-  <main>
-    <section class="hero">
-      <div class="container">
-        <h1>Rent Premium Furniture</h1>
-        <p>Transform your space without the commitment of buying. Choose from our wide selection of high-quality furniture.</p>
-        <a href="/products" class="btn">Browse Collection</a>
-      </div>
-    </section>
+  <section class="hero">
+    <div class="container">
+      <h1>Rent Stylish Furniture for Your Home</h1>
+      <p class="subtitle">Transform your space without the commitment of buying</p>
+      <a href="/products" class="btn">Browse Products</a>
+    </div>
+  </section>
 
-    <section class="categories">
-      <div class="container">
-        <h2>Shop By Categories</h2>
-        <div class="category-grid">
-          <div class="category-card">
-            <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1486304873000-235643847519?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=400&q=80');"></div>
-            <div class="category-content">
-              <h3>Living Room</h3>
-              <p>Find comfortable sofas, coffee tables, and more for your living space.</p>
-              <a href="/category/living-room" class="btn">View Products</a>
-            </div>
-          </div>
-          
-          <div class="category-card">
-            <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1600585154526-990dced4db0d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=400&q=80');"></div>
-            <div class="category-content">
-              <h3>Bedroom</h3>
-              <p>Discover beds, nightstands, and dressers for a peaceful bedroom.</p>
-              <a href="/category/bedroom" class="btn">View Products</a>
-            </div>
-          </div>
-          
-          <div class="category-card">
-            <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1615968679312-9b7ed9f04e79?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=400&q=80');"></div>
-            <div class="category-content">
-              <h3>Dining Room</h3>
-              <p>Explore dining tables, chairs, and more for memorable meals.</p>
-              <a href="/category/dining-room" class="btn">View Products</a>
-            </div>
-          </div>
-          
-          <div class="category-card">
-            <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=400&q=80');"></div>
-            <div class="category-content">
-              <h3>Office</h3>
-              <p>Find desks, chairs, and storage for a productive workspace.</p>
-              <a href="/category/office" class="btn">View Products</a>
-            </div>
-          </div>
+  <section id="main-content">
+    <div class="container">
+      <div id="content-area">
+        <h2 class="section-title">Shop By Categories</h2>
+        <div class="categories" id="categories-container">
+          <!-- Categories will be loaded here -->
+          <p>Loading categories...</p>
         </div>
       </div>
-    </section>
-  </main>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-column">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/categories">Categories</a></li>
+            <li><a href="/products">Products</a></li>
+            <li><a href="/how-it-works">How It Works</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h3>Customer Service</h3>
+          <ul>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">FAQs</a></li>
+            <li><a href="#">Shipping Information</a></li>
+            <li><a href="#">Return Policy</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h3>About Us</h3>
+          <ul>
+            <li><a href="#">Our Story</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Press</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="copyright">
+        <p>&copy; 2023 CreativeCanvas. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
 
   <script>
-    // Simple client-side routing
     document.addEventListener('DOMContentLoaded', function() {
-      const navLinks = document.querySelectorAll('.nav-links a');
+      // Function to load categories
+      async function loadCategories() {
+        try {
+          const response = await fetch('/api/categories');
+          const categories = await response.json();
+          
+          const categoriesContainer = document.getElementById('categories-container');
+          categoriesContainer.innerHTML = '';
+          
+          categories.forEach(category => {
+            const categoryCard = document.createElement('div');
+            categoryCard.className = 'category-card';
+            categoryCard.innerHTML = `
+              <div class="category-img" style="background-image: url('${category.imageUrl}')"></div>
+              <div class="category-content">
+                <h3 class="category-title">${category.name}</h3>
+                <p class="category-description">${category.description}</p>
+                <a href="/category/${category.slug}" class="btn">View Products</a>
+              </div>
+            `;
+            categoriesContainer.appendChild(categoryCard);
+          });
+        } catch (error) {
+          console.error('Error loading categories:', error);
+          document.getElementById('categories-container').innerHTML = '<p>Error loading categories. Please try again later.</p>';
+        }
+      }
       
-      navLinks.forEach(link => {
+      // Load categories on page load
+      loadCategories();
+      
+      // Navigation handling
+      document.querySelectorAll('nav a').forEach(link => {
         link.addEventListener('click', function(e) {
           e.preventDefault();
-          const path = this.getAttribute('href');
+          const href = this.getAttribute('href');
+          const contentArea = document.getElementById('content-area');
           
-          // Update active state
-          navLinks.forEach(l => l.classList.remove('active'));
+          // Highlight active link
+          document.querySelectorAll('nav a').forEach(l => l.classList.remove('active'));
           this.classList.add('active');
           
-          // In a real app, this would update the view or navigate
-          console.log('Navigating to:', path);
+          if (href === '/') {
+            contentArea.innerHTML = `
+              <h2 class="section-title">Shop By Categories</h2>
+              <div class="categories" id="categories-container">
+                <p>Loading categories...</p>
+              </div>
+            `;
+            loadCategories();
+          } else if (href === '/categories') {
+            contentArea.innerHTML = `
+              <h2 class="section-title">All Categories</h2>
+              <div class="categories" id="categories-container">
+                <p>Loading categories...</p>
+              </div>
+            `;
+            loadCategories();
+          } else if (href === '/products') {
+            contentArea.innerHTML = `
+              <h2 class="section-title">All Products</h2>
+              <p>Browse our collection of high-quality furniture available for rent.</p>
+              <p>We are working on loading products...</p>
+            `;
+          } else if (href === '/how-it-works') {
+            contentArea.innerHTML = `
+              <h2 class="section-title">How It Works</h2>
+              <div style="text-align: center;">
+                <p>Renting furniture with CreativeCanvas is easy!</p>
+                <ol style="text-align: left; display: inline-block; margin-top: 20px;">
+                  <li>Browse our collection and select the items you love</li>
+                  <li>Choose your rental duration (3, 6, or 12 months)</li>
+                  <li>Complete your order and schedule delivery</li>
+                  <li>Enjoy your furniture with free maintenance</li>
+                  <li>Return, renew, or buy at the end of your term</li>
+                </ol>
+              </div>
+            `;
+          } else if (href === '/auth') {
+            contentArea.innerHTML = `
+              <h2 class="section-title">Log In</h2>
+              <form style="max-width: 400px; margin: 0 auto;" onsubmit="event.preventDefault(); alert('Login functionality coming soon!');">
+                <div style="margin-bottom: 15px;">
+                  <label for="email" style="display: block; margin-bottom: 5px;">Email</label>
+                  <input type="email" id="email" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                </div>
+                <div style="margin-bottom: 15px;">
+                  <label for="password" style="display: block; margin-bottom: 5px;">Password</label>
+                  <input type="password" id="password" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                </div>
+                <button type="submit" class="btn" style="width: 100%;">Log In</button>
+                <p style="text-align: center; margin-top: 15px;">
+                  Don't have an account? <a href="#" style="color: #3f51b5; text-decoration: none;">Sign Up</a>
+                </p>
+              </form>
+            `;
+          }
+          
+          // Update the URL without page reload
+          history.pushState({}, '', href);
         });
       });
     });

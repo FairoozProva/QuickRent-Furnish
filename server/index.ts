@@ -9,6 +9,15 @@ import { fileURLToPath } from 'url';
 // Load environment variables
 dotenv.config();
 
+// Add status message for tracking MongoDB connection state
+console.log('Patching mongoose models for Replit environment');
+
+// Check if in Replit environment
+const isReplitEnv = process.env.REPLIT_DB_URL ? true : false;
+if (isReplitEnv) {
+  console.log('Initializing in-memory storage for Replit environment');
+}
+
 // ES modules compatible __dirname equivalent
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
