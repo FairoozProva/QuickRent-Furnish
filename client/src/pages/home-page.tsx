@@ -1,6 +1,6 @@
 import Navbar from "@/components/ui/navbar";
 import { Link } from "wouter";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Heart, ShoppingCart, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { imageUrls } from "../lib/image-urls";
 
@@ -118,6 +118,217 @@ export default function HomePage() {
             <Link href="/categories">
               <Button variant="outline">View All Categories</Button>
             </Link>
+          </div>
+        </div>
+      </section>
+      
+      {/* Trending Now Section */}
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Trending Now</h2>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              Discover our most popular pieces this month, handpicked for your home
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Trending Product 1 */}
+            <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+              <div className="relative h-64">
+                <img 
+                  src={imageUrls.studyTable1Image} 
+                  alt="White Study Table" 
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute top-3 right-3 flex space-x-2">
+                  <button className="p-1.5 bg-white rounded-full shadow-sm hover:bg-gray-100">
+                    <Heart className="h-5 w-5 text-gray-600" />
+                  </button>
+                  <button className="p-1.5 bg-white rounded-full shadow-sm hover:bg-gray-100">
+                    <ShoppingCart className="h-5 w-5 text-gray-600" />
+                  </button>
+                </div>
+              </div>
+              <div className="p-4">
+                <h3 className="text-lg font-semibold text-gray-900">White Study Table</h3>
+                <p className="text-sm text-gray-600 mb-3">Wood</p>
+                <div className="flex justify-between items-center">
+                  <span className="text-lg font-bold">৳ 300<span className="text-gray-500 text-sm">/month</span></span>
+                  <Link href="/product/study-table" className="text-primary text-sm flex items-center">
+                    Details <ChevronRight className="h-4 w-4 ml-1" />
+                  </Link>
+                </div>
+              </div>
+            </div>
+            
+            {/* Trending Product 2 */}
+            <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+              <div className="relative h-64">
+                <img 
+                  src={imageUrls.bohoDiningTableImage} 
+                  alt="Boho Sofa" 
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute top-3 right-3 flex space-x-2">
+                  <button className="p-1.5 bg-white rounded-full shadow-sm hover:bg-gray-100">
+                    <Heart className="h-5 w-5 text-gray-600" />
+                  </button>
+                  <button className="p-1.5 bg-white rounded-full shadow-sm hover:bg-gray-100">
+                    <ShoppingCart className="h-5 w-5 text-gray-600" />
+                  </button>
+                </div>
+              </div>
+              <div className="p-4">
+                <h3 className="text-lg font-semibold text-gray-900">Boho Sofa</h3>
+                <p className="text-sm text-gray-600 mb-3">Premium Fabric</p>
+                <div className="flex justify-between items-center">
+                  <span className="text-lg font-bold">৳ 1000<span className="text-gray-500 text-sm">/month</span></span>
+                  <Link href="/product/l-shaped-sofa" className="text-primary text-sm flex items-center">
+                    Details <ChevronRight className="h-4 w-4 ml-1" />
+                  </Link>
+                </div>
+              </div>
+            </div>
+            
+            {/* Trending Product 3 */}
+            <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+              <div className="relative h-64">
+                <img 
+                  src={imageUrls.doubleBedImage} 
+                  alt="Bed ER6456" 
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute top-3 right-3 flex space-x-2">
+                  <button className="p-1.5 bg-white rounded-full shadow-sm hover:bg-gray-100">
+                    <Heart className="h-5 w-5 text-gray-600" />
+                  </button>
+                  <button className="p-1.5 bg-white rounded-full shadow-sm hover:bg-gray-100">
+                    <ShoppingCart className="h-5 w-5 text-gray-600" />
+                  </button>
+                </div>
+              </div>
+              <div className="p-4">
+                <h3 className="text-lg font-semibold text-gray-900">Bed ER6456</h3>
+                <p className="text-sm text-gray-600 mb-3">Wood</p>
+                <div className="flex justify-between items-center">
+                  <span className="text-lg font-bold">৳ 800<span className="text-gray-500 text-sm">/month</span></span>
+                  <Link href="/product/double-bed" className="text-primary text-sm flex items-center">
+                    Details <ChevronRight className="h-4 w-4 ml-1" />
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      {/* New Arrivals Section */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">New Arrivals</h2>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              Explore our latest additions, fresh designs for your living space
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* New Arrival 1 */}
+            <div className="bg-white rounded-lg overflow-hidden shadow-sm border hover:shadow-md transition-shadow">
+              <div className="relative h-64">
+                <img 
+                  src={imageUrls.singleBedImage} 
+                  alt="Storage Bed" 
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute top-3 right-3 flex space-x-2">
+                  <button className="p-1.5 bg-white rounded-full shadow-sm hover:bg-gray-100">
+                    <Heart className="h-5 w-5 text-gray-600" />
+                  </button>
+                  <button className="p-1.5 bg-white rounded-full shadow-sm hover:bg-gray-100">
+                    <ShoppingCart className="h-5 w-5 text-gray-600" />
+                  </button>
+                </div>
+                <div className="absolute top-3 left-3 py-1 px-2 bg-primary text-white text-xs font-semibold rounded">
+                  New
+                </div>
+              </div>
+              <div className="p-4">
+                <h3 className="text-lg font-semibold text-gray-900">Storage Bed</h3>
+                <p className="text-sm text-gray-600 mb-3">Wood</p>
+                <div className="flex justify-between items-center">
+                  <span className="text-lg font-bold">৳ 700<span className="text-gray-500 text-sm">/month</span></span>
+                  <Link href="/product/double-bed" className="text-primary text-sm flex items-center">
+                    Details <ChevronRight className="h-4 w-4 ml-1" />
+                  </Link>
+                </div>
+              </div>
+            </div>
+            
+            {/* New Arrival 2 */}
+            <div className="bg-white rounded-lg overflow-hidden shadow-sm border hover:shadow-md transition-shadow">
+              <div className="relative h-64">
+                <img 
+                  src={imageUrls.officeChairImage} 
+                  alt="Neutral Office Chair" 
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute top-3 right-3 flex space-x-2">
+                  <button className="p-1.5 bg-white rounded-full shadow-sm hover:bg-gray-100">
+                    <Heart className="h-5 w-5 text-gray-600" />
+                  </button>
+                  <button className="p-1.5 bg-white rounded-full shadow-sm hover:bg-gray-100">
+                    <ShoppingCart className="h-5 w-5 text-gray-600" />
+                  </button>
+                </div>
+                <div className="absolute top-3 left-3 py-1 px-2 bg-primary text-white text-xs font-semibold rounded">
+                  New
+                </div>
+              </div>
+              <div className="p-4">
+                <h3 className="text-lg font-semibold text-gray-900">Neutral Office Chair</h3>
+                <p className="text-sm text-gray-600 mb-3">Fabric</p>
+                <div className="flex justify-between items-center">
+                  <span className="text-lg font-bold">৳ 500<span className="text-gray-500 text-sm">/month</span></span>
+                  <Link href="/product/office-chair" className="text-primary text-sm flex items-center">
+                    Details <ChevronRight className="h-4 w-4 ml-1" />
+                  </Link>
+                </div>
+              </div>
+            </div>
+            
+            {/* New Arrival 3 */}
+            <div className="bg-white rounded-lg overflow-hidden shadow-sm border hover:shadow-md transition-shadow">
+              <div className="relative h-64">
+                <img 
+                  src={imageUrls.studyTableImage} 
+                  alt="Wooden Study Table" 
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute top-3 right-3 flex space-x-2">
+                  <button className="p-1.5 bg-white rounded-full shadow-sm hover:bg-gray-100">
+                    <Heart className="h-5 w-5 text-gray-600" />
+                  </button>
+                  <button className="p-1.5 bg-white rounded-full shadow-sm hover:bg-gray-100">
+                    <ShoppingCart className="h-5 w-5 text-gray-600" />
+                  </button>
+                </div>
+                <div className="absolute top-3 left-3 py-1 px-2 bg-primary text-white text-xs font-semibold rounded">
+                  New
+                </div>
+              </div>
+              <div className="p-4">
+                <h3 className="text-lg font-semibold text-gray-900">Wooden Study Table</h3>
+                <p className="text-sm text-gray-600 mb-3">Wood</p>
+                <div className="flex justify-between items-center">
+                  <span className="text-lg font-bold">৳ 300<span className="text-gray-500 text-sm">/month</span></span>
+                  <Link href="/product/study-table" className="text-primary text-sm flex items-center">
+                    Details <ChevronRight className="h-4 w-4 ml-1" />
+                  </Link>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
