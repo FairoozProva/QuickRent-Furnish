@@ -6,14 +6,14 @@ import { Heart } from "lucide-react";
 export default function ProductsPage() {
   // Define some sample products with direct image paths
   const products = [
-    { id: 1, name: "Modern Sofa", category: "Living Room", price: 45, duration: "per month", sku: "LV-S001", imageUrl: "/attached_assets/image_1745945348014.png" },
-    { id: 2, name: "Round Dining Table", category: "Dining", price: 38, duration: "per month", sku: "DN-T001", imageUrl: "/attached_assets/image_1745943673036.png" },
-    { id: 3, name: "Queen Bed Frame", category: "Bedroom", price: 42, duration: "per month", sku: "BD-B001", imageUrl: "/attached_assets/image_1745943307745.png" },
-    { id: 4, name: "Study Table", category: "Study", price: 35, duration: "per month", sku: "ST-T001", imageUrl: "/attached_assets/image_1745943903821.png" },
-    { id: 5, name: "Dining Table", category: "Dining", price: 38, duration: "per month", sku: "DN-T002", imageUrl: "/attached_assets/image_1745943673036.png" },
-    { id: 6, name: "Office Chair", category: "Office", price: 32, duration: "per month", sku: "OF-C001", imageUrl: "/attached_assets/image_1745943739669.png" },
-    { id: 7, name: "Executive Desk", category: "Office", price: 40, duration: "per month", sku: "OF-D001", imageUrl: "/attached_assets/image_1745943739669.png" },
-    { id: 8, name: "Kids Bed", category: "Kids", price: 35, duration: "per month", sku: "KD-B001", imageUrl: "/attached_assets/image_1745945403668.png" },
+    { id: 1, name: "Modern Sofa", category: "Living Room", price: 45, duration: "per month", sku: "LV-S001", imageUrl: "/src/assets/Sofa Set 5.jpeg" },
+    { id: 2, name: "Round Dining Table", category: "Dining", price: 38, duration: "per month", sku: "DN-T001", imageUrl: "/src/assets/Round Dining Table.jpeg" },
+    { id: 3, name: "Queen Bed Frame", category: "Bedroom", price: 42, duration: "per month", sku: "BD-B001", imageUrl: "/src/assets/Bed 4.jpeg" },
+    { id: 4, name: "Study Table", category: "Study", price: 35, duration: "per month", sku: "ST-T001", imageUrl: "/src/assets/Study Table 3.jpeg" },
+    { id: 5, name: "Dining Table", category: "Dining", price: 38, duration: "per month", sku: "DN-T002", imageUrl: "/src/assets/Dining Table.jpeg" },
+    { id: 6, name: "Office Chair", category: "Office", price: 32, duration: "per month", sku: "OF-C001", imageUrl: "/src/assets/Modern Office Chair.jpeg" },
+    { id: 7, name: "Executive Desk", category: "Office", price: 40, duration: "per month", sku: "OF-D001", imageUrl: "/src/assets/Large Executive Desk With File Cabinet.jpeg" },
+    { id: 8, name: "Kids Bed", category: "Kids", price: 35, duration: "per month", sku: "KD-B001", imageUrl: "/src/assets/Bed 1.jpeg" },
   ];
 
   return (

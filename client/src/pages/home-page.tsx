@@ -4,49 +4,49 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function HomePage() {
-  // Define sample categories with image URLs
+  // Define some sample categories for the home page with images
   const categories = [
     { 
       id: 1, 
       name: "Living Room", 
       slug: "living-room", 
-      description: "Comfortable sofas, coffee tables, and more", 
-      imageUrl: "/images/Sofa Set 1.jpeg" 
+      description: "Comfortable sofas, coffee tables, and more",
+      imageUrl: "/src/assets/Sofa Set 4.jpeg" 
     },
     { 
       id: 2, 
       name: "Bedroom", 
       slug: "bedroom", 
-      description: "Beds, nightstands, and other bedroom essentials", 
-      imageUrl: "/images/Bed 3.jpeg" 
+      description: "Beds, nightstands, and other bedroom essentials",
+      imageUrl: "/src/assets/Boho Bed.jpeg" 
     },
     { 
       id: 3, 
       name: "Dining", 
       slug: "dining", 
-      description: "Dining tables, chairs, and dining room accessories", 
-      imageUrl: "/images/Dining Table.jpeg" 
+      description: "Dining tables, chairs, and dining room accessories",
+      imageUrl: "/src/assets/Modern Boho Dining Table.jpeg" 
     },
     { 
       id: 4, 
       name: "Office", 
       slug: "office", 
-      description: "Desks, office chairs, and work-from-home solutions", 
-      imageUrl: "/images/Office Room Setup.jpeg" 
+      description: "Desks, office chairs, and work-from-home solutions",
+      imageUrl: "/src/assets/Office Room Setup.jpeg" 
     },
     { 
       id: 5, 
       name: "Study", 
       slug: "study", 
-      description: "Bookshelves, reading desks, and study room accessories", 
-      imageUrl: "/images/Study Table 3.jpeg" 
+      description: "Bookshelves, reading desks, and study room accessories",
+      imageUrl: "/src/assets/Study Table 1.jpeg" 
     },
     { 
       id: 6, 
       name: "Kids", 
       slug: "kids", 
-      description: "Furniture for children's rooms and play areas", 
-      imageUrl: "/images/Bed 1.jpeg" 
+      description: "Furniture for children's rooms and play areas",
+      imageUrl: "/src/assets/Bed 1.jpeg" 
     },
   ];
 
@@ -75,13 +75,11 @@ export default function HomePage() {
               </div>
             </div>
             <div className="flex-1 flex justify-center">
-              <div className="w-full max-w-md h-80 rounded-lg shadow-lg overflow-hidden">
-                <img 
-                  src="/images/Sofa Set 7.jpeg" 
-                  alt="Premium Furniture" 
-                  className="w-full h-full object-cover"
-                />
-              </div>
+              <img 
+                src="/attached_assets/image_1745942846416.png" 
+                alt="Quick Rental Process" 
+                className="w-full max-w-md rounded-lg shadow-lg"
+              />
             </div>
           </div>
         </div>
@@ -101,12 +99,8 @@ export default function HomePage() {
             {categories.map((category) => (
               <Link href={`/category/${category.slug}`} key={category.id}>
                 <div className="bg-gray-50 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow cursor-pointer h-full flex flex-col">
-                  <div className="h-40 rounded-md mb-4 overflow-hidden">
-                    <img 
-                      src={category.imageUrl} 
-                      alt={category.name} 
-                      className="w-full h-full object-cover"
-                    />
+                  <div className="h-40 bg-gray-200 rounded-md mb-4 flex items-center justify-center overflow-hidden">
+                    <img src={category.imageUrl} alt={category.name} className="object-cover w-full h-full" />
                   </div>
                   <h3 className="text-xl font-semibold mb-2">{category.name}</h3>
                   <p className="text-gray-600 mb-4 flex-grow">{category.description}</p>
