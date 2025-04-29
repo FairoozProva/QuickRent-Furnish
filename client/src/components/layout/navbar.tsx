@@ -17,7 +17,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import logoImage from "@/assets/logo.png";
+// Temporarily remove image import
 
 export default function Navbar() {
   const { user, logoutMutation } = useAuth();
@@ -57,8 +57,8 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
             <Link href="/" className="flex-shrink-0 flex items-center">
-              <img src={logoImage} alt="QuickRent Furnish" className="h-10 w-auto" />
-              <span className="ml-2 text-xl font-semibold text-gray-800">QuickRent Furnish</span>
+              {/* Temporarily removed logo image */}
+              <span className="text-xl font-semibold text-gray-800">QuickRent Furnish</span>
             </Link>
             <div className="hidden md:ml-6 md:flex md:space-x-6">
               <Link href="/" className={`${isActive('/') ? 'border-b-2 border-primary text-gray-900' : 'border-transparent border-b-2 hover:border-gray-300 text-gray-500 hover:text-gray-800'} px-1 pt-1 font-medium`}>
