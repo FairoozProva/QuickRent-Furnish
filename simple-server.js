@@ -1,4 +1,4 @@
-// Simple Express server to serve static files without any MongoDB dependencies
+// Simple Express server to serve test HTML without MongoDB dependencies
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -36,7 +36,7 @@ app.use((req, res, next) => {
 });
 
 // Serve static files from client directory
-app.use(express.static(path.join(__dirname, '../client')));
+app.use(express.static(path.join(__dirname, 'client')));
 
 // Basic API endpoints for testing
 app.get('/api/categories', (req, res) => {
@@ -51,7 +51,7 @@ app.get('/api/categories', (req, res) => {
 
 // Serve test.html for all other routes
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/test.html'));
+  res.sendFile(path.join(__dirname, 'client/test.html'));
 });
 
 // Start the server
