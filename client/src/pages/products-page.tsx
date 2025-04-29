@@ -30,94 +30,34 @@ export default function ProductsPage() {
         </div>
       </div>
       
-      {/* Filters + Products Grid */}
+      {/* Products Grid */}
       <div className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col lg:flex-row gap-8">
-            {/* Filters Sidebar */}
-            <div className="lg:w-1/4">
-              <div className="bg-gray-50 p-6 rounded-lg shadow-sm">
-                <h3 className="text-lg font-semibold mb-4">Filter Products</h3>
-                
-                <div className="mb-6">
-                  <h4 className="font-medium mb-2">Categories</h4>
-                  <div className="space-y-2">
-                    <div className="flex items-center">
-                      <input type="checkbox" id="cat-living" className="mr-2" />
-                      <label htmlFor="cat-living">Living Room</label>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {products.map((product) => (
+              <div key={product.id} className="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden">
+                <div className="h-48 bg-gray-200 flex items-center justify-center">
+                  <span className="text-gray-500 font-medium">{product.name}</span>
+                </div>
+                <div className="p-4">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h3 className="text-lg font-semibold mb-1">{product.name}</h3>
+                      <p className="text-sm text-gray-500 mb-2">{product.category}</p>
                     </div>
-                    <div className="flex items-center">
-                      <input type="checkbox" id="cat-bedroom" className="mr-2" />
-                      <label htmlFor="cat-bedroom">Bedroom</label>
-                    </div>
-                    <div className="flex items-center">
-                      <input type="checkbox" id="cat-dining" className="mr-2" />
-                      <label htmlFor="cat-dining">Dining</label>
-                    </div>
-                    <div className="flex items-center">
-                      <input type="checkbox" id="cat-office" className="mr-2" />
-                      <label htmlFor="cat-office">Office</label>
-                    </div>
-                    <div className="flex items-center">
-                      <input type="checkbox" id="cat-study" className="mr-2" />
-                      <label htmlFor="cat-study">Study</label>
-                    </div>
-                    <div className="flex items-center">
-                      <input type="checkbox" id="cat-kids" className="mr-2" />
-                      <label htmlFor="cat-kids">Kids</label>
-                    </div>
+                    <button className="text-gray-400 hover:text-red-500 transition-colors">
+                      <Heart size={20} />
+                    </button>
+                  </div>
+                  <div className="flex justify-between items-center mt-3">
+                    <p className="text-xl font-bold">৳{product.price} <span className="text-sm font-normal text-gray-500">{product.duration}</span></p>
+                    <Link href={`/product/${product.id}`}>
+                      <Button size="sm">View Details</Button>
+                    </Link>
                   </div>
                 </div>
-                
-                <div className="mb-6">
-                  <h4 className="font-medium mb-2">Price Range</h4>
-                  <div className="flex items-center space-x-2">
-                    <input 
-                      type="range" 
-                      min="0" 
-                      max="100" 
-                      className="w-full" 
-                    />
-                  </div>
-                  <div className="flex justify-between text-sm text-gray-500 mt-1">
-                    <span>৳0</span>
-                    <span>৳100</span>
-                  </div>
-                </div>
-                
-                <Button className="w-full">Apply Filters</Button>
               </div>
-            </div>
-            
-            {/* Products Grid */}
-            <div className="lg:w-3/4">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {products.map((product) => (
-                  <div key={product.id} className="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden">
-                    <div className="h-48 bg-gray-200 flex items-center justify-center">
-                      <span className="text-gray-500 font-medium">{product.name}</span>
-                    </div>
-                    <div className="p-4">
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <h3 className="text-lg font-semibold mb-1">{product.name}</h3>
-                          <p className="text-sm text-gray-500 mb-2">{product.category}</p>
-                        </div>
-                        <button className="text-gray-400 hover:text-red-500 transition-colors">
-                          <Heart size={20} />
-                        </button>
-                      </div>
-                      <div className="flex justify-between items-center mt-3">
-                        <p className="text-xl font-bold">৳{product.price} <span className="text-sm font-normal text-gray-500">{product.duration}</span></p>
-                        <Link href={`/product/${product.id}`}>
-                          <Button size="sm">View Details</Button>
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
