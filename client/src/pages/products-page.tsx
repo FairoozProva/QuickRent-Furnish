@@ -4,16 +4,16 @@ import { Button } from "@/components/ui/button";
 import { Heart } from "lucide-react";
 
 export default function ProductsPage() {
-  // Define some sample products
+  // Define some sample products with direct image paths
   const products = [
-    { id: 1, name: "Modern Sofa", category: "Living Room", price: 45, duration: "per month", sku: "LV-S001" },
-    { id: 2, name: "Coffee Table", category: "Living Room", price: 25, duration: "per month", sku: "LV-T001" },
-    { id: 3, name: "Queen Bed Frame", category: "Bedroom", price: 42, duration: "per month", sku: "BD-B001" },
-    { id: 4, name: "Nightstand", category: "Bedroom", price: 18, duration: "per month", sku: "BD-N001" },
-    { id: 5, name: "Dining Table", category: "Dining", price: 38, duration: "per month", sku: "DN-T001" },
-    { id: 6, name: "Dining Chair (set of 4)", category: "Dining", price: 32, duration: "per month", sku: "DN-C001" },
-    { id: 7, name: "Office Desk", category: "Office", price: 40, duration: "per month", sku: "OF-D001" },
-    { id: 8, name: "Ergonomic Chair", category: "Office", price: 35, duration: "per month", sku: "OF-C001" },
+    { id: 1, name: "Modern Sofa", category: "Living Room", price: 45, duration: "per month", sku: "LV-S001", imageUrl: "/src/assets/Sofa Set 5.jpeg" },
+    { id: 2, name: "Round Dining Table", category: "Dining", price: 38, duration: "per month", sku: "DN-T001", imageUrl: "/src/assets/Round Dining Table.jpeg" },
+    { id: 3, name: "Queen Bed Frame", category: "Bedroom", price: 42, duration: "per month", sku: "BD-B001", imageUrl: "/src/assets/Bed 4.jpeg" },
+    { id: 4, name: "Study Table", category: "Study", price: 35, duration: "per month", sku: "ST-T001", imageUrl: "/src/assets/Study Table 3.jpeg" },
+    { id: 5, name: "Dining Table", category: "Dining", price: 38, duration: "per month", sku: "DN-T002", imageUrl: "/src/assets/Dining Table.jpeg" },
+    { id: 6, name: "Office Chair", category: "Office", price: 32, duration: "per month", sku: "OF-C001", imageUrl: "/src/assets/Modern Office Chair.jpeg" },
+    { id: 7, name: "Executive Desk", category: "Office", price: 40, duration: "per month", sku: "OF-D001", imageUrl: "/src/assets/Large Executive Desk With File Cabinet.jpeg" },
+    { id: 8, name: "Kids Bed", category: "Kids", price: 35, duration: "per month", sku: "KD-B001", imageUrl: "/src/assets/Bed 1.jpeg" },
   ];
 
   return (
@@ -36,8 +36,8 @@ export default function ProductsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {products.map((product) => (
               <div key={product.id} className="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden">
-                <div className="h-48 bg-gray-200 flex items-center justify-center">
-                  <span className="text-gray-500 font-medium">{product.name}</span>
+                <div className="h-48 bg-gray-200 flex items-center justify-center overflow-hidden">
+                  <img src={product.imageUrl} alt={product.name} className="object-cover w-full h-full" />
                 </div>
                 <div className="p-4">
                   <div className="flex justify-between items-start">
