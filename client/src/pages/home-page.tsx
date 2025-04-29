@@ -4,50 +4,14 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function HomePage() {
-  // Define some sample categories for the home page with images
+  // Define some sample categories for the home page
   const categories = [
-    { 
-      id: 1, 
-      name: "Living Room", 
-      slug: "living-room", 
-      description: "Comfortable sofas, coffee tables, and more",
-      imageUrl: "https://static.replit.com/hosted-assets/attached_assets/image_1745943012980.png" 
-    },
-    { 
-      id: 2, 
-      name: "Bedroom", 
-      slug: "bedroom", 
-      description: "Beds, nightstands, and other bedroom essentials",
-      imageUrl: "https://static.replit.com/hosted-assets/attached_assets/image_1745943307745.png" 
-    },
-    { 
-      id: 3, 
-      name: "Dining", 
-      slug: "dining", 
-      description: "Dining tables, chairs, and dining room accessories",
-      imageUrl: "https://static.replit.com/hosted-assets/attached_assets/image_1745943673036.png" 
-    },
-    { 
-      id: 4, 
-      name: "Office", 
-      slug: "office", 
-      description: "Desks, office chairs, and work-from-home solutions",
-      imageUrl: "https://static.replit.com/hosted-assets/attached_assets/image_1745943739669.png" 
-    },
-    { 
-      id: 5, 
-      name: "Study", 
-      slug: "study", 
-      description: "Bookshelves, reading desks, and study room accessories",
-      imageUrl: "https://static.replit.com/hosted-assets/attached_assets/image_1745943903821.png" 
-    },
-    { 
-      id: 6, 
-      name: "Kids", 
-      slug: "kids", 
-      description: "Furniture for children's rooms and play areas",
-      imageUrl: "https://static.replit.com/hosted-assets/attached_assets/image_1745945403668.png" 
-    },
+    { id: 1, name: "Living Room", slug: "living-room", description: "Comfortable sofas, coffee tables, and more" },
+    { id: 2, name: "Bedroom", slug: "bedroom", description: "Beds, nightstands, and other bedroom essentials" },
+    { id: 3, name: "Dining", slug: "dining", description: "Dining tables, chairs, and dining room accessories" },
+    { id: 4, name: "Office", slug: "office", description: "Desks, office chairs, and work-from-home solutions" },
+    { id: 5, name: "Study", slug: "study", description: "Bookshelves, reading desks, and study room accessories" },
+    { id: 6, name: "Kids", slug: "kids", description: "Furniture for children's rooms and play areas", imageUrl: "/attached_assets/image_1745945403668.png" },
   ];
 
   return (
@@ -76,7 +40,7 @@ export default function HomePage() {
             </div>
             <div className="flex-1 flex justify-center">
               <img 
-                src="https://static.replit.com/hosted-assets/attached_assets/image_1745945348014.png" 
+                src="/attached_assets/image_1745945348014.png" 
                 alt="Comfortable Sofa" 
                 className="w-full max-w-md rounded-lg shadow-lg"
               />
@@ -99,8 +63,12 @@ export default function HomePage() {
             {categories.map((category) => (
               <Link href={`/category/${category.slug}`} key={category.id}>
                 <div className="bg-gray-50 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow cursor-pointer h-full flex flex-col">
-                  <div className="h-40 bg-gray-200 rounded-md mb-4 flex items-center justify-center overflow-hidden">
-                    <img src={category.imageUrl} alt={category.name} className="object-cover w-full h-full" />
+                  <div className="h-40 bg-gray-200 rounded-md mb-4 flex items-center justify-center">
+                    {category.imageUrl ? (
+                      <img src={category.imageUrl} alt={category.name} className="object-cover w-full h-full" />
+                    ) : (
+                      <span className="text-gray-500 font-medium">{category.name}</span>
+                    )}
                   </div>
                   <h3 className="text-xl font-semibold mb-2">{category.name}</h3>
                   <p className="text-gray-600 mb-4 flex-grow">{category.description}</p>
