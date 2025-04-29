@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useLocation, Link } from "wouter";
+import { useRoute, Link } from "wouter";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -142,11 +142,11 @@ const products = {
 };
 
 export default function ProductDetailPage() {
-  // Get product slug from URL
-  const [location] = useLocation();
+  // Get product slug from URL 
+  const [match, params] = useRoute("/product/:slug");
   const { toast } = useToast();
-  const slug = location.split("/").pop() || "office-chair"; // Default product if none specified
-
+  const slug = params?.slug || "office-chair"; // Default product if none specified
+  
   // Get product from mock data
   const product = products[slug as keyof typeof products] || products["office-chair"];
   

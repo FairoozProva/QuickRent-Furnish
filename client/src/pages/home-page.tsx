@@ -76,23 +76,11 @@ export default function HomePage() {
               </div>
             </div>
             <div className="flex-1 flex justify-center">
-              <div className="grid grid-cols-3 gap-2 w-full max-w-md">
-                <img 
-                  src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e" 
-                  alt="Headphones" 
-                  className="rounded-lg shadow-lg w-full h-32 object-cover"
-                />
-                <img 
-                  src="https://images.unsplash.com/photo-1618426118358-b40a49230e61" 
-                  alt="Concert" 
-                  className="rounded-lg shadow-lg w-full h-32 object-cover"
-                />
-                <img 
-                  src="https://images.unsplash.com/photo-1524758631624-e2822e304c36" 
-                  alt="Office Setup" 
-                  className="rounded-lg shadow-lg w-full h-32 object-cover"
-                />
-              </div>
+              <img 
+                src="https://images.unsplash.com/photo-1556228453-efd6c1ff04f6" 
+                alt="Modern Furniture" 
+                className="w-full max-w-md rounded-lg shadow-lg object-cover"
+              />
             </div>
           </div>
         </div>
