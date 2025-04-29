@@ -69,12 +69,7 @@ const products = {
     isNewArrival: false,
     ratings: 4.5,
     reviewCount: 28,
-    image: imageUrls.officeChairImage,
-    additionalImages: [
-      imageUrls.officeChairImage,
-      imageUrls.studyTableImage,
-      imageUrls.officeSetupImage
-    ]
+    image: imageUrls.officeChairImage
   },
   "l-shaped-sofa": {
     id: 2,
@@ -108,12 +103,7 @@ const products = {
     isNewArrival: true,
     ratings: 4.8,
     reviewCount: 45,
-    image: imageUrls.lShapedSofaImage,
-    additionalImages: [
-      imageUrls.lShapedSofaImage,
-      imageUrls.doubleSofaImage,
-      imageUrls.livingRoomImage
-    ]
+    image: imageUrls.lShapedSofaImage
   },
   "double-bed": {
     id: 3,
@@ -147,12 +137,7 @@ const products = {
     isNewArrival: true,
     ratings: 4.6,
     reviewCount: 32,
-    image: imageUrls.doubleBedImage,
-    additionalImages: [
-      imageUrls.doubleBedImage,
-      imageUrls.bedroomImage,
-      imageUrls.singleBedImage
-    ]
+    image: imageUrls.doubleBedImage
   }
 };
 
@@ -165,9 +150,8 @@ export default function ProductDetailPage() {
   // Get product from mock data
   const product = products[slug as keyof typeof products] || products["office-chair"];
   
-  // State for selected duration and image
+  // State for selected duration
   const [rentalDuration, setRentalDuration] = useState("3");
-  const [selectedImage, setSelectedImage] = useState(product.image);
   const [isWishlisted, setIsWishlisted] = useState(false);
   
   // Calculate pricing
@@ -210,28 +194,10 @@ export default function ProductDetailPage() {
           <div className="space-y-4">
             <div className="border rounded-lg overflow-hidden bg-white aspect-square">
               <img 
-                src={selectedImage} 
+                src={product.image} 
                 alt={product.name} 
                 className="w-full h-full object-cover"
               />
-            </div>
-            
-            <div className="grid grid-cols-4 gap-2">
-              {product.additionalImages.map((image, index) => (
-                <button
-                  key={index}
-                  className={`border rounded-md overflow-hidden aspect-square ${
-                    selectedImage === image ? "ring-2 ring-primary" : ""
-                  }`}
-                  onClick={() => setSelectedImage(image)}
-                >
-                  <img 
-                    src={image} 
-                    alt={`${product.name} view ${index + 1}`} 
-                    className="w-full h-full object-cover"
-                  />
-                </button>
-              ))}
             </div>
           </div>
           
