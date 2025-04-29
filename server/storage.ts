@@ -1,9 +1,5 @@
 import session from 'express-session';
 import { MongoDBStorage } from './mongo-storage';
-import { ReplitStorage } from './replit-storage';
-
-// Check if in Replit environment
-const isReplitEnv = process.env.REPLIT_DB_URL ? true : false;
 
 export interface IStorage {
   sessionStore: session.Store;
@@ -328,8 +324,5 @@ export class MemStorage implements IStorage {
   }
 }
 
-// Create and export the storage instance
-// Use MongoDB storage in normal environment, but in Replit we'll use special storage
-export const storage: IStorage = isReplitEnv 
-  ? new ReplitStorage() 
-  : new MongoDBStorage();
+// Create and export the MongoDB storage instance
+export const storage: IStorage = new MongoDBStorage();

@@ -1,146 +1,101 @@
+import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-// Check if running in Replit environment
-const isReplitEnv = process.env.REPLIT_DB_URL ? true : false;
-
-// Types for our MongoDB connection
-type MongooseConnection = {
-  db: { 
-    databaseName: string;
-    collections: () => Promise<any[]>;
-    collection: (name: string) => any;
-  };
-  on: (event: string, callback: Function) => any;
-  once: (event: string, callback: Function) => any;
-};
-
-type MockModel = {
-  find: (query?: any) => Promise<any[]>;
-  findOne: (query?: any) => Promise<any | null>;
-  findById: (id: string) => Promise<any | null>;
-  create: (data: any) => Promise<any>;
-  deleteOne: (query: any) => Promise<{ deletedCount: number }>;
-  updateOne: (query: any, update: any) => Promise<{ modifiedCount: number }>;
-};
-
-// Create a mock mongoose for Replit
-const mockMongoose = {
-  connect: () => Promise.resolve(mockMongoose),
-  disconnect: () => Promise.resolve(),
-  connection: {
-    db: { 
-      databaseName: 'mock_db',
-      collections: () => Promise.resolve([]),
-      collection: () => ({})
-    },
-    on: function() { return this; },
-    once: function() { return this; },
-  },
-  Schema: function() { 
-    return { 
-      index: () => ({}),
-      pre: () => ({}),
-      virtual: () => ({}),
-    }; 
-  },
-  model: function(): MockModel { 
-    return {
-      find: () => Promise.resolve([]),
-      findOne: () => Promise.resolve(null),
-      findById: () => Promise.resolve(null),
-      create: (data: any) => Promise.resolve(data),
-      deleteOne: () => Promise.resolve({ deletedCount: 0 }),
-      updateOne: () => Promise.resolve({ modifiedCount: 0 }),
-    };
-  },
-  createConnection: () => ({
-    model: () => ({
-      find: () => Promise.resolve([]),
-      findOne: () => Promise.resolve(null),
-      findById: () => Promise.resolve(null),
-      create: (data: any) => Promise.resolve(data),
-      deleteOne: () => Promise.resolve({ deletedCount: 0 }),
-      updateOne: () => Promise.resolve({ modifiedCount: 0 }),
-    }),
-    on: function() { return this; },
-    once: function() { return this; },
-  }),
-};
-
-// Re-export our mock mongoose when in Replit
-export const mongoose = isReplitEnv ? mockMongoose : null;
-
-// Get MongoDB connection string (even though we won't use it in Replit)
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/quickrent_furnish';
-const connectionSource = isReplitEnv ? 'Replit Environment' : 'Local MongoDB';
+// Get MongoDB Atlas connection string
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://QuickRent-Furnish:TukiMeow18%26@cluster0.xtppfyc.mongodb.net/QuickRent-Furnish?retryWrites=true&w=majority&appName=Cluster0';
 
 // Debug the connection string (hide username/password)
 const debugUri = MONGODB_URI.replace(/\/\/([^:]+):([^@]+)@/, '//***:***@');
-console.log(`Using MongoDB connection: ${debugUri}`);
-console.log(`Connection source: ${connectionSource}`);
+console.log(`Using MongoDB Atlas connection: ${debugUri}`);
 
-// Connect to MongoDB (or return mock in Replit)
-export async function connectToDatabase(): Promise<any> {
-  // For Replit environment, return a mock connection
-  if (isReplitEnv) {
-    console.log('Running in Replit environment - using in-memory storage instead of MongoDB');
+// MongoDB Atlas configuration options
+const mongooseConfig = {
+  // Connection timeouts and settings
+  serverSelectionTimeoutMS: 30000, // 30 seconds
+  connectTimeoutMS: 30000,
+  socketTimeoutMS: 45000,
+  
+  // Application name for monitoring
+  appName: 'CreativeCanvas',
+  
+  // Auto create indexes and collections
+  autoCreate: true,
+  autoIndex: true,
+  
+  // Optimize for resilience
+  family: 4,               // Use IPv4
+  maxPoolSize: 10,
+  minPoolSize: 2,
+  maxIdleTimeMS: 60000,    // Close idle connections after 60 seconds
+};
+
+// Track if we've already attempted to connect
+let isConnecting = false;
+let connectionEstablished = false;
+
+// Connect to MongoDB Atlas
+export async function connectToDatabase() {
+  // If already connecting or connected, don't try again
+  if (isConnecting) {
+    console.log('MongoDB Atlas connection already in progress...');
+    // Wait for existing connection attempt to finish
+    while (isConnecting && !connectionEstablished) {
+      await new Promise(resolve => setTimeout(resolve, 500));
+    }
+    return mongoose.connection;
+  }
+  
+  // If already connected, return the connection
+  if (mongoose.connection.readyState === 1) {
+    console.log('Using existing MongoDB Atlas connection');
+    connectionEstablished = true;
+    return mongoose.connection;
+  }
+  
+  isConnecting = true;
+  
+  try {
+    console.log('Connecting to MongoDB Atlas...');
     
-    // Set up mock schemas
-    try {
-      await import('./mock-schema');
-      console.log('✅ Mock MongoDB setup complete for Replit environment');
-    } catch (error) {
-      console.warn('⚠️ Warning: Failed to load mock schemas for Replit environment:', error);
-      console.error(error);
+    // Close any existing connection first
+    if (mongoose.connection.readyState !== 0) {
+      console.log('Closing existing connection before reconnecting...');
+      await mongoose.disconnect();
     }
     
-    return Promise.resolve({ db: { databaseName: 'mock_db' } });
-  }
-
-  // We shouldn't reach here in Replit, but keep the code for VSCode environment
-  try {
-    console.log('Attempting to connect to MongoDB...');
-    // We'll need to import the real mongoose dynamically
-    const { default: realMongoose } = await import('mongoose');
+    // Connect to MongoDB Atlas
+    await mongoose.connect(MONGODB_URI, mongooseConfig);
     
-    // Connect using real mongoose
-    await realMongoose.connect(MONGODB_URI, {
-      serverSelectionTimeoutMS: 2000,
-      connectTimeoutMS: 5000,
-      socketTimeoutMS: 30000,
-      appName: 'QuickRent Furnish',
-      autoCreate: true,
-      autoIndex: true,
-      family: 4,
-      maxPoolSize: 10,
-      minPoolSize: 1,
-      maxIdleTimeMS: 30000
-    });
+    // Connection successful
+    console.log('✅ Connected to MongoDB Atlas');
+    connectionEstablished = true;
     
-    console.log('✅ Connected to MongoDB');
-    return realMongoose.connection;
+    // Output database information
+    if (mongoose.connection.db) {
+      console.log(`Database name: ${mongoose.connection.db.databaseName}`);
+    }
+    
+    return mongoose.connection;
   } catch (error) {
-    console.error('❌ Failed to connect to MongoDB:', error);
-    throw error;
+    console.error('❌ Failed to connect to MongoDB Atlas:', error);
+    throw new Error('Unable to connect to MongoDB Atlas. Please check your connection string and network.');
+  } finally {
+    isConnecting = false;
   }
 }
 
 // Disconnect from MongoDB
-export async function disconnectFromDatabase(): Promise<void> {
-  // For Replit environment, skip disconnection
-  if (isReplitEnv) {
-    console.log('Mock disconnection from MongoDB in Replit environment');
-    return;
-  }
-  
+export async function disconnectFromDatabase() {
   try {
-    const { default: realMongoose } = await import('mongoose');
-    await realMongoose.disconnect();
-    console.log('Disconnected from MongoDB');
+    await mongoose.disconnect();
+    console.log('Disconnected from MongoDB Atlas');
   } catch (error) {
-    console.error('Failed to disconnect from MongoDB:', error);
+    console.error('Failed to disconnect from MongoDB Atlas:', error);
     throw error;
   }
 }
+
+// Export mongoose
+export { mongoose };

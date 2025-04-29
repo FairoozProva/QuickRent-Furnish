@@ -8,42 +8,15 @@ export class MongoDBStorage implements IStorage {
   sessionStore: session.Store;
 
   constructor() {
-    // Get MongoDB connection string
-    let mongoUrl: string;
-
-    // Check if MONGODB_URI is directly provided
-    if (process.env.MONGODB_URI) {
-      // Replace any environment variable placeholders in the URI
-      let uri = process.env.MONGODB_URI;
-      
-      // Replace ${MONGODB_USERNAME} and ${MONGODB_PASSWORD} with the actual values
-      if (uri.includes('${MONGODB_USERNAME}') && process.env.MONGODB_USERNAME) {
-        uri = uri.replace('${MONGODB_USERNAME}', process.env.MONGODB_USERNAME);
-      }
-      
-      if (uri.includes('${MONGODB_PASSWORD}') && process.env.MONGODB_PASSWORD) {
-        uri = uri.replace('${MONGODB_PASSWORD}', process.env.MONGODB_PASSWORD);
-      }
-      
-      // If it's a mongodb+srv connection, ensure there's no port number
-      if (uri.startsWith('mongodb+srv://')) {
-        const portRegex = /:(\d+)(?=\/)/;
-        if (portRegex.test(uri)) {
-          uri = uri.replace(portRegex, '');
-        }
-      }
-      
-      mongoUrl = uri;
-    }
-    // Default to localhost
-    else {
-      mongoUrl = 'mongodb://localhost:27017/quickrent_furnish';
-    }
-
-    // Initialize MongoDB connection
+    // Get MongoDB Atlas connection string from environment variables
+    const mongoUrl = process.env.MONGODB_URI || 'mongodb+srv://QuickRent-Furnish:TukiMeow18%26@cluster0.xtppfyc.mongodb.net/QuickRent-Furnish?retryWrites=true&w=majority&appName=Cluster0';
+    
+    console.log('Initializing MongoDB Atlas connection...');
+    
+    // Initialize MongoDB Atlas connection
     this.initializeMongoDB(mongoUrl);
 
-    // Initialize session store with MongoDB
+    // Initialize session store with MongoDB Atlas
     this.sessionStore = MongoStore.create({
       mongoUrl,
       collectionName: 'sessions',
@@ -53,25 +26,53 @@ export class MongoDBStorage implements IStorage {
 
   private async initializeMongoDB(mongoUrl: string) {
     try {
-      await mongoose.connect(mongoUrl);
-      console.log('✅ Connected to MongoDB');
+      // Configure mongoose for MongoDB Atlas connection
+      const options = {
+        // Connection timeouts
+        serverSelectionTimeoutMS: 30000, // 30 seconds
+        connectTimeoutMS: 30000,
+        socketTimeoutMS: 45000,
+        
+        // Application name
+        appName: 'CreativeCanvas',
+        
+        // Auto create indexes and collections
+        autoCreate: true,
+        autoIndex: true,
+        
+        // Optimize for resilience
+        family: 4,               // Use IPv4
+        maxPoolSize: 10,
+        minPoolSize: 2,
+        maxIdleTimeMS: 60000,    // Close idle connections after 60 seconds
+      };
+      
+      // Check existing connection
+      if (mongoose.connection.readyState === 1) {
+        console.log('Using existing MongoDB Atlas connection');
+        return mongoose.connection;
+      }
+      
+      // Connect to MongoDB Atlas
+      await mongoose.connect(mongoUrl, options);
+      console.log('✅ Connected to MongoDB Atlas');
       
       // Add error handlers
       mongoose.connection.on('error', (err) => {
-        console.error('MongoDB connection error:', err);
+        console.error('MongoDB Atlas connection error:', err);
       });
 
       mongoose.connection.on('disconnected', () => {
-        console.warn('MongoDB disconnected. Attempting to reconnect...');
+        console.warn('MongoDB Atlas disconnected. Attempting to reconnect...');
       });
 
       mongoose.connection.on('reconnected', () => {
-        console.log('✅ MongoDB reconnected');
+        console.log('✅ MongoDB Atlas reconnected');
       });
 
     } catch (error) {
-      console.error('Failed to connect to MongoDB:', error);
-      // Don't throw the error, but log it and continue with fallback data
+      console.error('Failed to connect to MongoDB Atlas:', error);
+      throw new Error('Unable to connect to MongoDB Atlas database.');
     }
   }
 

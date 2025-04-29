@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CreativeCanvas Furniture Rental</title>
+  <style>
+    :root {
+      --primary: #3f51b5;
+      --primary-dark: #303f9f;
+      --secondary: #f50057;
+      --background: #f9f9f9;
+      --surface: #ffffff;
+      --on-primary: #ffffff;
+      --on-secondary: #ffffff;
+      --on-background: #333333;
+      --on-surface: #333333;
+      --shadow: 0 2px 10px rgba(0,0,0,0.1);
+      --radius: 8px;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: var(--on-background);
+      background-color: var(--background);
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    header {
+      background-color: var(--surface);
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+    }
+    
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--primary);
+      text-decoration: none;
+    }
+    
+    .nav-links {
+      display: flex;
+      list-style: none;
+    }
+    
+    .nav-links li {
+      margin-left: 2rem;
+    }
+    
+    .nav-links a {
+      color: var(--on-surface);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+    
+    .nav-links a.active {
+      color: var(--primary);
+      font-weight: 600;
+    }
+    
+    .hero {
+      background-color: var(--primary);
+      color: var(--on-primary);
+      padding: 4rem 0;
+      text-align: center;
+    }
+    
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .btn {
+      display: inline-block;
+      background-color: var(--secondary);
+      color: var(--on-secondary);
+      padding: 0.75rem 1.5rem;
+      text-decoration: none;
+      border-radius: var(--radius);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    
+    section {
+      padding: 4rem 0;
+    }
+    
+    .section-title {
+      text-align: center;
+      margin-bottom: 3rem;
+      position: relative;
+    }
+    
+    .section-title:after {
+      content: '';
+      display: block;
+      width: 50px;
+      height: 3px;
+      background-color: var(--primary);
+      margin: 0.5rem auto 0;
+    }
+    
+    .categories {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+    
+    .category-card {
+      background-color: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s;
+    }
+    
+    .category-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .category-image {
+      height: 200px;
+      background-size: cover;
+      background-position: center;
+    }
+    
+    .category-content {
+      padding: 1.5rem;
+    }
+    
+    .category-content h3 {
+      margin-bottom: 0.5rem;
+    }
+    
+    .category-content p {
+      margin-bottom: 1rem;
+      color: #666;
+    }
+    
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+    
+    .product-card {
+      background-color: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s;
+    }
+    
+    .product-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .product-image {
+      height: 200px;
+      background-size: cover;
+      background-position: center;
+    }
+    
+    .product-content {
+      padding: 1.5rem;
+    }
+    
+    .product-content h3 {
+      margin-bottom: 0.5rem;
+    }
+    
+    .product-price {
+      color: var(--primary);
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+    
+    footer {
+      background-color: #222;
+      color: #fff;
+      padding: 3rem 0;
+    }
+    
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+    }
+    
+    .footer-column h3 {
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+    
+    .footer-links {
+      list-style: none;
+    }
+    
+    .footer-links li {
+      margin-bottom: 0.5rem;
+    }
+    
+    .footer-links a {
+      color: #ccc;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    
+    .footer-links a:hover {
+      color: #fff;
+    }
+    
+    .copyright {
+      text-align: center;
+      padding-top: 2rem;
+      margin-top: 2rem;
+      border-top: 1px solid #444;
+      color: #888;
+    }
+    
+    /* Page specific styles */
+    #home-page,
+    #categories-page,
+    #products-page {
+      display: none;
+    }
+    
+    #home-page.active,
+    #categories-page.active,
+    #products-page.active {
+      display: block;
+    }
+    
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+      }
+      
+      .nav-links {
+        margin-top: 1rem;
+      }
+      
+      .nav-links li {
+        margin-left: 1rem;
+        margin-right: 1rem;
+      }
+      
+      .hero h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <nav class="navbar">
+        <a href="#" class="logo" id="home-link">CreativeCanvas</a>
+        <ul class="nav-links">
+          <li><a href="#" class="active" id="home-nav">Home</a></li>
+          <li><a href="#" id="categories-nav">Categories</a></li>
+          <li><a href="#" id="products-nav">Products</a></li>
+          <li><a href="#">How It Works</a></li>
+          <li><a href="#">Login</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Home Page -->
+  <div id="home-page" class="active">
+    <section class="hero">
+      <div class="container">
+        <h1>Transform Your Space with Premium Furniture</h1>
+        <p>Rent high-quality, stylish furniture without the commitment of buying. Perfect for temporary homes, events, or when you want to try before you buy.</p>
+        <a href="#" class="btn" id="browse-products">Browse Products</a>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <h2 class="section-title">Shop By Categories</h2>
+        <div class="categories" id="home-categories">
+          <!-- Categories will be loaded here -->
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Categories Page -->
+  <div id="categories-page">
+    <section>
+      <div class="container">
+        <h2 class="section-title">All Categories</h2>
+        <div class="categories" id="all-categories">
+          <!-- All categories will be loaded here -->
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Products Page -->
+  <div id="products-page">
+    <section>
+      <div class="container">
+        <h2 class="section-title">Our Products</h2>
+        <div class="products" id="all-products">
+          <!-- Products will be loaded here -->
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-column">
+          <h3>About Us</h3>
+          <ul class="footer-links">
+            <li><a href="#">Our Story</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Careers</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h3>Customer Service</h3>
+          <ul class="footer-links">
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">FAQs</a></li>
+            <li><a href="#">Shipping Information</a></li>
+            <li><a href="#">Returns & Refunds</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h3>Quick Links</h3>
+          <ul class="footer-links">
+            <li><a href="#" id="footer-home">Home</a></li>
+            <li><a href="#" id="footer-categories">Categories</a></li>
+            <li><a href="#" id="footer-products">Products</a></li>
+            <li><a href="#">How It Works</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="copyright">
+        <p>&copy; 2023 CreativeCanvas. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Sample data - would normally come from an API
+    const categories = [
+      {
+        id: 1,
+        name: 'Living Room',
+        description: 'Stylish and comfortable furniture for your living room',
+        image: 'https://images.unsplash.com/photo-1486304873000-235643847519?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=400&q=80'
+      },
+      {
+        id: 2,
+        name: 'Bedroom',
+        description: 'Cozy and elegant furniture for your bedroom',
+        image: 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=400&q=80'
+      },
+      {
+        id: 3,
+        name: 'Dining Room',
+        description: 'Elegant dining sets for memorable meals',
+        image: 'https://images.unsplash.com/photo-1615968679312-9b7ed9f04e79?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=400&q=80'
+      },
+      {
+        id: 4,
+        name: 'Office',
+        description: 'Professional furniture for your home office',
+        image: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=400&q=80'
+      }
+    ];
+
+    const products = [
+      {
+        id: 1,
+        name: 'Modern Sofa',
+        category: 'Living Room',
+        price: '$45/month',
+        image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=400&q=80'
+      },
+      {
+        id: 2,
+        name: 'Queen Size Bed',
+        category: 'Bedroom',
+        price: '$60/month',
+        image: 'https://images.unsplash.com/photo-1588046130717-0eb0c9a3ba15?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=400&q=80'
+      },
+      {
+        id: 3,
+        name: 'Dining Table Set',
+        category: 'Dining Room',
+        price: '$55/month',
+        image: 'https://images.unsplash.com/photo-1577140917170-285929fb55b7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=400&q=80'
+      },
+      {
+        id: 4,
+        name: 'Ergonomic Office Chair',
+        category: 'Office',
+        price: '$30/month',
+        image: 'https://images.unsplash.com/photo-1589384117478-8a6b8eb078ae?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=400&q=80'
+      },
+      {
+        id: 5,
+        name: 'Coffee Table',
+        category: 'Living Room',
+        price: '$25/month',
+        image: 'https://images.unsplash.com/photo-1533090481720-856c6e3c1fdc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=400&q=80'
+      },
+      {
+        id: 6,
+        name: 'Wardrobe',
+        category: 'Bedroom',
+        price: '$40/month',
+        image: 'https://images.unsplash.com/photo-1631454753330-e47a627b6f41?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=400&q=80'
+      }
+    ];
+
+    // DOM elements
+    const homeLink = document.getElementById('home-link');
+    const homeNav = document.getElementById('home-nav');
+    const categoriesNav = document.getElementById('categories-nav');
+    const productsNav = document.getElementById('products-nav');
+    const browseProducts = document.getElementById('browse-products');
+    const footerHome = document.getElementById('footer-home');
+    const footerCategories = document.getElementById('footer-categories');
+    const footerProducts = document.getElementById('footer-products');
+    
+    const homePage = document.getElementById('home-page');
+    const categoriesPage = document.getElementById('categories-page');
+    const productsPage = document.getElementById('products-page');
+    
+    const homeCategories = document.getElementById('home-categories');
+    const allCategories = document.getElementById('all-categories');
+    const allProducts = document.getElementById('all-products');
+
+    // Functions
+    function showPage(page) {
+      // Hide all pages
+      homePage.classList.remove('active');
+      categoriesPage.classList.remove('active');
+      productsPage.classList.remove('active');
+      
+      // Show the selected page
+      page.classList.add('active');
+      
+      // Update active nav link
+      homeNav.classList.remove('active');
+      categoriesNav.classList.remove('active');
+      productsNav.classList.remove('active');
+      
+      if (page === homePage) {
+        homeNav.classList.add('active');
+      } else if (page === categoriesPage) {
+        categoriesNav.classList.add('active');
+      } else if (page === productsPage) {
+        productsNav.classList.add('active');
+      }
+      
+      // Scroll to top
+      window.scrollTo(0, 0);
+    }
+
+    function renderCategories() {
+      // Render categories on home page (just 3)
+      homeCategories.innerHTML = '';
+      categories.slice(0, 3).forEach(category => {
+        const categoryCard = document.createElement('div');
+        categoryCard.className = 'category-card';
+        categoryCard.innerHTML = `
+          <div class="category-image" style="background-image: url('${category.image}')"></div>
+          <div class="category-content">
+            <h3>${category.name}</h3>
+            <p>${category.description}</p>
+            <a href="#" class="btn category-btn" data-id="${category.id}">View Products</a>
+          </div>
+        `;
+        homeCategories.appendChild(categoryCard);
+      });
+      
+      // Add event listeners to category buttons
+      document.querySelectorAll('.category-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          showPage(productsPage);
+        });
+      });
+      
+      // Render all categories on categories page
+      allCategories.innerHTML = '';
+      categories.forEach(category => {
+        const categoryCard = document.createElement('div');
+        categoryCard.className = 'category-card';
+        categoryCard.innerHTML = `
+          <div class="category-image" style="background-image: url('${category.image}')"></div>
+          <div class="category-content">
+            <h3>${category.name}</h3>
+            <p>${category.description}</p>
+            <a href="#" class="btn category-btn" data-id="${category.id}">View Products</a>
+          </div>
+        `;
+        allCategories.appendChild(categoryCard);
+      });
+    }
+
+    function renderProducts() {
+      allProducts.innerHTML = '';
+      products.forEach(product => {
+        const productCard = document.createElement('div');
+        productCard.className = 'product-card';
+        productCard.innerHTML = `
+          <div class="product-image" style="background-image: url('${product.image}')"></div>
+          <div class="product-content">
+            <h3>${product.name}</h3>
+            <p>Category: ${product.category}</p>
+            <p class="product-price">${product.price}</p>
+            <a href="#" class="btn">Rent Now</a>
+          </div>
+        `;
+        allProducts.appendChild(productCard);
+      });
+    }
+
+    // Event listeners
+    homeLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      showPage(homePage);
+    });
+    
+    homeNav.addEventListener('click', (e) => {
+      e.preventDefault();
+      showPage(homePage);
+    });
+    
+    categoriesNav.addEventListener('click', (e) => {
+      e.preventDefault();
+      showPage(categoriesPage);
+    });
+    
+    productsNav.addEventListener('click', (e) => {
+      e.preventDefault();
+      showPage(productsPage);
+    });
+    
+    browseProducts.addEventListener('click', (e) => {
+      e.preventDefault();
+      showPage(productsPage);
+    });
+    
+    footerHome.addEventListener('click', (e) => {
+      e.preventDefault();
+      showPage(homePage);
+    });
+    
+    footerCategories.addEventListener('click', (e) => {
+      e.preventDefault();
+      showPage(categoriesPage);
+    });
+    
+    footerProducts.addEventListener('click', (e) => {
+      e.preventDefault();
+      showPage(productsPage);
+    });
+
+    // Initialize the app
+    document.addEventListener('DOMContentLoaded', () => {
+      renderCategories();
+      renderProducts();
+    });
+  </script>
+</body>
+</html>

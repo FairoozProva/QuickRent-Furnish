@@ -1,22 +1,12 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
-import { connectToDatabase } from "./mongodb";
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
 // Load environment variables
 dotenv.config();
-
-// Add status message for tracking MongoDB connection state
-console.log('Patching mongoose models for Replit environment');
-
-// Check if in Replit environment
-const isReplitEnv = process.env.REPLIT_DB_URL ? true : false;
-if (isReplitEnv) {
-  console.log('Initializing in-memory storage for Replit environment');
-}
 
 // ES modules compatible __dirname equivalent
 const __filename = fileURLToPath(import.meta.url);
@@ -74,37 +64,9 @@ app.use((req, res, next) => {
   next();
 });
 
-(async () => {
-  // Check if in Replit environment
-  const isReplitEnv = process.env.REPLIT_DB_URL ? true : false;
-  
-  try {
-    // Always call connectToDatabase() which has special handling for Replit environment
-    await connectToDatabase();
-    
-    if (isReplitEnv) {
-      console.log('Running in Replit environment - using in-memory storage');
-    } else {
-      console.log('MongoDB connection successful');
-    }
-  } catch (error) {
-    console.error('Failed to connect to MongoDB:', error);
-    
-    // If not in Replit and connection fails, handle accordingly
-    if (!isReplitEnv) {
-      // In development mode, we'll allow the app to start without MongoDB
-      if (process.env.NODE_ENV === 'development') {
-        console.warn('⚠️ Running in development mode without MongoDB. Some features will not work.');
-        console.warn('⚠️ To use MongoDB:');
-        console.warn('   1. Make sure MongoDB is running locally');
-        console.warn('   2. Create a database named "quickrent_furnish" in MongoDB Compass');
-        console.warn('   3. Run the seed script: npx tsx scripts/seed-mongodb.ts');
-      } else {
-        // In production and not Replit, MongoDB is required
-        throw new Error('MongoDB connection is required - application cannot start without it');
-      }
-    }
-  }
+(async () => {  
+  // MongoDB connection will be handled by MongoDBStorage
+  // No need to explicitly connect here
   
   const server = await registerRoutes(app);
 
