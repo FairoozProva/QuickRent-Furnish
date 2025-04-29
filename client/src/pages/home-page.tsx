@@ -10,6 +10,8 @@ export default function HomePage() {
     { id: 2, name: "Bedroom", slug: "bedroom", description: "Beds, nightstands, and other bedroom essentials" },
     { id: 3, name: "Dining", slug: "dining", description: "Dining tables, chairs, and dining room accessories" },
     { id: 4, name: "Office", slug: "office", description: "Desks, office chairs, and work-from-home solutions" },
+    { id: 5, name: "Study", slug: "study", description: "Bookshelves, reading desks, and study room accessories" },
+    { id: 6, name: "Kids", slug: "kids", description: "Furniture for children's rooms and play areas" },
   ];
 
   return (

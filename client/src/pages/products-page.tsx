@@ -58,6 +58,14 @@ export default function ProductsPage() {
                       <input type="checkbox" id="cat-office" className="mr-2" />
                       <label htmlFor="cat-office">Office</label>
                     </div>
+                    <div className="flex items-center">
+                      <input type="checkbox" id="cat-study" className="mr-2" />
+                      <label htmlFor="cat-study">Study</label>
+                    </div>
+                    <div className="flex items-center">
+                      <input type="checkbox" id="cat-kids" className="mr-2" />
+                      <label htmlFor="cat-kids">Kids</label>
+                    </div>
                   </div>
                 </div>
                 

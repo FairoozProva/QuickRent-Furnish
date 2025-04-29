@@ -9,10 +9,8 @@ export default function CategoriesPage() {
     { id: 2, name: "Bedroom", slug: "bedroom", description: "Beds, nightstands, and other bedroom essentials", itemCount: 18 },
     { id: 3, name: "Dining", slug: "dining", description: "Dining tables, chairs, and dining room accessories", itemCount: 15 },
     { id: 4, name: "Office", slug: "office", description: "Desks, office chairs, and work-from-home solutions", itemCount: 22 },
-    { id: 5, name: "Outdoor", slug: "outdoor", description: "Patio furniture, outdoor dining sets, and garden accessories", itemCount: 12 },
+    { id: 5, name: "Study", slug: "study", description: "Bookshelves, reading desks, and study room accessories", itemCount: 16 },
     { id: 6, name: "Kids", slug: "kids", description: "Furniture for children's rooms and play areas", itemCount: 14 },
-    { id: 7, name: "Storage", slug: "storage", description: "Bookcases, shelves, and storage solutions", itemCount: 19 },
-    { id: 8, name: "Decor", slug: "decor", description: "Lamps, rugs, mirrors, and decorative items", itemCount: 31 },
   ];
 
   return (
