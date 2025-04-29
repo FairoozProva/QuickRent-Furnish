@@ -9,7 +9,14 @@ export class MongoDBStorage implements IStorage {
 
   constructor() {
     // Get MongoDB Atlas connection string from environment variables
-    const mongoUrl = process.env.MONGODB_URI || 'mongodb+srv://QuickRent-Furnish:TukiMeow18%26@cluster0.xtppfyc.mongodb.net/QuickRent-Furnish?retryWrites=true&w=majority&appName=Cluster0';
+    // If MONGODB_URI is not provided, we'll fall back to using the in-memory storage
+    // instead of having a hardcoded connection string that might not work
+    const mongoUrl = process.env.MONGODB_URI;
+    
+    if (!mongoUrl) {
+      console.log('No MongoDB URI found. Using in-memory storage instead.');
+      throw new Error('No MongoDB URI provided');
+    }
     
     console.log('Initializing MongoDB Atlas connection...');
     
