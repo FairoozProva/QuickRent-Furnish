@@ -34,9 +34,9 @@ export default function Navbar() {
           <div className="flex items-center">
             <Link href="/" className="flex-shrink-0 flex items-center">
               <img 
-                src="https://img.icons8.com/fluency/48/000000/sofa.png" 
-                alt="QuickRent Logo" 
-                className="h-8 w-8 mr-2" 
+                src="/src/assets/logo.png" 
+                alt="QuickRent Furnish Logo" 
+                className="h-10 mr-2" 
               />
               <span className="text-xl font-semibold text-gray-800">QuickRent Furnish</span>
             </Link>
