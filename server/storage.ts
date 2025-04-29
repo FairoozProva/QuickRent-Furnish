@@ -324,5 +324,12 @@ export class MemStorage implements IStorage {
   }
 }
 
-// Create and export the storage instance - using MemStorage temporarily
-export const storage: IStorage = new MemStorage();
+// Create and export the storage instance
+// Use MongoDBStorage if in Replit environment or has MongoDB URI, otherwise fallback to MemStorage
+if (process.env.REPL_ID || process.env.MONGODB_URI) {
+  console.log('Using MongoDB storage for production/Replit environment');
+  export const storage: IStorage = new MongoDBStorage();
+} else {
+  console.log('Initializing in-memory storage for Replit environment');
+  export const storage: IStorage = new MemStorage();
+}
