@@ -62,11 +62,7 @@ export default function HomePage() {
               <Link href={`/category/${category.slug}`} key={category.id}>
                 <div className="bg-gray-50 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow cursor-pointer h-full flex flex-col">
                   <div className="h-40 bg-gray-200 rounded-md mb-4 flex items-center justify-center">
-                    {category.imageUrl ? (
-                      <img src={category.imageUrl} alt={category.name} className="object-cover w-full h-full" />
-                    ) : (
-                      <span className="text-gray-500 font-medium">{category.name}</span>
-                    )}
+                    <span className="text-gray-800 font-semibold text-xl">{category.name}</span>
                   </div>
                   <h3 className="text-xl font-semibold mb-2">{category.name}</h3>
                   <p className="text-gray-600 mb-4 flex-grow">{category.description}</p>
