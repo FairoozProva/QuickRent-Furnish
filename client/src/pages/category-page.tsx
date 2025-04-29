@@ -49,7 +49,6 @@ export default function CategoryPage() {
       { id: 26, name: "Kid's Bed", category: "Kids", price: 30, duration: "per month", sku: "KD-B001", imageUrl: "/src/assets/Bed 1.jpeg" },
       { id: 27, name: "Study Desk for Kids", category: "Kids", price: 25, duration: "per month", sku: "KD-SD001", imageUrl: "/src/assets/Study Table 2.jpeg" },
       { id: 28, name: "Kid's Bed with Storage", category: "Kids", price: 35, duration: "per month", sku: "KD-B002", imageUrl: "/src/assets/Bed 2.jpeg" },
-      { id: 29, name: "Kid's Study Chair", category: "Kids", price: 15, duration: "per month", sku: "KD-C001", imageUrl: "/src/assets/Neutral Office Chair.jpeg" },
       { id: 30, name: "Kid's Study Table", category: "Kids", price: 22, duration: "per month", sku: "KD-SD002", imageUrl: "/src/assets/Study Table 4.jpeg" },
     ],
   };

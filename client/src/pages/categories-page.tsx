@@ -3,14 +3,50 @@ import { Link } from "wouter";
 import { ArrowRight } from "lucide-react";
 
 export default function CategoriesPage() {
-  // Define some sample categories
+  // Define some sample categories with images
   const categories = [
-    { id: 1, name: "Living Room", slug: "living-room", description: "Comfortable sofas, coffee tables, and more for your living room", itemCount: 24 },
-    { id: 2, name: "Bedroom", slug: "bedroom", description: "Beds, nightstands, and other bedroom essentials", itemCount: 18 },
-    { id: 3, name: "Dining", slug: "dining", description: "Dining tables, chairs, and dining room accessories", itemCount: 15 },
-    { id: 4, name: "Office", slug: "office", description: "Desks, office chairs, and work-from-home solutions", itemCount: 22 },
-    { id: 5, name: "Study", slug: "study", description: "Bookshelves, reading desks, and study room accessories", itemCount: 16 },
-    { id: 6, name: "Kids", slug: "kids", description: "Furniture for children's rooms and play areas", itemCount: 14 },
+    { 
+      id: 1, 
+      name: "Living Room", 
+      slug: "living-room", 
+      description: "Comfortable sofas, coffee tables, and more for your living room", 
+      imageUrl: "/src/assets/Sofa Set 4.jpeg" 
+    },
+    { 
+      id: 2, 
+      name: "Bedroom", 
+      slug: "bedroom", 
+      description: "Beds, nightstands, and other bedroom essentials", 
+      imageUrl: "/src/assets/Boho Bed.jpeg" 
+    },
+    { 
+      id: 3, 
+      name: "Dining", 
+      slug: "dining", 
+      description: "Dining tables, chairs, and dining room accessories", 
+      imageUrl: "/src/assets/Modern Boho Dining Table.jpeg" 
+    },
+    { 
+      id: 4, 
+      name: "Office", 
+      slug: "office", 
+      description: "Desks, office chairs, and work-from-home solutions", 
+      imageUrl: "/src/assets/Office Room Setup.jpeg" 
+    },
+    { 
+      id: 5, 
+      name: "Study", 
+      slug: "study", 
+      description: "Bookshelves, reading desks, and study room accessories", 
+      imageUrl: "/src/assets/Study Table 1.jpeg" 
+    },
+    { 
+      id: 6, 
+      name: "Kids", 
+      slug: "kids", 
+      description: "Furniture for children's rooms and play areas", 
+      imageUrl: "/src/assets/Bed 1.jpeg" 
+    },
   ];
 
   return (
@@ -34,8 +70,8 @@ export default function CategoriesPage() {
             {categories.map((category) => (
               <Link href={`/category/${category.slug}`} key={category.id}>
                 <div className="bg-gray-50 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow cursor-pointer h-full flex flex-col">
-                  <div className="h-48 bg-gray-200 rounded-md mb-4 flex items-center justify-center">
-                    <span className="text-gray-500 font-medium">{category.name}</span>
+                  <div className="h-48 bg-gray-200 rounded-md mb-4 flex items-center justify-center overflow-hidden">
+                    <img src={category.imageUrl} alt={category.name} className="object-cover w-full h-full" />
                   </div>
                   <h3 className="text-xl font-semibold mb-2">{category.name}</h3>
                   <p className="text-gray-600 mb-4 flex-grow">{category.description}</p>
