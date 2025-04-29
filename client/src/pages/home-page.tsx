@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { imageUrls } from "../lib/image-urls";
 
 export default function HomePage() {
-  // Define categories with images for the home page
+  // Define categories with URLs for the home page
   const categories = [
     {
       id: 1,
@@ -77,7 +77,7 @@ export default function HomePage() {
             </div>
             <div className="flex-1 flex justify-center">
               <img 
-                src="https://placehold.co/800x600" 
+                src={imageUrls.logoImage} 
                 alt="Quick Rental Process" 
                 className="w-full max-w-md rounded-lg shadow-lg"
               />

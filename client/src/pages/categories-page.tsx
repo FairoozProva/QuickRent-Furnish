@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { imageUrls } from "../lib/image-urls";
 
 export default function CategoriesPage() {
-  // Define some sample categories with images
+  // Define some sample categories with image URLs
   const categories = [
     { 
       id: 1, 

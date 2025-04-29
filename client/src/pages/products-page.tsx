@@ -5,7 +5,7 @@ import { Heart } from "lucide-react";
 import { imageUrls } from "../lib/image-urls";
 
 export default function ProductsPage() {
-  // Define some sample products
+  // Define some sample products with image URLs
   const products = [
     { id: 1, name: "Modern Sofa", category: "Living Room", price: 45, duration: "per month", sku: "LV-S001", imageUrl: imageUrls.sofaImage5 },
     { id: 2, name: "Round Dining Table", category: "Dining", price: 38, duration: "per month", sku: "DN-T001", imageUrl: imageUrls.roundDiningTableImage },

@@ -1,41 +1,54 @@
-// Using placeholder images to fix the navigation issues
-// We'll use the same placeholder for all images to ensure it works
-
-const placeholderImage = "https://placehold.co/600x400";
+// Define image URLs to use throughout the application
+// This avoids MIME type errors by using URLs directly instead of imports
 
 export const imageUrls = {
   // Living Room
-  sofaImage1: placeholderImage,
-  sofaImage2: placeholderImage,
-  sofaImage3: placeholderImage,
-  sofaImage4: placeholderImage,
-  sofaImage5: placeholderImage,
-  sofaImage6: placeholderImage,
+  sofaImage1: 'https://images.unsplash.com/photo-1540574163026-643ea20ade25',
+  sofaImage2: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc',
+  sofaImage3: 'https://images.unsplash.com/photo-1484101403633-562f891dc89a',
+  sofaImage4: 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e',
+  sofaImage5: 'https://images.unsplash.com/photo-1550581190-9c1c48d21d6c',
+  sofaImage6: 'https://images.unsplash.com/photo-1558211583-d26f610c1eb1',
   
   // Bedroom
-  bed1Image: placeholderImage,
-  bed2Image: placeholderImage,
-  bed3Image: placeholderImage,
-  bed4Image: placeholderImage,
-  bohoBedImage: placeholderImage,
+  bed1Image: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85',
+  bed2Image: 'https://images.unsplash.com/photo-1505693314120-0d443867891c',
+  bed3Image: 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af',
+  bed4Image: 'https://images.unsplash.com/photo-1505693314120-0d443867891c',
+  bohoBedImage: 'https://images.unsplash.com/photo-1494203484021-3c454daf695d',
+  hargroveImage: 'https://images.unsplash.com/photo-1505693314120-0d443867891c',
+  elinaQueenImage: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85',
   
   // Dining
-  diningTableImage: placeholderImage,
-  roundDiningTableImage: placeholderImage,
-  bohoDiningTableImage: placeholderImage,
-  darkDiningTableImage: placeholderImage,
+  diningTableImage: 'https://images.unsplash.com/photo-1617098900591-3f90928e8c54',
+  roundDiningTableImage: 'https://images.unsplash.com/photo-1617098900591-3f90928e8c54',
+  bohoDiningTableImage: 'https://images.unsplash.com/photo-1604578762246-41134e37f9cc',
+  darkDiningTableImage: 'https://images.unsplash.com/photo-1615066390971-03e2e3484cb7',
+  diningTable5555Image: 'https://images.unsplash.com/photo-1615066390971-03e2e3484cb7',
+  diningTableKIU85Image: 'https://images.unsplash.com/photo-1615066390971-03e2e3484cb7',
   
   // Office
-  officeSetupImage: placeholderImage,
-  officeChairImage: placeholderImage,
-  neutralOfficeChairImage: placeholderImage,
-  laptopChairImage: placeholderImage,
-  executiveDeskImage: placeholderImage,
+  officeSetupImage: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36',
+  officeChairImage: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e',
+  neutralOfficeChairImage: 'https://images.unsplash.com/photo-1580480055273-228ff5388ef8',
+  laptopChairImage: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e',
+  executiveDeskImage: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36',
+  computerDeskChairImage: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e',
   
   // Study
-  studyTable1Image: placeholderImage,
-  studyTable2Image: placeholderImage,
-  studyTable3Image: placeholderImage,
-  studyTable4Image: placeholderImage,
-  studyTable5Image: placeholderImage
+  studyTable1Image: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36',
+  studyTable2Image: 'https://images.unsplash.com/photo-1544427920-c49ccfb85579',
+  studyTable3Image: 'https://images.unsplash.com/photo-1526657782461-9fe13402a841',
+  studyTable4Image: 'https://images.unsplash.com/photo-1544427920-c49ccfb85579',
+  studyTable5Image: 'https://images.unsplash.com/photo-1526657782461-9fe13402a841',
+  studyTable6Image: 'https://images.unsplash.com/photo-1544427920-c49ccfb85579',
+  studyTable7Image: 'https://images.unsplash.com/photo-1526657782461-9fe13402a841',
+  
+  // Kitchen
+  kitchenImage: 'https://images.unsplash.com/photo-1600489000022-c2086d79f9d4',
+  kitchenSetupImage: 'https://images.unsplash.com/photo-1600489000022-c2086d79f9d4',
+  smallKitchenImage: 'https://images.unsplash.com/photo-1600489000022-c2086d79f9d4',
+  
+  // Logo and other
+  logoImage: 'https://via.placeholder.com/800x600?text=QuickRent+Furnish'
 };

@@ -9,7 +9,7 @@ export default function CategoryPage() {
   const [, params] = useRoute("/category/:slug");
   const slug = params?.slug;
 
-  // Define sample products for all categories using imported images
+  // Define sample products for all categories using image URLs
   const allProducts = {
     'living-room': [
       { id: 1, name: "Modern Sofa", category: "Living Room", price: 45, duration: "per month", sku: "LV-S001", imageUrl: imageUrls.sofaImage1 },
