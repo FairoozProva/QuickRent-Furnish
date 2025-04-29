@@ -1,7 +1,9 @@
 // This script adds products to MongoDB Atlas
-require('dotenv').config();
-const mongoose = require('mongoose');
-const { Category, Product } = require('../shared/schema');
+import dotenv from 'dotenv';
+import mongoose from 'mongoose';
+import { Category, Product } from '../shared/schema.js';
+
+dotenv.config();
 
 // Connection URI from .env file
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://QuickRent-Furnish:TukiMeow18%26@cluster0.xtppfyc.mongodb.net/QuickRent-Furnish?retryWrites=true&w=majority&appName=Cluster0';
