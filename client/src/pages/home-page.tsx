@@ -77,7 +77,7 @@ export default function HomePage() {
             </div>
             <div className="flex-1 flex justify-center">
               <img 
-                src="/attached_assets/image_1745942846416.png" 
+                src="https://placehold.co/800x600" 
                 alt="Quick Rental Process" 
                 className="w-full max-w-md rounded-lg shadow-lg"
               />

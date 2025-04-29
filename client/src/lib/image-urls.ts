@@ -1,39 +1,41 @@
-// Define image URLs rather than importing the actual images
-// This avoids MIME type issues
+// Using placeholder images to fix the navigation issues
+// We'll use the same placeholder for all images to ensure it works
+
+const placeholderImage = "https://placehold.co/600x400";
 
 export const imageUrls = {
   // Living Room
-  sofaImage1: "/src/assets/Sofa Set 1.jpeg",
-  sofaImage2: "/src/assets/Sofa Set 2.jpeg",
-  sofaImage3: "/src/assets/Sofa Set 3.jpeg",
-  sofaImage4: "/src/assets/Sofa Set 4.jpeg",
-  sofaImage5: "/src/assets/Sofa Set 5.jpeg",
-  sofaImage6: "/src/assets/Sofa Set 6.jpeg",
+  sofaImage1: placeholderImage,
+  sofaImage2: placeholderImage,
+  sofaImage3: placeholderImage,
+  sofaImage4: placeholderImage,
+  sofaImage5: placeholderImage,
+  sofaImage6: placeholderImage,
   
   // Bedroom
-  bed1Image: "/src/assets/Bed 1.jpeg",
-  bed2Image: "/src/assets/Bed 2.jpeg",
-  bed3Image: "/src/assets/Bed 3.jpeg",
-  bed4Image: "/src/assets/Bed 4.jpeg",
-  bohoBedImage: "/src/assets/Boho Bed.jpeg",
+  bed1Image: placeholderImage,
+  bed2Image: placeholderImage,
+  bed3Image: placeholderImage,
+  bed4Image: placeholderImage,
+  bohoBedImage: placeholderImage,
   
   // Dining
-  diningTableImage: "/src/assets/Dining Table.jpeg",
-  roundDiningTableImage: "/src/assets/Round Dining Table.jpeg",
-  bohoDiningTableImage: "/src/assets/Modern Boho Dining Table.jpeg",
-  darkDiningTableImage: "/src/assets/Stunning Dark Dining Wood Table.jpeg",
+  diningTableImage: placeholderImage,
+  roundDiningTableImage: placeholderImage,
+  bohoDiningTableImage: placeholderImage,
+  darkDiningTableImage: placeholderImage,
   
   // Office
-  officeSetupImage: "/src/assets/Office Room Setup.jpeg",
-  officeChairImage: "/src/assets/Modern Office Chair.jpeg",
-  neutralOfficeChairImage: "/src/assets/Neutral Office Chair.jpeg",
-  laptopChairImage: "/src/assets/Comfortable Office Chairs for Laptop Users.jpeg",
-  executiveDeskImage: "/src/assets/Large Executive Desk With File Cabinet.jpeg",
+  officeSetupImage: placeholderImage,
+  officeChairImage: placeholderImage,
+  neutralOfficeChairImage: placeholderImage,
+  laptopChairImage: placeholderImage,
+  executiveDeskImage: placeholderImage,
   
   // Study
-  studyTable1Image: "/src/assets/Study Table 1.jpeg",
-  studyTable2Image: "/src/assets/Study Table 2.jpeg",
-  studyTable3Image: "/src/assets/Study Table 3.jpeg",
-  studyTable4Image: "/src/assets/Study Table 4.jpeg",
-  studyTable5Image: "/src/assets/Study Table 5.jpeg"
+  studyTable1Image: placeholderImage,
+  studyTable2Image: placeholderImage,
+  studyTable3Image: placeholderImage,
+  studyTable4Image: placeholderImage,
+  studyTable5Image: placeholderImage
 };
