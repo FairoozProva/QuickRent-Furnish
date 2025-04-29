@@ -12,11 +12,11 @@ export default function CategoryPage() {
   const allProducts = {
     'living-room': [
       { id: 1, name: "Modern Sofa", category: "Living Room", price: 45, duration: "per month", sku: "LV-S001", imageUrl: "/src/assets/Sofa Set 1.jpeg" },
-      { id: 2, name: "L-Shaped Sofa", category: "Living Room", price: 55, duration: "per month", sku: "LV-S002", imageUrl: "/src/assets/Sofa Set 2.jpeg" },
+      { id: 2, name: "L-Shaped Sofa", category: "Living Room", price: 55, duration: "per month", sku: "LV-S002", imageUrl: "/src/assets/Sofa Set 6.jpeg" },
       { id: 3, name: "Corner Sofa", category: "Living Room", price: 60, duration: "per month", sku: "LV-CS001", imageUrl: "/src/assets/Sofa Set 3.jpeg" },
       { id: 4, name: "Sectional Sofa", category: "Living Room", price: 50, duration: "per month", sku: "LV-S003", imageUrl: "/src/assets/Sofa Set 4.jpeg" },
       { id: 5, name: "Comfortable Sofa", category: "Living Room", price: 48, duration: "per month", sku: "LV-S004", imageUrl: "/src/assets/Sofa Set 5.jpeg" },
-      { id: 6, name: "Double Sofa", category: "Living Room", price: 52, duration: "per month", sku: "LV-S005", imageUrl: "/src/assets/Sofa Set 6.jpeg" },
+      { id: 6, name: "Double Sofa", category: "Living Room", price: 52, duration: "per month", sku: "LV-S005", imageUrl: "/src/assets/Sofa Set 2.jpeg" },
     ],
     'bedroom': [
       { id: 7, name: "Kid's Bed", category: "Bedroom", price: 30, duration: "per month", sku: "BD-B001", imageUrl: "/src/assets/Bed 1.jpeg" },
