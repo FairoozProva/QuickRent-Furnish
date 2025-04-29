@@ -52,9 +52,12 @@ export default function Navbar() {
           </div>
           
           <div className="hidden md:flex items-center">
-            <div className="flex-shrink-0 ml-4">
+            <div className="flex-shrink-0 ml-4 space-x-2">
               <Link href="/auth">
-                <Button size="sm">Sign In</Button>
+                <Button size="sm" variant="outline">Sign In</Button>
+              </Link>
+              <Link href="/dashboard">
+                <Button size="sm">Dashboard</Button>
               </Link>
             </div>
           </div>
@@ -91,7 +94,10 @@ export default function Navbar() {
           <div className="pt-4 pb-3 border-t border-gray-200">
             <div className="flex items-center px-4 space-x-4">
               <Link href="/auth">
-                <Button size="sm">Sign In</Button>
+                <Button size="sm" variant="outline">Sign In</Button>
+              </Link>
+              <Link href="/dashboard">
+                <Button size="sm">Dashboard</Button>
               </Link>
             </div>
           </div>
