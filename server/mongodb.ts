@@ -3,12 +3,11 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-// Get MongoDB Atlas connection string
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://QuickRent-Furnish:TukiMeow18%26@cluster0.xtppfyc.mongodb.net/QuickRent-Furnish?retryWrites=true&w=majority&appName=Cluster0';
+// Skip MongoDB connection for now
+console.log('Using in-memory storage, MongoDB connection disabled');
 
-// Debug the connection string (hide username/password)
-const debugUri = MONGODB_URI.replace(/\/\/([^:]+):([^@]+)@/, '//***:***@');
-console.log(`Using MongoDB Atlas connection: ${debugUri}`);
+// Placeholder for MongoDB URI (not actually used)
+const MONGODB_URI = 'mongodb://localhost:27017/quickrent';
 
 // MongoDB Atlas configuration options
 const mongooseConfig = {
@@ -35,55 +34,10 @@ const mongooseConfig = {
 let isConnecting = false;
 let connectionEstablished = false;
 
-// Connect to MongoDB Atlas
+// Mock connect to database - do not actually connect
 export async function connectToDatabase() {
-  // If already connecting or connected, don't try again
-  if (isConnecting) {
-    console.log('MongoDB Atlas connection already in progress...');
-    // Wait for existing connection attempt to finish
-    while (isConnecting && !connectionEstablished) {
-      await new Promise(resolve => setTimeout(resolve, 500));
-    }
-    return mongoose.connection;
-  }
-  
-  // If already connected, return the connection
-  if (mongoose.connection.readyState === 1) {
-    console.log('Using existing MongoDB Atlas connection');
-    connectionEstablished = true;
-    return mongoose.connection;
-  }
-  
-  isConnecting = true;
-  
-  try {
-    console.log('Connecting to MongoDB Atlas...');
-    
-    // Close any existing connection first
-    if (mongoose.connection.readyState !== 0) {
-      console.log('Closing existing connection before reconnecting...');
-      await mongoose.disconnect();
-    }
-    
-    // Connect to MongoDB Atlas
-    await mongoose.connect(MONGODB_URI, mongooseConfig);
-    
-    // Connection successful
-    console.log('✅ Connected to MongoDB Atlas');
-    connectionEstablished = true;
-    
-    // Output database information
-    if (mongoose.connection.db) {
-      console.log(`Database name: ${mongoose.connection.db.databaseName}`);
-    }
-    
-    return mongoose.connection;
-  } catch (error) {
-    console.error('❌ Failed to connect to MongoDB Atlas:', error);
-    throw new Error('Unable to connect to MongoDB Atlas. Please check your connection string and network.');
-  } finally {
-    isConnecting = false;
-  }
+  console.log('Using in-memory storage instead of MongoDB');
+  return mongoose.connection;
 }
 
 // Disconnect from MongoDB

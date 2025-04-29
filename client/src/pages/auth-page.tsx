@@ -1,9 +1,8 @@
-import { useState } from "react";
-import { useLocation, Redirect } from "wouter";
-import { useAuth } from "@/hooks/use-auth";
+import React, { useState } from "react";
+import { Link, useLocation } from "wouter";
+import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -15,19 +14,23 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { insertUserSchema } from "@shared/schema";
+import { useToast } from "@/hooks/use-toast";
+import Navbar from "@/components/ui/navbar";
+import { imageUrls } from "../lib/image-urls";
 
-// Login form schema
+// User schema for authentication
 const loginSchema = z.object({
   username: z.string().min(3, "Username must be at least 3 characters"),
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
-// Register form schema (reuse the insertUserSchema but ensure password confirmation)
-const registerSchema = insertUserSchema.extend({
-  confirmPassword: z.string().min(6, "Confirm password is required"),
-}).refine(data => data.password === data.confirmPassword, {
-  message: "Passwords do not match",
+const registerSchema = z.object({
+  username: z.string().min(3, "Username must be at least 3 characters"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+  confirmPassword: z.string().min(6, "Password must be at least 6 characters"),
+  email: z.string().email("Invalid email address"),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords don't match",
   path: ["confirmPassword"],
 });
 
@@ -35,11 +38,11 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export default function AuthPage() {
-  const [activeTab, setActiveTab] = useState<"login" | "register">("login");
-  const { user, loginMutation, registerMutation } = useAuth();
-  const [location] = useLocation();
+  const [, setLocation] = useLocation();
+  const { toast } = useToast();
+  const [activeTab, setActiveTab] = useState<string>("login");
 
-  // Login form
+  // Login form handling
   const loginForm = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -48,62 +51,106 @@ export default function AuthPage() {
     },
   });
 
-  // Register form
+  // Register form handling
   const registerForm = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
       username: "",
-      name: "",
       email: "",
       password: "",
       confirmPassword: "",
     },
   });
 
-  // Submit handlers
-  const onLoginSubmit = (data: LoginFormValues) => {
-    loginMutation.mutate(data);
+  // Function to handle login form submission
+  const onLoginSubmit = async (values: LoginFormValues) => {
+    try {
+      const response = await fetch("/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+
+      if (!response.ok) {
+        throw new Error("Login failed. Please check your credentials.");
+      }
+
+      const user = await response.json();
+      toast({
+        title: "Login successful",
+        description: `Welcome back, ${user.username}!`,
+      });
+      setLocation("/");
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Login failed",
+        description: error instanceof Error ? error.message : "An error occurred",
+      });
+    }
   };
 
-  const onRegisterSubmit = (data: RegisterFormValues) => {
-    // Remove confirmPassword as it's not needed for the API
-    const { confirmPassword, ...registerData } = data;
-    registerMutation.mutate(registerData);
-  };
+  // Function to handle registration form submission
+  const onRegisterSubmit = async (values: RegisterFormValues) => {
+    try {
+      const { confirmPassword, ...userData } = values;
 
-  // Redirect if user is already logged in
-  if (user) {
-    // Get the from query parameter or default to home
-    const params = new URLSearchParams(location.split('?')[1]);
-    const from = params.get('from') || '/';
-    return <Redirect to={from} />;
-  }
+      const response = await fetch("/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Registration failed. Username may already be taken.");
+      }
+
+      const user = await response.json();
+      toast({
+        title: "Registration successful",
+        description: `Welcome, ${user.username}!`,
+      });
+      setLocation("/");
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Registration failed",
+        description: error instanceof Error ? error.message : "An error occurred",
+      });
+    }
+  };
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row">
-      {/* Auth Form */}
-      <div className="flex-1 flex items-center justify-center p-8 md:p-12">
-        <div className="w-full max-w-md">
-          <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold text-gray-900">FurnishRent</h1>
-            <p className="mt-2 text-gray-600">Premium Furniture Rental Service</p>
-          </div>
-
-          <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as "login" | "register")}>
-            <TabsList className="grid w-full grid-cols-2 mb-8">
-              <TabsTrigger value="login">Login</TabsTrigger>
-              <TabsTrigger value="register">Register</TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="login">
-              <div className="space-y-6">
-                <div className="text-center">
-                  <h2 className="text-xl font-semibold text-gray-900">Welcome back</h2>
-                  <p className="mt-1 text-sm text-gray-600">Sign in to your account to continue</p>
-                </div>
-
+    <div className="flex flex-col min-h-screen">
+      <Navbar />
+      
+      <div className="flex-1 flex flex-col md:flex-row">
+        {/* Auth Forms Column */}
+        <div className="w-full md:w-1/2 p-8 flex items-center justify-center">
+          <div className="w-full max-w-md space-y-8">
+            <div className="text-center">
+              <h2 className="text-3xl font-bold tracking-tight text-gray-900">
+                Welcome to QuickRent Furnish
+              </h2>
+              <p className="mt-2 text-gray-600">
+                Sign in to access your account or create a new one
+              </p>
+            </div>
+            
+            <Tabs defaultValue="login" value={activeTab} onValueChange={setActiveTab} className="w-full">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="login">Login</TabsTrigger>
+                <TabsTrigger value="register">Register</TabsTrigger>
+              </TabsList>
+              
+              {/* Login Form */}
+              <TabsContent value="login" className="mt-6">
                 <Form {...loginForm}>
-                  <form onSubmit={loginForm.handleSubmit(onLoginSubmit)} className="space-y-4">
+                  <form onSubmit={loginForm.handleSubmit(onLoginSubmit)} className="space-y-6">
                     <FormField
                       control={loginForm.control}
                       name="username"
@@ -117,7 +164,7 @@ export default function AuthPage() {
                         </FormItem>
                       )}
                     />
-
+                    
                     <FormField
                       control={loginForm.control}
                       name="password"
@@ -131,26 +178,26 @@ export default function AuthPage() {
                         </FormItem>
                       )}
                     />
-
-                    <Button 
-                      type="submit" 
-                      className="w-full" 
-                      disabled={loginMutation.isPending}
-                    >
-                      {loginMutation.isPending ? "Signing in..." : "Sign In"}
+                    
+                    <Button type="submit" className="w-full" disabled={loginForm.formState.isSubmitting}>
+                      {loginForm.formState.isSubmitting ? "Signing in..." : "Sign in"}
                     </Button>
                   </form>
                 </Form>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="register">
-              <div className="space-y-6">
-                <div className="text-center">
-                  <h2 className="text-xl font-semibold text-gray-900">Create an account</h2>
-                  <p className="mt-1 text-sm text-gray-600">Sign up to start renting premium furniture</p>
+                
+                <div className="mt-4 text-center text-sm text-gray-600">
+                  <span>Don't have an account? </span>
+                  <button 
+                    onClick={() => setActiveTab("register")} 
+                    className="text-primary hover:underline"
+                  >
+                    Register
+                  </button>
                 </div>
-
+              </TabsContent>
+              
+              {/* Register Form */}
+              <TabsContent value="register" className="mt-6">
                 <Form {...registerForm}>
                   <form onSubmit={registerForm.handleSubmit(onRegisterSubmit)} className="space-y-4">
                     <FormField
@@ -166,21 +213,7 @@ export default function AuthPage() {
                         </FormItem>
                       )}
                     />
-
-                    <FormField
-                      control={registerForm.control}
-                      name="name"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Full Name</FormLabel>
-                          <FormControl>
-                            <Input placeholder="Enter your full name" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
+                    
                     <FormField
                       control={registerForm.control}
                       name="email"
@@ -194,7 +227,7 @@ export default function AuthPage() {
                         </FormItem>
                       )}
                     />
-
+                    
                     <FormField
                       control={registerForm.control}
                       name="password"
@@ -208,7 +241,7 @@ export default function AuthPage() {
                         </FormItem>
                       )}
                     />
-
+                    
                     <FormField
                       control={registerForm.control}
                       name="confirmPassword"
@@ -222,78 +255,58 @@ export default function AuthPage() {
                         </FormItem>
                       )}
                     />
-
-                    <Button 
-                      type="submit" 
-                      className="w-full" 
-                      disabled={registerMutation.isPending}
-                    >
-                      {registerMutation.isPending ? "Creating account..." : "Create Account"}
+                    
+                    <Button type="submit" className="w-full" disabled={registerForm.formState.isSubmitting}>
+                      {registerForm.formState.isSubmitting ? "Creating account..." : "Create account"}
                     </Button>
                   </form>
                 </Form>
-              </div>
-            </TabsContent>
-          </Tabs>
+                
+                <div className="mt-4 text-center text-sm text-gray-600">
+                  <span>Already have an account? </span>
+                  <button 
+                    onClick={() => setActiveTab("login")} 
+                    className="text-primary hover:underline"
+                  >
+                    Sign in
+                  </button>
+                </div>
+              </TabsContent>
+            </Tabs>
+          </div>
         </div>
-      </div>
-
-      {/* Hero Section */}
-      <div className="hidden md:flex flex-1 bg-primary-50 items-center justify-center p-12">
-        <div className="max-w-md">
-          <h1 className="text-4xl font-bold text-gray-900">
-            <span className="block">Transform Your Space</span>
-            <span className="block text-primary">Without Commitment</span>
-          </h1>
-          <p className="mt-6 text-lg text-gray-600">
-            Join FurnishRent and enjoy premium furniture with flexible rental periods, 
-            free delivery, and hassle-free returns. Make your house feel like home without the long-term commitment.
-          </p>
-          <div className="mt-8 grid grid-cols-2 gap-4">
-            <div className="flex items-start">
-              <div className="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-md bg-primary-100 text-primary">
-                <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-              <div className="ml-4">
-                <h3 className="text-lg font-medium text-gray-900">Premium Quality</h3>
-                <p className="mt-1 text-sm text-gray-600">Carefully curated high-quality furniture</p>
-              </div>
-            </div>
-            <div className="flex items-start">
-              <div className="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-md bg-primary-100 text-primary">
-                <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <div className="ml-4">
-                <h3 className="text-lg font-medium text-gray-900">Flexible Duration</h3>
-                <p className="mt-1 text-sm text-gray-600">Rent for as long as you need</p>
-              </div>
-            </div>
-            <div className="flex items-start">
-              <div className="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-md bg-primary-100 text-primary">
-                <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 14v6m-3-3h6M6 10h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2zm10 0h2a2 2 0 002-2V6a2 2 0 00-2-2h-2a2 2 0 00-2 2v2a2 2 0 002 2zM6 20h2a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2z" />
-                </svg>
-              </div>
-              <div className="ml-4">
-                <h3 className="text-lg font-medium text-gray-900">Wide Selection</h3>
-                <p className="mt-1 text-sm text-gray-600">Choose from a variety of styles</p>
-              </div>
-            </div>
-            <div className="flex items-start">
-              <div className="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-md bg-primary-100 text-primary">
-                <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
-                </svg>
-              </div>
-              <div className="ml-4">
-                <h3 className="text-lg font-medium text-gray-900">Free Delivery</h3>
-                <p className="mt-1 text-sm text-gray-600">Delivered and assembled for free</p>
-              </div>
-            </div>
+        
+        {/* Hero Column */}
+        <div 
+          className="w-full md:w-1/2 bg-cover bg-center hidden md:block"
+          style={{ 
+            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${imageUrls.officeSetupImage})`,
+            minHeight: "400px"
+          }}
+        >
+          <div className="h-full flex flex-col justify-center p-12 text-white">
+            <h1 className="text-4xl font-bold mb-4">Premium Furniture Rental</h1>
+            <p className="text-xl mb-8">
+              Rent high-quality furniture for your home or office without the hassle of ownership
+            </p>
+            <ul className="space-y-4">
+              <li className="flex items-center">
+                <span className="inline-block w-6 h-6 mr-2 rounded-full bg-white text-primary flex items-center justify-center">✓</span>
+                Flexible rental periods
+              </li>
+              <li className="flex items-center">
+                <span className="inline-block w-6 h-6 mr-2 rounded-full bg-white text-primary flex items-center justify-center">✓</span>
+                Free delivery and assembly
+              </li>
+              <li className="flex items-center">
+                <span className="inline-block w-6 h-6 mr-2 rounded-full bg-white text-primary flex items-center justify-center">✓</span>
+                Premium furniture collections
+              </li>
+              <li className="flex items-center">
+                <span className="inline-block w-6 h-6 mr-2 rounded-full bg-white text-primary flex items-center justify-center">✓</span>
+                Easy returns and swaps
+              </li>
+            </ul>
           </div>
         </div>
       </div>
