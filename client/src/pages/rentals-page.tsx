@@ -33,7 +33,7 @@ export default function RentalsPage() {
     queryKey: ['/api/rentals'],
   });
   
-  // Filter rentals based on active tab
+  
   const filteredRentals = rentals?.filter(rental => {
     if (activeTab === "all") return true;
     return rental.status === activeTab;
