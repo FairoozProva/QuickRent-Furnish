@@ -16,8 +16,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useState } from "react";
 
+
 export default function Navbar() {
-  // Simplified version without auth
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [location] = useLocation();
   
