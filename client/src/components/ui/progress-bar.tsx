@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 
+
 interface ProgressBarProps {
   value: number;
   max?: number;
@@ -7,6 +8,7 @@ interface ProgressBarProps {
   height?: "sm" | "md" | "lg";
   className?: string;
 }
+
 
 export function ProgressBar({ 
   value, 
