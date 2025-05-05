@@ -3,12 +3,14 @@ import { Link } from "wouter";
 import { Skeleton } from "@/components/ui/skeleton";
 import { fetchCategories } from "@/lib/api";
 
+
 interface Category {
   _id: string;
   name: string;
   slug: string;
   imageUrl: string;
 }
+
 
 const predefinedCategories = [
   { id: 1, name: "Living Room", slug: "living-room", imageUrl: "/src/assets/Sofa Set 5.jpeg" },
@@ -17,6 +19,7 @@ const predefinedCategories = [
   { id: 4, name: "Office", slug: "office", imageUrl: "/src/assets/Office Room Setup.jpeg" },
   { id: 5, name: "Kitchen", slug: "kitchen", imageUrl: "/src/assets/kitchen.jpeg" }
 ];
+
 
 export default function ProductCategories() {
   const { data: categories, isLoading } = useQuery<Category[]>({
