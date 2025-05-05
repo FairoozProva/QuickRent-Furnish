@@ -2,10 +2,6 @@ import { useFirebaseAuth } from "@/hooks/use-firebase-auth";
 import { Loader2 } from "lucide-react";
 import { Redirect, Route } from "wouter";
 
-/**
- * A route that requires Firebase authentication
- * Redirects to /firebase-auth if user is not authenticated
- */
 export function FirebaseProtectedRoute({
   path,
   component: Component,
