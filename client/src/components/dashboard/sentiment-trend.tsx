@@ -3,7 +3,6 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 import { MoreHorizontal } from "lucide-react";
 import { ProgressBar } from "../ui/progress-bar";
 
-// Sample data for the chart - in a real app, this would come from an API
 const data = [
   { name: 'Jan', positive: 65, neutral: 20, negative: 15 },
   { name: 'Feb', positive: 60, neutral: 25, negative: 15 },
