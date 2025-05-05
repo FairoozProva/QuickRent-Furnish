@@ -42,7 +42,6 @@ export default function WishlistItem({ item }: WishlistItemProps) {
     },
   });
 
-  // Add to cart mutation
   const addToCartMutation = useMutation({
     mutationFn: () => addToCart(item.productId),
     onSuccess: () => {
