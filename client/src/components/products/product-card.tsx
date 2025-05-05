@@ -8,6 +8,7 @@ import { addToWishlist, removeFromWishlist, addToCart, checkWishlist, checkCart 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
+
 type ProductCardProps = {
   product: {
     _id: string;
@@ -49,7 +50,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   const isInWishlist = wishlistData?.isInWishlist ?? false;
   const isInCart = cartData?.isInCart ?? false;
 
-  // Add to wishlist mutation
+  
   const wishlistMutation = useMutation({
     mutationFn: isInWishlist 
       ? () => removeFromWishlist(product._id)
@@ -74,7 +75,7 @@ export default function ProductCard({ product }: ProductCardProps) {
     },
   });
 
-  // Add to cart mutation
+ 
   const cartMutation = useMutation({
     mutationFn: () => addToCart(product._id),
     onSuccess: () => {
