@@ -2,6 +2,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { MoreHorizontal, Zap, HeadphonesIcon, Gauge, CreditCard, Smartphone } from "lucide-react";
 import { ProgressBar } from "../ui/progress-bar";
 
+
 const categories = [
   {
     id: 1,
