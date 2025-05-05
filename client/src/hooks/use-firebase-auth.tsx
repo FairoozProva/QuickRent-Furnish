@@ -16,7 +16,7 @@ import {
 } from "@/lib/firebase";
 import { useToast } from "@/hooks/use-toast";
 
-// Types for our auth context
+
 type FirebaseAuthContextType = {
   user: FirebaseUser | null;
   isLoading: boolean;
@@ -27,28 +27,27 @@ type FirebaseAuthContextType = {
   logoutMutation: UseMutationResult<void, Error, void>;
 };
 
-// Create the auth context
+
 export const FirebaseAuthContext = createContext<FirebaseAuthContextType | null>(null);
 
-// Provider component
 export function FirebaseAuthProvider({ children }: { children: ReactNode }) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [user, setUser] = useState<FirebaseUser | null>(null);
   const [initializing, setInitializing] = useState(true);
 
-  // Set up auth state listener on mount
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((currentUser) => {
       setUser(currentUser);
       if (initializing) setInitializing(false);
     });
 
-    // Clean up the listener on unmount
+    
     return () => unsubscribe();
   }, [initializing]);
 
-  // Email sign in mutation
+  
   const emailLoginMutation = useMutation({
     mutationFn: async ({ email, password }: { email: string; password: string }) => {
       try {
@@ -80,18 +79,16 @@ export function FirebaseAuthProvider({ children }: { children: ReactNode }) {
     },
   });
 
-  // Email registration mutation
+  
   const emailRegisterMutation = useMutation({
     mutationFn: async ({ email, password, displayName }: { email: string; password: string; displayName: string }) => {
       try {
         const result = await createUserWithEmail(email, password);
-        // Set display name
         if (result.user) {
           await updateUserProfile(result.user, displayName);
         }
         return result.user;
       } catch (error) {
-        // Format the error for better UX
         const errorMessage = (error as Error).message;
         const formattedError = errorMessage.includes('auth/') 
           ? errorMessage.split('auth/')[1].split(')')[0].replace(/-/g, ' ')
@@ -116,14 +113,13 @@ export function FirebaseAuthProvider({ children }: { children: ReactNode }) {
     },
   });
 
-  // Google sign-in mutation
+ 
   const googleSignInMutation = useMutation({
     mutationFn: async () => {
       try {
         const result = await signInWithGoogle();
         return result.user;
       } catch (error) {
-        // Google sign-in can be cancelled by the user, which isn't an error
         if ((error as Error).message.includes('cancelled')) {
           throw new Error('Sign in was cancelled');
         }
@@ -139,7 +135,6 @@ export function FirebaseAuthProvider({ children }: { children: ReactNode }) {
       queryClient.invalidateQueries({ queryKey: ["currentUser"] });
     },
     onError: (error: Error) => {
-      // Don't show error toast if user just cancelled the popup
       if (!error.message.includes('cancelled')) {
         toast({
           title: "Google sign in failed",
@@ -150,7 +145,6 @@ export function FirebaseAuthProvider({ children }: { children: ReactNode }) {
     },
   });
 
-  // Logout mutation
   const logoutMutation = useMutation({
     mutationFn: async () => {
       await logoutUser();
@@ -189,7 +183,7 @@ export function FirebaseAuthProvider({ children }: { children: ReactNode }) {
   );
 }
 
-// Hook to use the auth context
+
 export function useFirebaseAuth() {
   const context = useContext(FirebaseAuthContext);
   if (!context) {
