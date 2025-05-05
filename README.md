@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # QuickRent Furnish
 
 A sustainable furniture rental platform designed to simplify eco-friendly home furnishing through an intuitive digital marketplace.
@@ -94,3 +95,7 @@ For authentication, this application uses Firebase:
 - The application will run in development mode even if MongoDB is not available, but with limited functionality
 - Firebase authentication can be set up later if needed
 - User schema includes `firebaseId` field for Firebase authentication integration
+=======
+# QuickRent-Furnish
+This is a project for web development course in university.
+>>>>>>> b6659c5c2b86b48f6bc5c872e88a31e9491c8b39
