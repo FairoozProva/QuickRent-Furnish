@@ -2,6 +2,7 @@ import { Link } from "wouter";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useQuery } from "@tanstack/react-query";
 
+
 interface BaseCategory {
   name: string;
   slug: string;
