@@ -11,7 +11,6 @@ import { pool } from "./db";
 const MemoryStore = createMemoryStore(session);
 const PostgresSessionStore = connectPg(session);
 
-// Sample data for the application
 const sampleCategories = [
   { id: 1, name: "Sofa Set", slug: "sofa-set", imageUrl: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" },
   { id: 2, name: "Bedroom", slug: "bedroom", imageUrl: "https://images.unsplash.com/photo-1588046130717-0eb0c9a3ba15?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" },
@@ -200,19 +199,19 @@ const sampleProducts = [
 ];
 
 export interface IStorage {
-  // User methods
+
   getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
   updateUser(id: number, user: Partial<User>): Promise<User | undefined>;
 
-  // Category methods
+
   getCategories(): Promise<Category[]>;
   getCategory(id: number): Promise<Category | undefined>;
   getCategoryBySlug(slug: string): Promise<Category | undefined>;
   createCategory(category: InsertCategory): Promise<Category>;
 
-  // Product methods
+ 
   getProducts(filters?: { 
     categoryId?: number, 
     isTrending?: boolean, 
@@ -222,18 +221,18 @@ export interface IStorage {
   getProductBySku(sku: string): Promise<Product | undefined>;
   createProduct(product: InsertProduct): Promise<Product>;
   
-  // Rental methods
+  
   getRentals(userId: number): Promise<Rental[]>;
   getRental(id: number): Promise<Rental | undefined>;
   createRental(rental: InsertRental): Promise<Rental>;
   updateRental(id: number, rental: Partial<Rental>): Promise<Rental | undefined>;
 
-  // Wishlist methods
+
   getWishlistItems(userId: number): Promise<WishlistItem[]>;
   addToWishlist(wishlistItem: InsertWishlist): Promise<WishlistItem>;
   removeFromWishlist(userId: number, productId: number): Promise<void>;
 
-  // Cart methods
+  
   getCartItems(userId: number): Promise<CartItem[]>;
   addToCart(cartItem: InsertCart): Promise<CartItem>;
   updateCartItem(userId: number, productId: number, duration: number): Promise<CartItem | undefined>;
@@ -260,12 +259,11 @@ export class MemStorage implements IStorage {
   currentCartId: number;
 
   constructor() {
-    // Initialize session store
     this.sessionStore = new MemoryStore({
       checkPeriod: 86400000, // prune expired entries every 24h
     });
 
-    // Initialize collections
+    
     this.users = new Map();
     this.categories = new Map();
     this.products = new Map();
@@ -273,7 +271,7 @@ export class MemStorage implements IStorage {
     this.wishlistItems = new Map();
     this.cartItems = new Map();
 
-    // Set current IDs
+
     this.currentUserId = 1;
     this.currentCategoryId = sampleCategories.length + 1;
     this.currentProductId = sampleProducts.length + 1;
@@ -281,23 +279,20 @@ export class MemStorage implements IStorage {
     this.currentWishlistId = 1;
     this.currentCartId = 1;
 
-    // Seed the database with sample data
+   
     this.seedDatabase();
   }
 
   private seedDatabase() {
-    // Add sample categories
     sampleCategories.forEach(category => {
       this.categories.set(category.id, { ...category, createdAt: new Date() });
     });
 
-    // Add sample products
     sampleProducts.forEach(product => {
       this.products.set(product.id, { ...product, createdAt: new Date() });
     });
   }
 
-  // User methods
   async getUser(id: number): Promise<User | undefined> {
     return this.users.get(id);
   }
@@ -324,7 +319,6 @@ export class MemStorage implements IStorage {
     return updatedUser;
   }
 
-  // Category methods
   async getCategories(): Promise<Category[]> {
     return Array.from(this.categories.values());
   }
@@ -346,7 +340,7 @@ export class MemStorage implements IStorage {
     return category;
   }
 
-  // Product methods
+
   async getProducts(filters?: { 
     categoryId?: number, 
     isTrending?: boolean, 
@@ -386,7 +380,7 @@ export class MemStorage implements IStorage {
     return product;
   }
 
-  // Rental methods
+ 
   async getRentals(userId: number): Promise<Rental[]> {
     return Array.from(this.rentals.values()).filter(
       (rental) => rental.userId === userId,
@@ -413,7 +407,6 @@ export class MemStorage implements IStorage {
     return updatedRental;
   }
 
-  // Wishlist methods
   async getWishlistItems(userId: number): Promise<WishlistItem[]> {
     return Array.from(this.wishlistItems.values()).filter(
       (item) => item.userId === userId,
@@ -421,7 +414,6 @@ export class MemStorage implements IStorage {
   }
 
   async addToWishlist(insertWishlistItem: InsertWishlist): Promise<WishlistItem> {
-    // Check if item already exists
     const existingItem = Array.from(this.wishlistItems.values()).find(
       (item) => item.userId === insertWishlistItem.userId && item.productId === insertWishlistItem.productId,
     );
@@ -445,7 +437,7 @@ export class MemStorage implements IStorage {
     });
   }
 
-  // Cart methods
+
   async getCartItems(userId: number): Promise<CartItem[]> {
     return Array.from(this.cartItems.values()).filter(
       (item) => item.userId === userId,
@@ -453,7 +445,6 @@ export class MemStorage implements IStorage {
   }
 
   async addToCart(insertCartItem: InsertCart): Promise<CartItem> {
-    // Check if item already exists
     const existingItem = Array.from(this.cartItems.values()).find(
       (item) => item.userId === insertCartItem.userId && item.productId === insertCartItem.productId,
     );
@@ -509,7 +500,6 @@ export class DatabaseStorage implements IStorage {
     });
   }
 
-  // User methods
   async getUser(id: number): Promise<User | undefined> {
     const [user] = await db.select().from(users).where(eq(users.id, id));
     return user;
@@ -534,7 +524,6 @@ export class DatabaseStorage implements IStorage {
     return updatedUser;
   }
 
-  // Category methods
   async getCategories(): Promise<Category[]> {
     return db.select().from(categories);
   }
@@ -554,7 +543,6 @@ export class DatabaseStorage implements IStorage {
     return category;
   }
 
-  // Product methods
   async getProducts(filters?: {
     categoryId?: number;
     isTrending?: boolean;
@@ -592,7 +580,6 @@ export class DatabaseStorage implements IStorage {
     return product;
   }
 
-  // Rental methods
   async getRentals(userId: number): Promise<Rental[]> {
     return db.select().from(rentals).where(eq(rentals.userId, userId));
   }
@@ -616,13 +603,11 @@ export class DatabaseStorage implements IStorage {
     return updatedRental;
   }
 
-  // Wishlist methods
   async getWishlistItems(userId: number): Promise<WishlistItem[]> {
     return db.select().from(wishlist).where(eq(wishlist.userId, userId));
   }
 
   async addToWishlist(insertWishlistItem: InsertWishlist): Promise<WishlistItem> {
-    // Check if the item already exists
     const [existingItem] = await db
       .select()
       .from(wishlist)
@@ -652,13 +637,11 @@ export class DatabaseStorage implements IStorage {
       );
   }
 
-  // Cart methods
   async getCartItems(userId: number): Promise<CartItem[]> {
     return db.select().from(cart).where(eq(cart.userId, userId));
   }
 
   async addToCart(insertCartItem: InsertCart): Promise<CartItem> {
-    // Check if the item already exists
     const [existingItem] = await db
       .select()
       .from(cart)
@@ -711,5 +694,4 @@ export class DatabaseStorage implements IStorage {
   }
 }
 
-// Create a new storage instance
 export const storage = new MemStorage();
