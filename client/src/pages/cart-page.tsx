@@ -33,7 +33,6 @@ export default function CartPage() {
     queryKey: ['/api/cart'],
   });
   
-  // Clear cart mutation
   const clearCartMutation = useMutation({
     mutationFn: clearCart,
     onSuccess: () => {
@@ -52,7 +51,6 @@ export default function CartPage() {
     },
   });
   
-  // Create rentals mutation
   const createRentalsMutation = useMutation({
     mutationFn: createRentals,
     onSuccess: () => {
