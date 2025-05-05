@@ -1,4 +1,3 @@
-// Simple Express server to serve static files without any MongoDB dependencies
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -54,7 +53,7 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/test.html'));
 });
 
-// Start the server
+
 app.listen(port, '0.0.0.0', () => {
   console.log(`Test server running at http://0.0.0.0:${port}`);
 });
