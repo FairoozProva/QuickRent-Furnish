@@ -6,10 +6,9 @@ import { z } from "zod";
 import { insertCartSchema, insertWishlistSchema } from "../shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Authentication routes (register, login, logout, user)
   setupAuth(app);
-
-  // Categories
+  
+//Categories
   app.get("/api/categories", async (_req, res) => {
     try {
       const categories = await storage.getCategories();
@@ -88,7 +87,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Related products - returns products in the same category
+  
   app.get("/api/products/:id/related", async (req, res) => {
     try {
       const productId = parseInt(req.params.id, 10);
@@ -179,14 +178,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const cartItems = await storage.getCartItems(req.user!.id);
       
-      // Get full product details for each cart item
       const productsPromises = cartItems.map(item => 
         storage.getProduct(item.productId.toString())
       );
       
       const products = await Promise.all(productsPromises);
       
-      // Combine cart items with product details
       const result = cartItems.map((item, index) => ({
         ...item,
         product: products[index]
@@ -292,14 +289,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const rentals = await storage.getRentals(req.user!.id);
       
-      // Get full product details for each rental
       const productsPromises = rentals.map(rental => 
         storage.getProduct(rental.productId.toString())
       );
       
       const products = await Promise.all(productsPromises);
       
-      // Combine rentals with product details
       const result = rentals.map((rental, index) => ({
         ...rental,
         product: products[index]
