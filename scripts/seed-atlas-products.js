@@ -1,4 +1,3 @@
-// This script adds products to MongoDB Atlas
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import { Category, Product } from '../shared/schema.js';
@@ -19,15 +18,15 @@ async function connectToAtlas() {
       maxPoolSize: 10,
       appName: 'CreativeCanvas Seeder'
     });
-    console.log('✅ Connected to MongoDB Atlas');
+    console.log(' Connected to MongoDB Atlas');
     return true;
   } catch (error) {
-    console.error('❌ Failed to connect to MongoDB Atlas:', error);
+    console.error(' Failed to connect to MongoDB Atlas:', error);
     return false;
   }
 }
 
-// Create categories if they don't exist
+
 async function createCategories() {
   const categories = [
     {
@@ -208,9 +207,9 @@ async function seedDatabase() {
     // Create products using the category map
     await createProducts(categoryMap);
     
-    console.log('✅ Database seeding completed successfully!');
+    console.log(' Database seeding completed successfully!');
   } catch (error) {
-    console.error('❌ Error seeding database:', error);
+    console.error(' Error seeding database:', error);
   } finally {
     // Close the MongoDB connection
     await mongoose.disconnect();
