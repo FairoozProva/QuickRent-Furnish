@@ -9,7 +9,6 @@ interface FeedbackToolsProps {
 }
 
 export default function FeedbackTools({ tools }: FeedbackToolsProps) {
-  // Sample tools when no API data is available
   const sampleTools = [
     {
       id: 1,
