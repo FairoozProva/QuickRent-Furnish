@@ -4,6 +4,7 @@ import { MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
+
 export default function Header() {
   const [location] = useLocation();
   
