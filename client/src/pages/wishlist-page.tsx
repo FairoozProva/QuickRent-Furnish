@@ -20,7 +20,6 @@ type WishlistItem = {
 };
 
 export default function WishlistPage() {
-  // Fetch wishlist items
   const { data: wishlistItems, isLoading, error } = useQuery<WishlistItem[]>({
     queryKey: ['/api/wishlist'],
   });
