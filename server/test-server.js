@@ -1,4 +1,3 @@
-// Simple Express server to serve static files without MongoDB dependencies
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
