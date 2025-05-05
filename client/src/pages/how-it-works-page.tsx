@@ -3,6 +3,7 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { CheckCircle } from "lucide-react";
 
+
 export default function HowItWorksPage() {
   const steps = [
     {
