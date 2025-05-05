@@ -1,6 +1,7 @@
 import { Link } from "wouter";
 import { Facebook, Twitter, Instagram, Linkedin, MapPin, Phone, Mail } from "lucide-react";
 
+
 export default function Footer() {
   return (
     <footer className="bg-gray-800">
