@@ -4,17 +4,10 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-/**
- * This script checks connection to MongoDB and verifies the database setup
- * It's designed to be run directly in VSCode or terminal for local development
- * 
- * Run with: npx tsx scripts/check-mongodb.ts
- */
 async function checkMongoDBConnection() {
   console.log('MongoDB Connection Check');
   console.log('=======================');
   
-  // Using local MongoDB connection string only for VSCode compatibility
   const connectionString = 'mongodb://localhost:27017/quickrent_furnish';
   console.log('Using local MongoDB connection for VSCode compatibility');
   
@@ -22,7 +15,7 @@ async function checkMongoDBConnection() {
     console.log(`Attempting to connect to MongoDB: ${connectionString.replace(/\/\/([^:]+):[^@]+@/, '//***:***@')}`);
     
     await mongoose.connect(connectionString);
-    console.log('✅ MongoDB connected successfully');
+    console.log(' MongoDB connected successfully');
     
     // Check for collections and document counts
     console.log('\nChecking collections:');
@@ -57,7 +50,7 @@ async function checkMongoDBConnection() {
     console.log('   - Populate with sample data using: npx tsx scripts/seed-mongodb.ts');
     
   } catch (error) {
-    console.error('❌ Failed to connect to MongoDB');
+    console.error(' Failed to connect to MongoDB');
     console.error(error);
     
     console.log('\nTroubleshooting steps for VSCode:');
