@@ -16,9 +16,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Middleware removed as it was causing MIME type issues
 
-// Serve static assets
 app.use('/src/assets', express.static(path.join(__dirname, '../client/src/assets')));
 
 app.use((req, res, next) => {
@@ -53,8 +51,6 @@ app.use((req, res, next) => {
 
 (async () => {  
   // MongoDB connection will be handled by MongoDBStorage
-  // No need to explicitly connect here
-  
   const server = await registerRoutes(app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
@@ -65,18 +61,14 @@ app.use((req, res, next) => {
     res.status(status).json({ message });
   });
 
-  // importantly only setup vite in development and after
-  // setting up all the other routes so the catch-all route
-  // doesn't interfere with the other routes
+  
   if (app.get("env") === "development") {
     await setupVite(app, server);
   } else {
     serveStatic(app);
   }
 
-  // ALWAYS serve the app on port 5000
   // this serves both the API and the client.
-  // It is the only port that is not firewalled.
   const port = 5000;
   console.log(` Server is starting on http://localhost:${port}`);
   server.listen({
