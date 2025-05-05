@@ -8,7 +8,6 @@ import { cn } from "@/lib/utils";
 
 type SentimentFilter = "all" | "positive" | "neutral" | "negative";
 
-// Sample feedback items
 const feedbackItems = [
   {
     id: 1,
