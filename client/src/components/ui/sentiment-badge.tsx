@@ -7,6 +7,7 @@ interface SentimentBadgeProps {
   className?: string;
 }
 
+
 const sentimentClasses: Record<SentimentType, string> = {
   positive: "bg-green-100 border-left-green-500 text-green-700",
   neutral: "bg-neutral-100 border-left-neutral-500 text-neutral-700",
