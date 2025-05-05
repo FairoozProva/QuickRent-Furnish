@@ -1,10 +1,3 @@
-/**
- * MongoDB Seed Script for QuickRent Furnish
- * 
- * This script populates the MongoDB database with initial data.
- * Run with: npx tsx scripts/seed-mongodb.ts
- */
-
 import mongoose from 'mongoose';
 import { User, Category, Product } from '../shared/schema';
 import { scrypt, randomBytes } from 'crypto';
@@ -15,20 +8,13 @@ const scryptAsync = promisify(scrypt);
 // MongoDB connection string
 const MONGODB_URI = 'mongodb://localhost:27017/quickrent_furnish';
 
-/**
- * Hashes a password using scrypt with a salt
- * @param password The password to hash
- * @returns A string in the format "hash.salt"
- */
 async function hashPassword(password: string): Promise<string> {
   const salt = randomBytes(16).toString('hex');
   const buf = (await scryptAsync(password, salt, 64)) as Buffer;
   return `${buf.toString('hex')}.${salt}`;
 }
 
-/**
- * Seeds the MongoDB database with initial data
- */
+
 async function seedDatabase() {
   console.log('Connecting to MongoDB...');
   try {
@@ -189,7 +175,6 @@ async function seedDatabase() {
         trending: false,
         isNewProduct: true
       }
-      // Add more products as needed
     ];
 
     for (const productData of products) {
