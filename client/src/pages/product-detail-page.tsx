@@ -35,7 +35,7 @@ import { useToast } from "@/hooks/use-toast";
 import Navbar from "@/components/ui/navbar";
 import { imageUrls } from "../lib/image-urls";
 
-// Mock product details
+
 const products = {
   "office-chair": {
     id: 1,
@@ -167,7 +167,7 @@ export default function ProductDetailPage() {
     });
   };
   
-  // Toggle wishlist handler
+  
   const handleToggleWishlist = () => {
     setIsWishlisted(!isWishlisted);
     toast({
