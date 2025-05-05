@@ -58,19 +58,18 @@ export function setupAuth(app: Express) {
         const user = await storage.getUserByUsername(username);
         if (!user || !(await comparePasswords(password, user.password))) {
           return done(null, false);
-        } else {
-          return done(null, user);
         }
+        return done(null, user);
       } catch (error) {
         return done(error);
       }
-    }),
+    })
   );
 
   passport.serializeUser((user, done) => {
     done(null, user._id);
   });
-  
+
   passport.deserializeUser(async (id: string, done) => {
     try {
       const user = await storage.getUser(id);
@@ -84,14 +83,22 @@ export function setupAuth(app: Express) {
     try {
       const existingUser = await storage.getUserByUsername(req.body.username);
       if (existingUser) {
-        return res.status(400).send("Username already exists");
+        return res.status(400).json({ error: "Username already exists" });
       }
 
       const hashedPassword = await hashPassword(req.body.password);
-      const user = await storage.createUser({
-        ...req.body,
+      const userData = {
+        username: req.body.username,
         password: hashedPassword,
-      });
+        name: req.body.name,
+        email: req.body.email,
+        createdAt: new Date()
+      };
+
+      const user = await storage.createUser(userData);
+
+      // Initialize empty cart and rentals for the new user
+      await storage.initializeUserData(user._id.toString());
 
       req.login(user, (err) => {
         if (err) return next(err);
@@ -107,10 +114,13 @@ export function setupAuth(app: Express) {
     }
   });
 
-  app.post("/api/login", passport.authenticate("local"), (req, res) => {
+  app.post("/api/login", passport.authenticate("local"), async (req, res) => {
     // Remove password from response
     const userResponse = { ...req.user };
     delete userResponse.password;
+    
+    // Ensure cart and rentals are initialized
+    await storage.initializeUserData(req.user._id.toString());
     
     res.status(200).json(userResponse);
   });

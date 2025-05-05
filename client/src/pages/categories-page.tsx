@@ -11,42 +11,42 @@ export default function CategoriesPage() {
       name: "Living Room", 
       slug: "living-room", 
       description: "Comfortable sofas, coffee tables, and more for your living room", 
-      imageUrl: imageUrls.sofaImage4 
+      imageUrl: imageUrls.sofaImage5  // Changed to Sofa Set 5 image
     },
     { 
       id: 2, 
       name: "Bedroom", 
       slug: "bedroom", 
       description: "Beds, nightstands, and other bedroom essentials", 
-      imageUrl: imageUrls.bohoBedImage 
+      imageUrl: imageUrls.bed4Image  // Changed to more attractive Bed 4 image
     },
     { 
       id: 3, 
       name: "Dining", 
       slug: "dining", 
       description: "Dining tables, chairs, and dining room accessories", 
-      imageUrl: imageUrls.bohoDiningTableImage 
+      imageUrl: imageUrls.diningTableImage  // Changed to main dining table image
     },
     { 
       id: 4, 
       name: "Office", 
       slug: "office", 
       description: "Desks, office chairs, and work-from-home solutions", 
-      imageUrl: imageUrls.officeSetupImage 
+      imageUrl: imageUrls.officeSetupImage  // Using the office setup image
     },
     { 
       id: 5, 
       name: "Study", 
       slug: "study", 
       description: "Bookshelves, reading desks, and study room accessories", 
-      imageUrl: imageUrls.studyTable1Image 
+      imageUrl: imageUrls.studyTable3Image  // Changed to Study Table 3 image
     },
     { 
       id: 6, 
       name: "Kids", 
       slug: "kids", 
       description: "Furniture for children's rooms and play areas", 
-      imageUrl: imageUrls.bed1Image 
+      imageUrl: imageUrls.kidsBed1Image  // Changed to Kid's Bed image
     },
   ];
 
@@ -76,11 +76,9 @@ export default function CategoriesPage() {
                   </div>
                   <h3 className="text-xl font-semibold mb-2">{category.name}</h3>
                   <p className="text-gray-600 mb-4 flex-grow">{category.description}</p>
-                  <div className="flex items-center justify-end">
-                    <div className="flex items-center text-primary">
-                      <span className="mr-2">View Products</span>
-                      <ArrowRight size={16} />
-                    </div>
+                  <div className="flex items-center text-primary">
+                    <span className="mr-2">View Products</span>
+                    <ArrowRight size={16} />
                   </div>
                 </div>
               </Link>

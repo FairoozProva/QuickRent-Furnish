@@ -1,21 +1,83 @@
 import Navbar from "@/components/ui/navbar";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Heart } from "lucide-react";
+import { Heart, ShoppingCart } from "lucide-react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { fetchProducts, addToCart } from "@/lib/api";
+import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/use-auth";
+import { Skeleton } from "@/components/ui/skeleton";
 import { imageUrls } from "../lib/image-urls";
 
+type Product = {
+  _id: string;
+  name: string;
+  category: string;
+  price: number;
+  imageUrl: string;
+  material?: string;
+  trending?: boolean;
+  isNewProduct?: boolean;
+};
+
 export default function ProductsPage() {
-  // Define some sample products with image URLs
-  const products = [
-    { id: 1, name: "Modern Sofa", category: "Living Room", price: 45, duration: "per month", sku: "LV-S001", imageUrl: imageUrls.sofaImage5 },
-    { id: 2, name: "Round Dining Table", category: "Dining", price: 38, duration: "per month", sku: "DN-T001", imageUrl: imageUrls.roundDiningTableImage },
-    { id: 3, name: "Queen Bed Frame", category: "Bedroom", price: 42, duration: "per month", sku: "BD-B001", imageUrl: imageUrls.bed4Image },
-    { id: 4, name: "Study Table", category: "Study", price: 35, duration: "per month", sku: "ST-T001", imageUrl: imageUrls.studyTable3Image },
-    { id: 5, name: "Dining Table", category: "Dining", price: 38, duration: "per month", sku: "DN-T002", imageUrl: imageUrls.diningTableImage },
-    { id: 6, name: "Office Chair", category: "Office", price: 32, duration: "per month", sku: "OF-C001", imageUrl: imageUrls.officeChairImage },
-    { id: 7, name: "Executive Desk", category: "Office", price: 40, duration: "per month", sku: "OF-D001", imageUrl: imageUrls.executiveDeskImage },
-    { id: 8, name: "Kids Bed", category: "Kids", price: 35, duration: "per month", sku: "KD-B001", imageUrl: imageUrls.bed1Image },
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  // Define manual products list
+  const manualProducts = [
+    { id: 1, name: "Modern Sofa", category: "Living Room", price: 2500, duration: "per month", sku: "LV-S001", imageUrl: imageUrls.sofaImage1 },
+    { id: 2, name: "Round Dining Table", category: "Dining", price: 2500, duration: "per month", sku: "DN-T001", imageUrl: imageUrls.roundDiningTableImage },
+    { id: 3, name: "Queen Bed Frame", category: "Bedroom", price: 2500, duration: "per month", sku: "BD-B001", imageUrl: imageUrls.bed4Image },
+    { id: 4, name: "Study Table", category: "Study", price: 700, duration: "per month", sku: "ST-T001", imageUrl: imageUrls.studyTable3Image },
+    { id: 5, name: "Dining Table", category: "Dining", price: 1500, duration: "per month", sku: "DN-T002", imageUrl: imageUrls.diningTableImage },
+    { id: 6, name: "Modern Office Chair", category: "Office", price: 500, duration: "per month", sku: "OF-C001", imageUrl: imageUrls.officeChairImage },
+    { id: 7, name: "Office Desk", category: "Office", price: 3000, duration: "per month", sku: "OF-D001", imageUrl: imageUrls.executiveDeskImage },
+    { id: 8, name: "Kids Bed", category: "Kids", price: 1000, duration: "per month", sku: "KD-B001", imageUrl: imageUrls.kidsBed1Image },
   ];
+
+  // Use API products if available, otherwise use manual products
+  const { data: apiProducts, isLoading } = useQuery<Product[]>({
+    queryKey: ['/api/products'],
+    queryFn: () => fetchProducts(),
+    enabled: false, // Disable API fetching since we're using manual products
+  });
+
+  // Use manual products instead of API products
+  const products = manualProducts;
+
+  // Add to cart mutation
+  const addToCartMutation = useMutation({
+    mutationFn: (productId: string) => addToCart(productId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/cart'] });
+      toast({
+        title: 'Added to cart',
+        description: 'Item has been added to your cart.',
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: 'Failed to add to cart',
+        description: error.message,
+        variant: 'destructive',
+      });
+    },
+  });
+
+  const handleAddToCart = (productId: string, productName: string) => {
+    if (!user) {
+      toast({
+        title: 'Authentication required',
+        description: 'Please sign in to add items to your cart.',
+        variant: 'destructive',
+      });
+      return;
+    }
+    
+    addToCartMutation.mutate(productId);
+  };
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -52,9 +114,15 @@ export default function ProductsPage() {
                   </div>
                   <div className="flex justify-between items-center mt-3">
                     <p className="text-xl font-bold">৳{product.price} <span className="text-sm font-normal text-gray-500">{product.duration}</span></p>
-                    <Link href={`/product/${product.id}`}>
-                      <Button size="sm">View Details</Button>
-                    </Link>
+                    <Button 
+                      size="sm"
+                      className="flex items-center gap-2"
+                      onClick={() => handleAddToCart(product.id.toString(), product.name)}
+                      disabled={addToCartMutation.isPending}
+                    >
+                      <ShoppingCart className="h-4 w-4" />
+                      Add to Cart
+                    </Button>
                   </div>
                 </div>
               </div>

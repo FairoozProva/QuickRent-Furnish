@@ -1,8 +1,7 @@
 import express from 'express';
 import admin from 'firebase-admin';
-import dotenv from 'dotenv';
-
-dotenv.config();
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
 // Firebase user interface for the application
 export interface FirebaseUser {
@@ -14,45 +13,25 @@ export interface FirebaseUser {
 }
 
 // Initialize Firebase Admin for server-side verification
-// In VSCode development, you'll need to add your service account key
-// Create a .env file with FIREBASE_SERVICE_ACCOUNT (base64 encoded)
 try {
   // Check if app is already initialized to prevent multiple instances
   admin.app();
   console.log('Firebase Admin already initialized');
 } catch (error) {
-  // Initialize only if not already initialized
-  const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT;
-  
-  if (serviceAccount) {
-    try {
-      // Decode the base64 encoded service account
-      const decodedServiceAccount = Buffer.from(serviceAccount, 'base64').toString();
-      const serviceAccountJson = JSON.parse(decodedServiceAccount);
-      
-      // Initialize with service account
-      admin.initializeApp({
-        credential: admin.credential.cert(serviceAccountJson)
-      });
-      
-      console.log('Firebase Admin initialized with service account');
-    } catch (initError) {
-      console.error('Error initializing Firebase Admin with service account:', initError);
-      
-      // Initialize with minimal configuration for development
-      admin.initializeApp();
-      console.log('⚠️ Firebase Admin initialized with default configuration');
-    }
-  } else {
-    // For development in VSCode, allow using Firebase without service account
-    console.log('⚠️ No service account provided');
+  try {
+    // Read the service account JSON file directly
+    const serviceAccountPath = join(process.cwd(), 'quickrent-furnish-firebase-adminsdk-fbsvc-c9122db31f.json');
+    const serviceAccount = JSON.parse(readFileSync(serviceAccountPath, 'utf8'));
     
-    // Initialize with minimal configuration
-    admin.initializeApp();
+    // Initialize with service account
+    admin.initializeApp({
+      credential: admin.credential.cert(serviceAccount)
+    });
     
-    console.log('⚠️ Firebase Admin initialized without service account');
-    console.log('⚠️ Token verification will not work properly');
-    console.log('⚠️ To enable full functionality, add FIREBASE_SERVICE_ACCOUNT to .env');
+    console.log('Firebase Admin initialized with service account');
+  } catch (initError) {
+    console.error('Error initializing Firebase Admin:', initError);
+    throw initError;
   }
 }
 
@@ -78,24 +57,11 @@ export const firebaseAuth = async (req: express.Request, res: express.Response, 
       emailVerified: decodedToken.email_verified || false
     };
     
-    req.firebaseUser = firebaseUser; // Add the firebase user to the request
+    req.firebaseUser = firebaseUser;
     next();
   } catch (error) {
     console.error('Firebase token verification failed:', error);
-    
-    if (process.env.NODE_ENV === 'development') {
-      // In development mode, allow continuing for easier testing in VSCode
-      console.warn('⚠️ Development mode - bypassing Firebase authentication');
-      req.firebaseUser = {
-        uid: 'development-user-id',
-        email: 'dev@example.com',
-        displayName: 'Development User',
-        emailVerified: true
-      };
-      next();
-    } else {
-      return res.status(401).json({ error: 'Unauthorized - Invalid token' });
-    }
+    return res.status(401).json({ error: 'Unauthorized - Invalid token' });
   }
 };
 

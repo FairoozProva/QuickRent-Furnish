@@ -1,8 +1,12 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "wouter";
 import ProductCard from "@/components/products/product-card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ShoppingCart } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/use-auth";
+import { useToast } from "@/hooks/use-toast";
+import { addToCart } from "@/lib/api";
 
 type Product = {
   _id: string;
@@ -15,6 +19,10 @@ type Product = {
 };
 
 export default function TrendingProducts() {
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+
   const { data: products, isLoading, error } = useQuery<Product[]>({
     queryKey: ['/api/products/trending'],
     queryFn: async () => {
@@ -23,6 +31,38 @@ export default function TrendingProducts() {
       return response.json();
     },
   });
+
+  // Add to cart mutation
+  const addToCartMutation = useMutation({
+    mutationFn: (productId: string) => addToCart(productId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/cart'] });
+      toast({
+        title: 'Added to cart',
+        description: 'Item has been added to your cart.',
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: 'Failed to add to cart',
+        description: error.message,
+        variant: 'destructive',
+      });
+    },
+  });
+
+  const handleAddToCart = (productId: string, productName: string) => {
+    if (!user) {
+      toast({
+        title: 'Authentication required',
+        description: 'Please sign in to add items to your cart.',
+        variant: 'destructive',
+      });
+      return;
+    }
+    
+    addToCartMutation.mutate(productId);
+  };
 
   // Add new trending products
   const trendingProducts = [
@@ -52,9 +92,6 @@ export default function TrendingProducts() {
             <h2 className="text-3xl font-extrabold tracking-tight text-gray-900">Trending Now</h2>
             <p className="mt-4 text-lg text-gray-500">Our most popular pieces this month</p>
           </div>
-          <Link href="/products?trending=true" className="hidden sm:flex text-primary hover:text-primary-600 font-medium items-center">
-            View all <ArrowRight className="h-4 w-4 ml-1" />
-          </Link>
         </div>
 
         <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -75,29 +112,42 @@ export default function TrendingProducts() {
           ) : (
             products?.length ? (
               products.map((product) => (
-                <ProductCard key={product._id} product={product} />
+                <div key={product._id} className="bg-white rounded-lg shadow-sm overflow-hidden">
+                  <img src={product.imageUrl} alt={product.name} className="w-full h-56 object-cover" />
+                  <div className="p-4">
+                    <h3 className="text-lg font-medium text-gray-900">{product.name}</h3>
+                    <p className="text-sm text-gray-500 mb-4">৳{product.price}/month</p>
+                    <Button 
+                      className="w-full flex items-center justify-center gap-2"
+                      onClick={() => handleAddToCart(product._id, product.name)}
+                      disabled={addToCartMutation.isPending}
+                    >
+                      <ShoppingCart className="h-4 w-4" />
+                      Add to Cart
+                    </Button>
+                  </div>
+                </div>
               ))
             ) : (
               trendingProducts.map((product) => (
-                <ProductCard 
-                  key={product.id} 
-                  product={{
-                    _id: product.id,
-                    name: product.name,
-                    price: product.price,
-                    imageUrl: product.imageUrl,
-                    material: "",
-                  }} 
-                />
+                <div key={product.id} className="bg-white rounded-lg shadow-sm overflow-hidden">
+                  <img src={product.imageUrl} alt={product.name} className="w-full h-56 object-cover" />
+                  <div className="p-4">
+                    <h3 className="text-lg font-medium text-gray-900">{product.name}</h3>
+                    <p className="text-sm text-gray-500 mb-4">৳{product.price}/month</p>
+                    <Button 
+                      className="w-full flex items-center justify-center gap-2"
+                      onClick={() => handleAddToCart(product.id, product.name)}
+                      disabled={addToCartMutation.isPending}
+                    >
+                      <ShoppingCart className="h-4 w-4" />
+                      Add to Cart
+                    </Button>
+                  </div>
+                </div>
               ))
             )
           )}
-        </div>
-
-        <div className="mt-8 text-center sm:hidden">
-          <Link href="/products?trending=true" className="inline-flex items-center text-primary hover:text-primary-600 font-medium">
-            View all products <ArrowRight className="h-4 w-4 ml-1" />
-          </Link>
         </div>
       </div>
     </div>

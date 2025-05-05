@@ -1,7 +1,4 @@
-/**
- * This file provides a mock implementation of mongoose for Replit environment
- * It prevents actual MongoDB connection attempts and provides fake data instead
- */
+
 
 // Import the real mongoose to extend its functionality
 import mongoose from 'mongoose';

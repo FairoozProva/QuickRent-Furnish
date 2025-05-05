@@ -26,6 +26,7 @@ const loginSchema = z.object({
 
 const registerSchema = z.object({
   username: z.string().min(3, "Username must be at least 3 characters"),
+  name: z.string().min(2, "Name must be at least 2 characters"),
   password: z.string().min(6, "Password must be at least 6 characters"),
   confirmPassword: z.string().min(6, "Password must be at least 6 characters"),
   email: z.string().email("Invalid email address"),
@@ -56,6 +57,7 @@ export default function AuthPage() {
     resolver: zodResolver(registerSchema),
     defaultValues: {
       username: "",
+      name: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -216,6 +218,20 @@ export default function AuthPage() {
                     
                     <FormField
                       control={registerForm.control}
+                      name="name"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Full Name</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Enter your full name" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={registerForm.control}
                       name="email"
                       render={({ field }) => (
                         <FormItem>
@@ -284,30 +300,7 @@ export default function AuthPage() {
             minHeight: "400px"
           }}
         >
-          <div className="h-full flex flex-col justify-center p-12 text-white">
-            <h1 className="text-4xl font-bold mb-4">Premium Furniture Rental</h1>
-            <p className="text-xl mb-8">
-              Rent high-quality furniture for your home or office without the hassle of ownership
-            </p>
-            <ul className="space-y-4">
-              <li className="flex items-center">
-                <span className="inline-block w-6 h-6 mr-2 rounded-full bg-white text-primary flex items-center justify-center">✓</span>
-                Flexible rental periods
-              </li>
-              <li className="flex items-center">
-                <span className="inline-block w-6 h-6 mr-2 rounded-full bg-white text-primary flex items-center justify-center">✓</span>
-                Free delivery and assembly
-              </li>
-              <li className="flex items-center">
-                <span className="inline-block w-6 h-6 mr-2 rounded-full bg-white text-primary flex items-center justify-center">✓</span>
-                Premium furniture collections
-              </li>
-              <li className="flex items-center">
-                <span className="inline-block w-6 h-6 mr-2 rounded-full bg-white text-primary flex items-center justify-center">✓</span>
-                Easy returns and swaps
-              </li>
-            </ul>
-          </div>
+         
         </div>
       </div>
     </div>

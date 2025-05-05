@@ -11,6 +11,7 @@ export interface IStorage {
   createUser(user: any): Promise<any>;
   updateUser(id: string, userData: Partial<any>): Promise<any | null>;
   updateUserByFirebaseId(firebaseId: string, userData: Partial<any>): Promise<any | null>;
+  initializeUserData(userId: string): Promise<void>;
 
   // Category methods
   getCategories(): Promise<any[]>;
@@ -49,7 +50,7 @@ export interface IStorage {
   isInCart(userId: string, productId: string): Promise<boolean>;
 }
 
-// Simple in-memory storage implementation for Replit environment
+
 export class MemStorage implements IStorage {
   private users: Map<string, any> = new Map();
   private categories: Map<string, any> = new Map();
@@ -60,8 +61,6 @@ export class MemStorage implements IStorage {
   sessionStore: session.Store;
 
   constructor() {
-    console.log('Initializing in-memory storage for Replit environment');
-    // Using built-in express-session memory store for simplicity
     this.sessionStore = new session.MemoryStore();
     
     // Initialize with sample data
@@ -156,6 +155,10 @@ export class MemStorage implements IStorage {
       }
     }
     return null;
+  }
+
+  async initializeUserData(userId: string): Promise<void> {
+    // Implementation for initializing user data
   }
 
   // Category methods
@@ -324,12 +327,16 @@ export class MemStorage implements IStorage {
   }
 }
 
-// Create and export the storage instance
-// Use MongoDBStorage if in Replit environment or has MongoDB URI, otherwise fallback to MemStorage
 let storageInstance: IStorage;
 
-// Always use in-memory storage for this project
-console.log('Initializing in-memory storage for Replit environment');
-storageInstance = new MemStorage();
+try {
+  // Try to create MongoDB storage
+  storageInstance = new MongoDBStorage();
+  console.log('Using MongoDB storage');
+} catch (error) {
+  // Fall back to in-memory storage if MongoDB fails
+  console.warn('Failed to initialize MongoDB storage, falling back to in-memory storage:', error.message);
+  storageInstance = new MemStorage();
+}
 
 export const storage = storageInstance;

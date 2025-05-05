@@ -6,6 +6,31 @@ import { setupAuth } from "./auth";
 import { firebaseAuth, FirebaseUser } from "./firebase-admin";
 import { z } from "zod";
 
+// Custom error class for authentication
+class AuthenticationError extends Error {
+  constructor(message: string = "Not authenticated") {
+    super(message);
+    this.name = "AuthenticationError";
+  }
+}
+
+// Extend Express.User interface
+declare global {
+  namespace Express {
+    interface User {
+      _id?: string;
+      id?: string;
+    }
+  }
+}
+
+// Helper function to safely handle errors
+const isAuthError = (error: unknown): error is AuthenticationError => {
+  return error instanceof AuthenticationError;
+};
+
+const ALLOWED_DURATIONS = [1, 3, 6, 9, 12];
+
 // Define local schemas since we're not using MongoDB
 const insertWishlistSchema = z.object({
   userId: z.string(),
@@ -15,7 +40,9 @@ const insertWishlistSchema = z.object({
 const insertCartSchema = z.object({
   userId: z.string(),
   productId: z.string(),
-  duration: z.number().int().positive()
+  duration: z.number().int().positive().refine(val => ALLOWED_DURATIONS.includes(val), {
+    message: "Duration must be 1, 3, 6, 9, or 12 months"
+  })
 });
 
 const insertRentalSchema = z.object({
@@ -23,12 +50,46 @@ const insertRentalSchema = z.object({
   productId: z.string(),
   startDate: z.date(),
   endDate: z.date(),
-  duration: z.number().int().positive(),
+  duration: z.number().int().positive().refine(val => ALLOWED_DURATIONS.includes(val), {
+    message: "Duration must be 1, 3, 6, 9, or 12 months"
+  }),
   totalAmount: z.number().positive(),
   status: z.enum(['pending', 'active', 'completed', 'cancelled', 'signed'])
 });
 
+const insertProductSchema = z.object({
+  name: z.string().min(2),
+  description: z.string().min(10),
+  imageUrl: z.string().url(),
+  price: z.number().positive(),
+  material: z.string().min(2),
+  category: z.string().min(2), // Category ID
+  trending: z.boolean().optional().default(false),
+  isNewProduct: z.boolean().optional().default(false),
+  sku: z.string().optional()
+});
+
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Helper function to safely get user ID
+  const getUserId = (req: Express.Request): string => {
+    if (!req.isAuthenticated() || !req.user?._id) {
+      throw new AuthenticationError();
+    }
+    return req.user._id.toString();
+  };
+
+  // Helper function for protected routes
+  const protectedRoute = async (req: Express.Request): Promise<string> => {
+    if (!req.isAuthenticated()) {
+      throw new AuthenticationError();
+    }
+    const userId = req.user?._id;
+    if (!userId) {
+      throw new AuthenticationError("User ID not found");
+    }
+    return userId.toString();
+  };
+
   try {
     // Traditional MongoDB authentication routes (register, login, logout, user)
     setupAuth(app);
@@ -127,6 +188,72 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Failed to create/update user profile:", error);
       res.status(500).json({ error: "Failed to create/update user profile" });
+    }
+  });
+
+  // Get user by ID
+  app.get("/api/user/get-user/:userId", async (req, res) => {
+    try {
+      const user = await storage.getUser(req.params.userId);
+      
+      if (!user) {
+        return res.status(404).json({ 
+          message: "User not found"
+        });
+      }
+
+      // Remove sensitive information
+      const userResponse = { ...user };
+      delete userResponse.password;
+      
+      res.json({
+        message: "User found",
+        user: userResponse
+      });
+    } catch (error) {
+      console.error("Failed to fetch user:", error);
+      res.status(500).json({ error: "Failed to fetch user" });
+    }
+  });
+
+  // Update user profile
+  app.put("/api/user/profile", async (req, res) => {
+    try {
+      const userId = await protectedRoute(req);
+      
+      // Validate request body
+      const userData = {
+        ...(req.body.firstName && { firstName: req.body.firstName }),
+        ...(req.body.lastName && { lastName: req.body.lastName }),
+        ...(req.body.email && { email: req.body.email }),
+        ...(req.body.phone && { phone: req.body.phone }),
+        ...(req.body.address && { address: req.body.address }),
+        ...(req.body.city && { city: req.body.city }),
+        ...(req.body.state && { state: req.body.state }),
+        ...(req.body.zipCode && { zipCode: req.body.zipCode }),
+        ...(req.body.country && { country: req.body.country })
+      };
+
+      const updatedUser = await storage.updateUser(userId, userData);
+      
+      if (!updatedUser) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      // Remove sensitive information
+      const userResponse = { ...updatedUser };
+      delete userResponse.password;
+
+      res.json({
+        message: "Profile updated successfully",
+        user: userResponse
+      });
+    } catch (error) {
+      if (isAuthError(error)) {
+        return res.status(401).json({ error: error.message });
+      }
+      console.error("Failed to update user profile:", error);
+      res.status(500).json({ error: "Failed to update user profile" });
     }
   });
 
@@ -298,23 +425,52 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Create a new product
+  app.post("/api/products", async (req, res) => {
+    try {
+      const validatedData = insertProductSchema.parse(req.body);
+
+      const product = await storage.createProduct(validatedData);
+      
+      // Transform the response with more meaningful data
+      res.status(201).json({
+        success: true,
+        message: "Product created successfully",
+        data: {
+          ...product,
+          createdAt: new Date(),
+          status: "active",
+          category: await storage.getCategory(product.category.toString())
+        }
+      });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ 
+          success: false,
+          error: "Validation failed",
+          details: error.errors 
+        });
+      }
+      console.error("Failed to create product:", error);
+      res.status(500).json({ 
+        success: false,
+        error: "Failed to create product" 
+      });
+    }
+  });
+
   // Wishlist
   app.get("/api/wishlist", async (req, res) => {
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ error: "Not authenticated" });
-    }
-
     try {
-      const wishlistItems = await storage.getWishlistItems(req.user!._id.toString());
+      const userId = getUserId(req);
+      const wishlistItems = await storage.getWishlistItems(userId);
       
-      // Get full product details for each wishlist item
       const productsPromises = wishlistItems.map((item: any) => 
         storage.getProduct(item.productId.toString())
       );
       
       const products = await Promise.all(productsPromises);
       
-      // Combine wishlist items with product details
       const result = wishlistItems.map((item: any, index: number) => ({
         ...item,
         product: products[index]
@@ -322,25 +478,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.json(result);
     } catch (error) {
+      if (isAuthError(error)) {
+        return res.status(401).json({ error: error.message });
+      }
       console.error("Failed to fetch wishlist:", error);
       res.status(500).json({ error: "Failed to fetch wishlist" });
     }
   });
 
   app.post("/api/wishlist", async (req, res) => {
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ error: "Not authenticated" });
-    }
-
     try {
+      const userId = getUserId(req);
       const validatedData = insertWishlistSchema.parse({
-        userId: req.user!._id.toString(),
+        userId,
         productId: req.body.productId
       });
 
       const wishlistItem = await storage.addToWishlist(validatedData);
-      
-      // Get product details
       const product = await storage.getProduct(wishlistItem.productId.toString());
       
       res.status(201).json({
@@ -348,6 +502,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         product
       });
     } catch (error) {
+      if (isAuthError(error)) {
+        return res.status(401).json({ error: error.message });
+      }
       if (error instanceof z.ZodError) {
         return res.status(400).json({ error: error.errors });
       }
@@ -357,28 +514,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   app.delete("/api/wishlist/:productId", async (req, res) => {
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ error: "Not authenticated" });
-    }
-
     try {
-      await storage.removeFromWishlist(req.user!._id.toString(), req.params.productId);
+      const userId = getUserId(req);
+      await storage.removeFromWishlist(userId, req.params.productId);
       res.sendStatus(204);
     } catch (error) {
+      if (isAuthError(error)) {
+        return res.status(401).json({ error: error.message });
+      }
       console.error("Failed to remove from wishlist:", error);
       res.status(500).json({ error: "Failed to remove from wishlist" });
     }
   });
 
   app.get("/api/wishlist/check/:productId", async (req, res) => {
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ error: "Not authenticated" });
-    }
-
     try {
-      const isInWishlist = await storage.isInWishlist(req.user!._id.toString(), req.params.productId);
+      const userId = getUserId(req);
+      const isInWishlist = await storage.isInWishlist(userId, req.params.productId);
       res.json({ isInWishlist });
     } catch (error) {
+      if (isAuthError(error)) {
+        return res.status(401).json({ error: error.message });
+      }
       console.error("Failed to check wishlist:", error);
       res.status(500).json({ error: "Failed to check wishlist" });
     }
@@ -386,12 +543,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Cart
   app.get("/api/cart", async (req, res) => {
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ error: "Not authenticated" });
-    }
-
     try {
-      const cartItems = await storage.getCartItems(req.user!._id.toString());
+      const userId = getUserId(req);
+      const cartItems = await storage.getCartItems(userId);
       
       // Get full product details for each cart item
       const productsPromises = cartItems.map((item: any) => 
@@ -408,19 +562,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.json(result);
     } catch (error) {
+      if (isAuthError(error)) {
+        return res.status(401).json({ error: error.message });
+      }
       console.error("Failed to fetch cart:", error);
       res.status(500).json({ error: "Failed to fetch cart" });
     }
   });
 
   app.post("/api/cart", async (req, res) => {
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ error: "Not authenticated" });
-    }
-
     try {
+      const userId = await protectedRoute(req);
       const validatedData = insertCartSchema.parse({
-        userId: req.user!._id.toString(),
+        userId,
         productId: req.body.productId,
         duration: req.body.duration || 3 // Default to 3 months
       });
@@ -435,6 +589,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         product
       });
     } catch (error) {
+      if (isAuthError(error)) {
+        return res.status(401).json({ error: error.message });
+      }
       if (error instanceof z.ZodError) {
         return res.status(400).json({ error: error.errors });
       }
@@ -444,19 +601,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   app.put("/api/cart/:productId", async (req, res) => {
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ error: "Not authenticated" });
-    }
-
     try {
+      const userId = getUserId(req);
       const duration = parseInt(req.body.duration);
       if (isNaN(duration) || duration < 1) {
         return res.status(400).json({ error: "Invalid duration" });
       }
 
       const updatedItem = await storage.updateCartItem(
-        req.user!._id.toString(), 
-        req.params.productId, 
+        userId,
+        req.params.productId,
         duration
       );
 
@@ -472,48 +626,51 @@ export async function registerRoutes(app: Express): Promise<Server> {
         product
       });
     } catch (error) {
+      if (isAuthError(error)) {
+        return res.status(401).json({ error: error.message });
+      }
       console.error("Failed to update cart item:", error);
       res.status(500).json({ error: "Failed to update cart item" });
     }
   });
 
   app.delete("/api/cart/:productId", async (req, res) => {
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ error: "Not authenticated" });
-    }
-
     try {
-      await storage.removeFromCart(req.user!._id.toString(), req.params.productId);
+      const userId = getUserId(req);
+      await storage.removeFromCart(userId, req.params.productId);
       res.sendStatus(204);
     } catch (error) {
+      if (isAuthError(error)) {
+        return res.status(401).json({ error: error.message });
+      }
       console.error("Failed to remove from cart:", error);
       res.status(500).json({ error: "Failed to remove from cart" });
     }
   });
 
   app.delete("/api/cart", async (req, res) => {
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ error: "Not authenticated" });
-    }
-
     try {
-      await storage.clearCart(req.user!._id.toString());
+      const userId = getUserId(req);
+      await storage.clearCart(userId);
       res.sendStatus(204);
     } catch (error) {
+      if (isAuthError(error)) {
+        return res.status(401).json({ error: error.message });
+      }
       console.error("Failed to clear cart:", error);
       res.status(500).json({ error: "Failed to clear cart" });
     }
   });
 
   app.get("/api/cart/check/:productId", async (req, res) => {
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ error: "Not authenticated" });
-    }
-
     try {
-      const isInCart = await storage.isInCart(req.user!._id.toString(), req.params.productId);
+      const userId = getUserId(req);
+      const isInCart = await storage.isInCart(userId, req.params.productId);
       res.json({ isInCart });
     } catch (error) {
+      if (isAuthError(error)) {
+        return res.status(401).json({ error: error.message });
+      }
       console.error("Failed to check cart:", error);
       res.status(500).json({ error: "Failed to check cart" });
     }
@@ -521,12 +678,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Rentals
   app.get("/api/rentals", async (req, res) => {
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ error: "Not authenticated" });
-    }
-
     try {
-      const rentals = await storage.getRentals(req.user!._id.toString());
+      const userId = await protectedRoute(req);
+      const rentals = await storage.getRentals(userId);
       
       // Get full product details for each rental
       const productsPromises = rentals.map((rental: any) => 
@@ -543,6 +697,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.json(result);
     } catch (error) {
+      if (isAuthError(error)) {
+        return res.status(401).json({ error: error.message });
+      }
       console.error("Failed to fetch rentals:", error);
       res.status(500).json({ error: "Failed to fetch rentals" });
     }
@@ -550,13 +707,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Create rental from cart
   app.post("/api/rentals", async (req, res) => {
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ error: "Not authenticated" });
-    }
-
     try {
+      const userId = await protectedRoute(req);
       // Get cart items
-      const cartItems = await storage.getCartItems(req.user!._id.toString());
+      const cartItems = await storage.getCartItems(userId);
       if (cartItems.length === 0) {
         return res.status(400).json({ error: "Cart is empty" });
       }
@@ -575,7 +729,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const totalAmount = product.price * item.duration;
 
         const rentalData = {
-          userId: req.user!._id.toString(),
+          userId,
           productId: item.productId.toString(),
           startDate,
           endDate,
@@ -590,10 +744,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const rentals = await Promise.all(rentalPromises);
 
       // Clear the cart after creating rentals
-      await storage.clearCart(req.user!._id.toString());
+      await storage.clearCart(userId);
 
       res.status(201).json(rentals);
     } catch (error) {
+      if (isAuthError(error)) {
+        return res.status(401).json({ error: error.message });
+      }
       console.error("Failed to create rentals:", error);
       res.status(500).json({ error: "Failed to create rentals" });
     }
@@ -601,11 +758,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Extend a rental
   app.put("/api/rentals/:id/extend", async (req, res) => {
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ error: "Not authenticated" });
-    }
-
     try {
+      const userId = await protectedRoute(req);
       const rentalId = req.params.id;
       
       const { duration } = req.body;
@@ -620,7 +774,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       // Verify the rental belongs to the user
-      if (rental.userId.toString() !== req.user!._id.toString()) {
+      if (rental.userId.toString() !== userId) {
         return res.status(403).json({ error: "Unauthorized" });
       }
       
@@ -636,6 +790,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.json(updatedRental);
     } catch (error) {
+      if (isAuthError(error)) {
+        return res.status(401).json({ error: error.message });
+      }
       console.error("Failed to extend rental:", error);
       res.status(500).json({ error: "Failed to extend rental" });
     }
@@ -643,11 +800,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Get a rental agreement
   app.get("/api/rentals/:id/agreement", async (req, res) => {
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ error: "Not authenticated" });
-    }
-
     try {
+      const userId = await protectedRoute(req);
       const rentalId = req.params.id;
       
       // Get the rental
@@ -657,7 +811,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       // Verify the rental belongs to the user
-      if (rental.userId.toString() !== req.user!._id.toString()) {
+      if (rental.userId.toString() !== userId) {
         return res.status(403).json({ error: "Unauthorized" });
       }
       
@@ -668,7 +822,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       // Get the user
-      const user = await storage.getUser(req.user!._id.toString());
+      const user = await storage.getUser(userId);
       if (!user) {
         return res.status(404).json({ error: "User not found" });
       }
@@ -680,6 +834,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         user
       });
     } catch (error) {
+      if (isAuthError(error)) {
+        return res.status(401).json({ error: error.message });
+      }
       console.error("Failed to get rental agreement:", error);
       res.status(500).json({ error: "Failed to get rental agreement" });
     }
@@ -687,11 +844,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Sign a rental agreement
   app.post("/api/rentals/:id/sign", async (req, res) => {
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ error: "Not authenticated" });
-    }
-
     try {
+      const userId = await protectedRoute(req);
       const rentalId = req.params.id;
       
       const { paymentMethod } = req.body;
@@ -706,7 +860,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       // Verify the rental belongs to the user
-      if (rental.userId.toString() !== req.user!._id.toString()) {
+      if (rental.userId.toString() !== userId) {
         return res.status(403).json({ error: "Unauthorized" });
       }
       
@@ -718,6 +872,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.json(updatedRental);
     } catch (error) {
+      if (isAuthError(error)) {
+        return res.status(401).json({ error: error.message });
+      }
       console.error("Failed to sign rental agreement:", error);
       res.status(500).json({ error: "Failed to sign rental agreement" });
     }

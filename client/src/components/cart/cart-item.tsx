@@ -3,8 +3,15 @@ import { Link } from "wouter";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { updateCartItem, removeFromCart } from "@/lib/api";
-import { Trash2, Plus, Minus } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 type CartItemProps = {
   item: {
@@ -24,11 +31,11 @@ type CartItemProps = {
 export default function CartItem({ item }: CartItemProps) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const [duration, setDuration] = useState(item.duration);
+  const [duration, setDuration] = useState(item.duration.toString());
   
   // Update cart item duration mutation
   const updateMutation = useMutation({
-    mutationFn: () => updateCartItem(item.productId, duration),
+    mutationFn: () => updateCartItem(item.productId, parseInt(duration)),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/cart'] });
       toast({
@@ -43,7 +50,7 @@ export default function CartItem({ item }: CartItemProps) {
         variant: 'destructive',
       });
       // Reset to original duration if update fails
-      setDuration(item.duration);
+      setDuration(item.duration.toString());
     },
   });
 
@@ -66,18 +73,9 @@ export default function CartItem({ item }: CartItemProps) {
     },
   });
 
-  const increaseDuration = () => {
-    const newDuration = duration + 1;
-    setDuration(newDuration);
+  const handleDurationChange = (value: string) => {
+    setDuration(value);
     updateMutation.mutate();
-  };
-
-  const decreaseDuration = () => {
-    if (duration > 1) {
-      const newDuration = duration - 1;
-      setDuration(newDuration);
-      updateMutation.mutate();
-    }
   };
 
   const handleRemove = () => {
@@ -120,27 +118,19 @@ export default function CartItem({ item }: CartItemProps) {
       </div>
 
       <div className="md:col-span-1 flex items-center">
-        <div className="flex items-center">
-          <Button
-            variant="outline"
-            size="icon"
-            className="h-8 w-8"
-            onClick={decreaseDuration}
-            disabled={duration <= 1 || updateMutation.isPending}
-          >
-            <Minus className="h-3 w-3" />
-          </Button>
-          <span className="mx-2 text-gray-900 w-8 text-center">{duration}</span>
-          <Button
-            variant="outline"
-            size="icon"
-            className="h-8 w-8"
-            onClick={increaseDuration}
-            disabled={updateMutation.isPending}
-          >
-            <Plus className="h-3 w-3" />
-          </Button>
-          <span className="ml-2 text-gray-500">months</span>
+        <div className="flex items-center space-x-2">
+          <Select value={duration} onValueChange={handleDurationChange}>
+            <SelectTrigger className="w-[110px]">
+              <SelectValue placeholder="Duration" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="1">1 Month</SelectItem>
+              <SelectItem value="3">3 Months</SelectItem>
+              <SelectItem value="6">6 Months</SelectItem>
+              <SelectItem value="9">9 Months</SelectItem>
+              <SelectItem value="12">12 Months</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
@@ -152,7 +142,7 @@ export default function CartItem({ item }: CartItemProps) {
 
       <div className="md:col-span-1 flex items-center justify-between">
         <span className="text-base font-medium text-gray-900">
-          ৳{(item.product.price + 1000) * duration}
+          ৳{(item.product.price + 1000) * parseInt(duration)}
         </span>
         <div className="hidden md:block">
           <Button 

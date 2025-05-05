@@ -1,12 +1,12 @@
 import mongoose from 'mongoose';
 import { z } from 'zod';
 
-// Check if in Replit environment
-const isReplitEnv = process.env.REPLIT_DB_URL ? true : false;
 
-// Patch mongoose model function for Replit environment
+/* const isReplitEnv = process.env.REPLIT_DB_URL ? true : false;
+
+
 if (isReplitEnv) {
-  console.log('Patching mongoose models for Replit environment');
+  
   
   // Save the original model function
   const originalModel = mongoose.model.bind(mongoose);
@@ -21,7 +21,7 @@ if (isReplitEnv) {
       return originalModel(name, schema);
     }
   };
-}
+} */
 
 // User Schema
 const userSchema = new mongoose.Schema({
@@ -31,7 +31,9 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true },
   firebaseId: { type: String, sparse: true, unique: true }, // For Firebase authentication
   photoURL: { type: String }, // From Firebase user profile
-  createdAt: { type: Date, default: Date.now }
+  createdAt: { type: Date, default: Date.now },
+  phone: { type: String },
+  address: { type: String }
 });
 
 // Category Schema
@@ -56,7 +58,8 @@ const productSchema = new mongoose.Schema({
   material: { type: String, required: true },
   category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true },
   trending: { type: Boolean, default: false },
-  isNewProduct: { type: Boolean, default: false }
+  isNewProduct: { type: Boolean, default: false },
+  sku: { type: String }
 });
 
 export const Product = mongoose.model('Product', productSchema);
@@ -69,7 +72,7 @@ const rentalSchema = new mongoose.Schema({
   endDate: { type: Date, required: true },
   duration: { type: Number, required: true },
   totalAmount: { type: Number, required: true },
-  status: { type: String, required: true, enum: ['pending', 'active', 'completed', 'cancelled', 'signed'] },
+  status: { type: String, required: true, enum: ['pending', 'active', 'completed', 'cancelled', 'signed'], default: 'pending' },
   paymentMethod: { type: String },
   createdAt: { type: Date, default: Date.now }
 });

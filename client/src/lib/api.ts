@@ -2,21 +2,15 @@ import { apiRequest } from './queryClient';
 
 // Category related API calls
 export const fetchCategories = async () => {
-  const res = await fetch('/api/categories');
-  if (!res.ok) throw new Error('Failed to fetch categories');
-  return res.json();
+  return apiRequest('GET', '/api/categories');
 };
 
 export const fetchAbout = async () => {
-  const res = await fetch('/api/about');
-  if (!res.ok) throw new Error('Failed to fetch about sections');
-  return res.json();
+  return apiRequest('GET', '/api/about');
 };
 
 export const fetchCategoryBySlug = async (slug: string) => {
-  const res = await fetch(`/api/categories/${slug}`);
-  if (!res.ok) throw new Error('Failed to fetch category');
-  return res.json();
+  return apiRequest('GET', `/api/categories/${slug}`);
 };
 
 export const addProductToCategory = async (slug: string, product: { 
@@ -48,40 +42,28 @@ export const fetchProducts = async (filters?: {
     }
   }
   
-  const res = await fetch(url);
-  if (!res.ok) throw new Error('Failed to fetch products');
-  return res.json();
+  return apiRequest('GET', url);
 };
 
 export const fetchTrendingProducts = async () => {
-  const res = await fetch('/api/products/trending');
-  if (!res.ok) throw new Error('Failed to fetch trending products');
-  return res.json();
+  return apiRequest('GET', '/api/products/trending');
 };
 
 export const fetchNewArrivals = async () => {
-  const res = await fetch('/api/products/new-arrivals');
-  if (!res.ok) throw new Error('Failed to fetch new arrivals');
-  return res.json();
+  return apiRequest('GET', '/api/products/new-arrivals');
 };
 
 export const fetchProduct = async (id: string) => {
-  const res = await fetch(`/api/products/${id}`);
-  if (!res.ok) throw new Error('Failed to fetch product');
-  return res.json();
+  return apiRequest('GET', `/api/products/${id}`);
 };
 
 export const fetchRelatedProducts = async (id: string) => {
-  const res = await fetch(`/api/products/${id}/related`);
-  if (!res.ok) throw new Error('Failed to fetch related products');
-  return res.json();
+  return apiRequest('GET', `/api/products/${id}/related`);
 };
 
 // Wishlist related API calls
 export const fetchWishlist = async () => {
-  const res = await fetch('/api/wishlist');
-  if (!res.ok) throw new Error('Failed to fetch wishlist');
-  return res.json();
+  return apiRequest('GET', '/api/wishlist');
 };
 
 export const addToWishlist = async (productId: string) => {
@@ -93,16 +75,12 @@ export const removeFromWishlist = async (productId: string) => {
 };
 
 export const checkWishlist = async (productId: string) => {
-  const res = await fetch(`/api/wishlist/check/${productId}`);
-  if (!res.ok) throw new Error('Failed to check wishlist');
-  return res.json();
+  return apiRequest('GET', `/api/wishlist/check/${productId}`);
 };
 
 // Cart related API calls
 export const fetchCart = async () => {
-  const res = await fetch('/api/cart');
-  if (!res.ok) throw new Error('Failed to fetch cart');
-  return res.json();
+  return apiRequest('GET', '/api/cart');
 };
 
 export const addToCart = async (productId: string, duration: number = 3) => {
@@ -122,16 +100,12 @@ export const clearCart = async () => {
 };
 
 export const checkCart = async (productId: string) => {
-  const res = await fetch(`/api/cart/check/${productId}`);
-  if (!res.ok) throw new Error('Failed to check cart');
-  return res.json();
+  return apiRequest('GET', `/api/cart/check/${productId}`);
 };
 
 // Rental related API calls
 export const fetchRentals = async () => {
-  const res = await fetch('/api/rentals');
-  if (!res.ok) throw new Error('Failed to fetch rentals');
-  return res.json();
+  return apiRequest('GET', '/api/rentals');
 };
 
 export const createRentals = async () => {
@@ -143,11 +117,28 @@ export const extendRental = async (id: string, duration: number) => {
 };
 
 export const fetchRentalAgreement = async (id: string) => {
-  const res = await fetch(`/api/rentals/${id}/agreement`);
-  if (!res.ok) throw new Error('Failed to fetch rental agreement');
-  return res.json();
+  return apiRequest('GET', `/api/rentals/${id}/agreement`);
 };
 
 export const signRentalAgreement = async (id: string, paymentMethod: string) => {
   return apiRequest('POST', `/api/rentals/${id}/sign`, { paymentMethod });
+};
+
+// User related API calls 
+export const getUserById = async (userId: string) => {
+  return apiRequest('GET', `/api/user/get-user/${userId}`);
+};
+
+export const updateUser = async (userData: {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  phone?: string;
+  address?: string;
+  city?: string;
+  state?: string;
+  zipCode?: string;
+  country?: string;
+}) => {
+  return apiRequest('PUT', '/api/user/profile', userData);
 };

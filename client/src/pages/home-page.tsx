@@ -3,8 +3,48 @@ import { Link } from "wouter";
 import { ArrowRight, Heart, ShoppingCart, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { imageUrls } from "../lib/image-urls";
+import { useAuth } from "@/hooks/use-auth";
+import { useToast } from "@/hooks/use-toast";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { addToCart } from "@/lib/api";
 
 export default function HomePage() {
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  // Add to cart mutation
+  const addToCartMutation = useMutation({
+    mutationFn: (productId: string) => addToCart(productId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/cart'] });
+      toast({
+        title: 'Added to cart',
+        description: 'Item has been added to your cart.',
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: 'Failed to add to cart',
+        description: error.message,
+        variant: 'destructive',
+      });
+    },
+  });
+
+  const handleAddToCart = (productId: string, productName: string) => {
+    if (!user) {
+      toast({
+        title: 'Authentication required',
+        description: 'Please sign in to add items to your cart.',
+        variant: 'destructive',
+      });
+      return;
+    }
+    
+    addToCartMutation.mutate(productId);
+  };
+
   // Define categories with URLs for the home page
   const categories = [
     {
@@ -49,6 +89,19 @@ export default function HomePage() {
       description: "Furniture for children's rooms and play areas",
       imageUrl: imageUrls.bed1Image
     },
+  ];
+
+  // Add product definitions
+  const trendingProducts = [
+    { _id: 'study-table-1', name: 'White Study Table', price: 300, material: 'Wood', imageUrl: imageUrls.studyTable1Image },
+    { _id: 'boho-sofa-1', name: 'Boho Sofa', price: 1000, material: 'Premium Fabric', imageUrl: imageUrls.bohoDiningTableImage },
+    { _id: 'bed-er6456', name: 'Bed ER6456', price: 800, material: 'Wood', imageUrl: imageUrls.doubleBedImage },
+  ];
+
+  const newArrivals = [
+    { _id: 'storage-bed-1', name: 'Storage Bed', price: 700, material: 'Wood', imageUrl: imageUrls.singleBedImage },
+    { _id: 'office-chair-1', name: 'Neutral Office Chair', price: 500, material: 'Fabric', imageUrl: imageUrls.officeChairImage },
+    { _id: 'study-table-2', name: 'Wooden Study Table', price: 300, material: 'Wood', imageUrl: imageUrls.studyTableImage },
   ];
 
   return (
@@ -133,92 +186,42 @@ export default function HomePage() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Trending Product 1 */}
-            <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-              <div className="relative h-64">
-                <img 
-                  src={imageUrls.studyTable1Image} 
-                  alt="White Study Table" 
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute top-3 right-3 flex space-x-2">
-                  <button className="p-1.5 bg-white rounded-full shadow-sm hover:bg-gray-100">
-                    <Heart className="h-5 w-5 text-gray-600" />
-                  </button>
-                  <button className="p-1.5 bg-white rounded-full shadow-sm hover:bg-gray-100">
-                    <ShoppingCart className="h-5 w-5 text-gray-600" />
-                  </button>
+            {trendingProducts.map((product) => (
+              <div key={product._id} className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                <div className="relative h-64">
+                  <img 
+                    src={product.imageUrl} 
+                    alt={product.name} 
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute top-3 right-3 flex space-x-2">
+                    <button className="p-1.5 bg-white rounded-full shadow-sm hover:bg-gray-100">
+                      <Heart className="h-5 w-5 text-gray-600" />
+                    </button>
+                    <button className="p-1.5 bg-white rounded-full shadow-sm hover:bg-gray-100">
+                      <ShoppingCart className="h-5 w-5 text-gray-600" />
+                    </button>
+                  </div>
+                </div>
+                <div className="p-4">
+                  <h3 className="text-lg font-semibold text-gray-900">{product.name}</h3>
+                  <p className="text-sm text-gray-600 mb-3">{product.material}</p>
+                  <div className="flex justify-between items-center">
+                    <span className="text-lg font-bold">৳ {product.price}<span className="text-gray-500 text-sm">/month</span></span>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="flex items-center gap-2"
+                      onClick={() => handleAddToCart(product._id, product.name)}
+                      disabled={addToCartMutation.isPending}
+                    >
+                      <ShoppingCart className="h-4 w-4" />
+                      Add to Cart
+                    </Button>
+                  </div>
                 </div>
               </div>
-              <div className="p-4">
-                <h3 className="text-lg font-semibold text-gray-900">White Study Table</h3>
-                <p className="text-sm text-gray-600 mb-3">Wood</p>
-                <div className="flex justify-between items-center">
-                  <span className="text-lg font-bold">৳ 300<span className="text-gray-500 text-sm">/month</span></span>
-                  <Link href="/product/study-table" className="text-primary text-sm flex items-center">
-                    Details <ChevronRight className="h-4 w-4 ml-1" />
-                  </Link>
-                </div>
-              </div>
-            </div>
-            
-            {/* Trending Product 2 */}
-            <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-              <div className="relative h-64">
-                <img 
-                  src={imageUrls.bohoDiningTableImage} 
-                  alt="Boho Sofa" 
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute top-3 right-3 flex space-x-2">
-                  <button className="p-1.5 bg-white rounded-full shadow-sm hover:bg-gray-100">
-                    <Heart className="h-5 w-5 text-gray-600" />
-                  </button>
-                  <button className="p-1.5 bg-white rounded-full shadow-sm hover:bg-gray-100">
-                    <ShoppingCart className="h-5 w-5 text-gray-600" />
-                  </button>
-                </div>
-              </div>
-              <div className="p-4">
-                <h3 className="text-lg font-semibold text-gray-900">Boho Sofa</h3>
-                <p className="text-sm text-gray-600 mb-3">Premium Fabric</p>
-                <div className="flex justify-between items-center">
-                  <span className="text-lg font-bold">৳ 1000<span className="text-gray-500 text-sm">/month</span></span>
-                  <Link href="/product/l-shaped-sofa" className="text-primary text-sm flex items-center">
-                    Details <ChevronRight className="h-4 w-4 ml-1" />
-                  </Link>
-                </div>
-              </div>
-            </div>
-            
-            {/* Trending Product 3 */}
-            <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-              <div className="relative h-64">
-                <img 
-                  src={imageUrls.doubleBedImage} 
-                  alt="Bed ER6456" 
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute top-3 right-3 flex space-x-2">
-                  <button className="p-1.5 bg-white rounded-full shadow-sm hover:bg-gray-100">
-                    <Heart className="h-5 w-5 text-gray-600" />
-                  </button>
-                  <button className="p-1.5 bg-white rounded-full shadow-sm hover:bg-gray-100">
-                    <ShoppingCart className="h-5 w-5 text-gray-600" />
-                  </button>
-                </div>
-              </div>
-              <div className="p-4">
-                <h3 className="text-lg font-semibold text-gray-900">Bed ER6456</h3>
-                <p className="text-sm text-gray-600 mb-3">Wood</p>
-                <div className="flex justify-between items-center">
-                  <span className="text-lg font-bold">৳ 800<span className="text-gray-500 text-sm">/month</span></span>
-                  <Link href="/product/double-bed" className="text-primary text-sm flex items-center">
-                    Details <ChevronRight className="h-4 w-4 ml-1" />
-                  </Link>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
@@ -234,101 +237,45 @@ export default function HomePage() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* New Arrival 1 */}
-            <div className="bg-white rounded-lg overflow-hidden shadow-sm border hover:shadow-md transition-shadow">
-              <div className="relative h-64">
-                <img 
-                  src={imageUrls.singleBedImage} 
-                  alt="Storage Bed" 
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute top-3 right-3 flex space-x-2">
-                  <button className="p-1.5 bg-white rounded-full shadow-sm hover:bg-gray-100">
-                    <Heart className="h-5 w-5 text-gray-600" />
-                  </button>
-                  <button className="p-1.5 bg-white rounded-full shadow-sm hover:bg-gray-100">
-                    <ShoppingCart className="h-5 w-5 text-gray-600" />
-                  </button>
+            {newArrivals.map((product) => (
+              <div key={product._id} className="bg-white rounded-lg overflow-hidden shadow-sm border hover:shadow-md transition-shadow">
+                <div className="relative h-64">
+                  <img 
+                    src={product.imageUrl} 
+                    alt={product.name} 
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute top-3 right-3 flex space-x-2">
+                    <button className="p-1.5 bg-white rounded-full shadow-sm hover:bg-gray-100">
+                      <Heart className="h-5 w-5 text-gray-600" />
+                    </button>
+                    <button className="p-1.5 bg-white rounded-full shadow-sm hover:bg-gray-100">
+                      <ShoppingCart className="h-5 w-5 text-gray-600" />
+                    </button>
+                  </div>
+                  <div className="absolute top-3 left-3 py-1 px-2 bg-primary text-white text-xs font-semibold rounded">
+                    New
+                  </div>
                 </div>
-                <div className="absolute top-3 left-3 py-1 px-2 bg-primary text-white text-xs font-semibold rounded">
-                  New
-                </div>
-              </div>
-              <div className="p-4">
-                <h3 className="text-lg font-semibold text-gray-900">Storage Bed</h3>
-                <p className="text-sm text-gray-600 mb-3">Wood</p>
-                <div className="flex justify-between items-center">
-                  <span className="text-lg font-bold">৳ 700<span className="text-gray-500 text-sm">/month</span></span>
-                  <Link href="/product/double-bed" className="text-primary text-sm flex items-center">
-                    Details <ChevronRight className="h-4 w-4 ml-1" />
-                  </Link>
-                </div>
-              </div>
-            </div>
-            
-            {/* New Arrival 2 */}
-            <div className="bg-white rounded-lg overflow-hidden shadow-sm border hover:shadow-md transition-shadow">
-              <div className="relative h-64">
-                <img 
-                  src={imageUrls.officeChairImage} 
-                  alt="Neutral Office Chair" 
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute top-3 right-3 flex space-x-2">
-                  <button className="p-1.5 bg-white rounded-full shadow-sm hover:bg-gray-100">
-                    <Heart className="h-5 w-5 text-gray-600" />
-                  </button>
-                  <button className="p-1.5 bg-white rounded-full shadow-sm hover:bg-gray-100">
-                    <ShoppingCart className="h-5 w-5 text-gray-600" />
-                  </button>
-                </div>
-                <div className="absolute top-3 left-3 py-1 px-2 bg-primary text-white text-xs font-semibold rounded">
-                  New
+                <div className="p-4">
+                  <h3 className="text-lg font-semibold text-gray-900">{product.name}</h3>
+                  <p className="text-sm text-gray-600 mb-3">{product.material}</p>
+                  <div className="flex justify-between items-center">
+                    <span className="text-lg font-bold">৳ {product.price}<span className="text-gray-500 text-sm">/month</span></span>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="flex items-center gap-2"
+                      onClick={() => handleAddToCart(product._id, product.name)}
+                      disabled={addToCartMutation.isPending}
+                    >
+                      <ShoppingCart className="h-4 w-4" />
+                      Add to Cart
+                    </Button>
+                  </div>
                 </div>
               </div>
-              <div className="p-4">
-                <h3 className="text-lg font-semibold text-gray-900">Neutral Office Chair</h3>
-                <p className="text-sm text-gray-600 mb-3">Fabric</p>
-                <div className="flex justify-between items-center">
-                  <span className="text-lg font-bold">৳ 500<span className="text-gray-500 text-sm">/month</span></span>
-                  <Link href="/product/office-chair" className="text-primary text-sm flex items-center">
-                    Details <ChevronRight className="h-4 w-4 ml-1" />
-                  </Link>
-                </div>
-              </div>
-            </div>
-            
-            {/* New Arrival 3 */}
-            <div className="bg-white rounded-lg overflow-hidden shadow-sm border hover:shadow-md transition-shadow">
-              <div className="relative h-64">
-                <img 
-                  src={imageUrls.studyTableImage} 
-                  alt="Wooden Study Table" 
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute top-3 right-3 flex space-x-2">
-                  <button className="p-1.5 bg-white rounded-full shadow-sm hover:bg-gray-100">
-                    <Heart className="h-5 w-5 text-gray-600" />
-                  </button>
-                  <button className="p-1.5 bg-white rounded-full shadow-sm hover:bg-gray-100">
-                    <ShoppingCart className="h-5 w-5 text-gray-600" />
-                  </button>
-                </div>
-                <div className="absolute top-3 left-3 py-1 px-2 bg-primary text-white text-xs font-semibold rounded">
-                  New
-                </div>
-              </div>
-              <div className="p-4">
-                <h3 className="text-lg font-semibold text-gray-900">Wooden Study Table</h3>
-                <p className="text-sm text-gray-600 mb-3">Wood</p>
-                <div className="flex justify-between items-center">
-                  <span className="text-lg font-bold">৳ 300<span className="text-gray-500 text-sm">/month</span></span>
-                  <Link href="/product/study-table" className="text-primary text-sm flex items-center">
-                    Details <ChevronRight className="h-4 w-4 ml-1" />
-                  </Link>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>

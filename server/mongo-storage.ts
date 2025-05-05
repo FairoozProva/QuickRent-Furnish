@@ -3,6 +3,10 @@ import { IStorage } from './storage';
 import { User, Category, Product, Rental, Wishlist, Cart } from '@shared/schema';
 import mongoose from 'mongoose';
 import MongoStore from 'connect-mongo';
+import dotenv from 'dotenv';
+
+// Configure dotenv at the top level
+dotenv.config();
 
 export class MongoDBStorage implements IStorage {
   sessionStore: session.Store;
@@ -124,6 +128,26 @@ export class MongoDBStorage implements IStorage {
       { new: true }
     ).lean();
     return updatedUser;
+  }
+
+  async initializeUserData(userId: string): Promise<void> {
+    try {
+      // Create an empty cart collection if it doesn't exist
+      const cartCount = await Cart.countDocuments({ userId });
+      if (cartCount === 0) {
+        // Don't create actual cart document, just ensure collection exists
+        await Cart.createCollection();
+      }
+
+      // Create an empty rentals collection if it doesn't exist
+      const rentalsCount = await Rental.countDocuments({ userId });
+      if (rentalsCount === 0) {
+        await Rental.createCollection();
+      }
+    } catch (error) {
+      console.error('Failed to initialize user data:', error);
+      throw new Error('Failed to initialize user data');
+    }
   }
 
   // Category methods

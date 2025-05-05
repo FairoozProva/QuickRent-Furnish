@@ -1,9 +1,12 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "wouter";
-import ProductCard from "@/components/products/product-card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ArrowRight } from "lucide-react";
-import axios from "axios"; // Import axios for API calls
+import { ArrowRight, ShoppingCart } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/use-auth";
+import { useToast } from "@/hooks/use-toast";
+import { addToCart } from "@/lib/api";
+import axios from "axios";
 import studyTableImg from '../../assets/Study Table 1.jpeg';
 import sofaSetImg from '../../assets/Sofa Set 1.jpeg';
 import bedImg from '../../assets/Bed 4.jpeg';
@@ -20,13 +23,51 @@ type Product = {
 };
 
 export default function NewArrivals() {
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+
   const { data: products, isLoading, error } = useQuery<Product[]>({
     queryKey: ['/api/products/new-arrivals'],
     queryFn: async () => {
       const response = await axios.get('http://localhost:5000/api/products/new-arrivals');
-      return response.data || [];  // Ensure we always return an array
+      return response.data || [];
     },
   });
+
+  // Add to cart mutation
+  const addToCartMutation = useMutation({
+    mutationFn: (productId: string) => addToCart(productId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/cart'] });
+      toast({
+        title: 'Added to cart',
+        description: 'Item has been added to your cart.',
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: 'Failed to add to cart',
+        description: error.message,
+        variant: 'destructive',
+      });
+    },
+  });
+
+  const handleAddToCart = (productId: string, productName: string) => {
+    if (!user) {
+      toast({
+        title: 'Authentication required',
+        description: 'Please sign in to add items to your cart.',
+        variant: 'destructive',
+      });
+      return;
+    }
+    
+    addToCartMutation.mutate(productId);
+  };
+
+  const availableProducts = Array.isArray(products) ? products : [];
 
   if (error) {
     return (
@@ -40,8 +81,6 @@ export default function NewArrivals() {
       </div>
     );
   }
-
-  const availableProducts = Array.isArray(products) ? products : [];
 
   return (
     <div className="bg-white">
@@ -74,19 +113,41 @@ export default function NewArrivals() {
           ) : (
             availableProducts.length > 0 ? (
               availableProducts.map((product) => (
-                <ProductCard key={product._id} product={product} />
+                <div key={product._id} className="bg-white rounded-lg shadow-sm overflow-hidden">
+                  <img src={product.imageUrl} alt={product.name} className="w-full h-56 object-cover" />
+                  <div className="p-4">
+                    <h3 className="text-lg font-medium text-gray-900">{product.name}</h3>
+                    <p className="text-sm text-gray-500 mb-4">৳{product.price}/month</p>
+                    <Button 
+                      className="w-full flex items-center justify-center gap-2"
+                      onClick={() => handleAddToCart(product._id, product.name)}
+                      disabled={addToCartMutation.isPending}
+                    >
+                      <ShoppingCart className="h-4 w-4" />
+                      Add to Cart
+                    </Button>
+                  </div>
+                </div>
               ))
             ) : (
               [
-                { id: '1', imageUrl: studyTableImg, name: 'White Study Table', price: 300 },
-                { id: '2', imageUrl: sofaSetImg, name: 'Boho Sofa', price: 1000 },
-                { id: '3', imageUrl: bedImg, name: 'Bed ER6456', price: 800 },
+                { id: '1', imageUrl: studyTableImg, name: 'Study Table', price: 800 },
+                { id: '2', imageUrl: sofaSetImg, name: 'Comfortable Sofa', price: 1000 },
+                { id: '3', imageUrl: bedImg, name: 'Double Bed', price: 2000 },
               ].map((placeholder) => (
                 <div key={placeholder.id} className="bg-white rounded-lg shadow-sm overflow-hidden">
                   <img src={placeholder.imageUrl} alt={placeholder.name} className="w-full h-56 object-cover" />
                   <div className="p-4">
                     <h3 className="text-lg font-medium text-gray-900">{placeholder.name}</h3>
-                    <p className="text-sm text-gray-500">৳{placeholder.price}</p>
+                    <p className="text-sm text-gray-500 mb-4">৳{placeholder.price}/month</p>
+                    <Button 
+                      className="w-full flex items-center justify-center gap-2"
+                      onClick={() => handleAddToCart(placeholder.id, placeholder.name)}
+                      disabled={addToCartMutation.isPending}
+                    >
+                      <ShoppingCart className="h-4 w-4" />
+                      Add to Cart
+                    </Button>
                   </div>
                 </div>
               ))
