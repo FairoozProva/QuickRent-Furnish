@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { CardMetric } from "@/components/ui/card-metric";
 import { MessageSquare, UserCheck, Reply, Clock } from "lucide-react";
 
+
 export default function MetricCards() {
   const { data: stats } = useQuery({
     queryKey: ['/api/feedbacks/stats'],
