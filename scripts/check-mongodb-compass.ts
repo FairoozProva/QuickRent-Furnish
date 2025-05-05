@@ -4,12 +4,6 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-/**
- * This script is specifically for checking a local MongoDB connection with MongoDB Compass.
- * It only checks the local connection regardless of environment variables.
- * 
- * Run with: npx tsx scripts/check-mongodb-compass.ts
- */
 async function checkMongoDBCompassConnection() {
   console.log('MongoDB Compass Connection Check');
   console.log('================================');
@@ -21,7 +15,7 @@ async function checkMongoDBCompassConnection() {
     console.log(`Attempting to connect to MongoDB Compass: ${connectionString}`);
     
     await mongoose.connect(connectionString);
-    console.log('✅ MongoDB Compass connected successfully');
+    console.log(' MongoDB Compass connected successfully');
     
     // Check for collections and document counts
     console.log('\nChecking collections:');
@@ -55,7 +49,7 @@ async function checkMongoDBCompassConnection() {
     console.log('6. Refresh MongoDB Compass to see the newly created collections and documents');
     
   } catch (error) {
-    console.error('❌ Failed to connect to MongoDB Compass');
+    console.error(' Failed to connect to MongoDB Compass');
     console.error(error);
     
     console.log('\nTroubleshooting steps:');
