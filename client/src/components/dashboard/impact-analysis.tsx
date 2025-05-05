@@ -9,7 +9,6 @@ interface ImpactAnalysisProps {
 }
 
 export default function ImpactAnalysis({ actions }: ImpactAnalysisProps) {
-  // Sample key improvements when no API data is available
   const keyImprovements = [
     {
       id: 1,
