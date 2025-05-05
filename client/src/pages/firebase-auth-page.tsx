@@ -27,7 +27,6 @@ const FirebaseAuthPage: React.FC = () => {
 
   // Check if user is already logged in
   if (user) {
-    // Redirect to home page
     setLocation('/');
     return null;
   }
@@ -54,7 +53,6 @@ const FirebaseAuthPage: React.FC = () => {
       return;
     }
 
-    // Clear any previous errors
     setRegisterPasswordError('');
 
     // Submit registration
