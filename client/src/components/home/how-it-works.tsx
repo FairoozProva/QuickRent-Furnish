@@ -2,6 +2,7 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Search, Calendar, Truck } from "lucide-react";
 
+
 export default function HowItWorks() {
   return (
     <div className="bg-gray-50">
