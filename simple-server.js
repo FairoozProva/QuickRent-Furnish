@@ -1,4 +1,3 @@
-// Simple Express server to serve test HTML without MongoDB dependencies
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -15,7 +14,6 @@ const port = 5000;
 app.use((req, res, next) => {
   const reqPath = req.path;
   
-  // Set proper MIME types
   if (reqPath.endsWith('.js')) {
     res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
   } else if (reqPath.endsWith('.css')) {
