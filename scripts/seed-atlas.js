@@ -1,4 +1,3 @@
-// MongoDB Atlas Seeder for CreativeCanvas
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 
@@ -8,7 +7,7 @@ dotenv.config();
 const MONGODB_URI = process.env.MONGODB_URI;
 
 if (!MONGODB_URI) {
-  console.error('❌ MONGODB_URI is not defined in environment variables');
+  console.error(' MONGODB_URI is not defined in environment variables');
   process.exit(1);
 }
 
@@ -172,10 +171,10 @@ async function connectToDatabase() {
       socketTimeoutMS: 45000,
       maxPoolSize: 10
     });
-    console.log('✅ Connected to MongoDB Atlas');
+    console.log(' Connected to MongoDB Atlas');
     return true;
   } catch (error) {
-    console.error('❌ Failed to connect to MongoDB Atlas:', error);
+    console.error(' Failed to connect to MongoDB Atlas:', error);
     return false;
   }
 }
@@ -262,9 +261,9 @@ async function seedDatabase() {
     // Create products
     await createProducts(categoryMap);
     
-    console.log('✅ Database seeding completed successfully!');
+    console.log(' Database seeding completed successfully!');
   } catch (error) {
-    console.error('❌ Error seeding database:', error);
+    console.error(' Error seeding database:', error);
   } finally {
     // Close MongoDB connection
     await mongoose.disconnect();
