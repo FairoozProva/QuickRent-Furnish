@@ -2,6 +2,7 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import sofaImage from '@/assets/Sofa Set 2.jpeg';
 
+
 export default function Hero() {
   return (
     <div className="relative bg-gray-50">
