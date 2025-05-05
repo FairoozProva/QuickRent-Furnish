@@ -12,8 +12,6 @@ import {
   sendPasswordResetEmail
 } from 'firebase/auth';
 
-// Firebase configuration
-// For VSCode development, you'll need to add these values to a .env file in the root directory
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "your-api-key-here", 
   authDomain: `${import.meta.env.VITE_FIREBASE_PROJECT_ID || "your-project-id"}.firebaseapp.com`,
