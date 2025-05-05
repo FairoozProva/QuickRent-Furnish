@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # QuickRent Furnish
 
 A sustainable furniture rental platform designed to simplify eco-friendly home furnishing through an intuitive digital marketplace.
@@ -11,6 +10,22 @@ A sustainable furniture rental platform designed to simplify eco-friendly home f
 - React
 - Tailwind CSS
 - Firebase Authentication
+
+## Setup
+
+1. Clone the repository
+2. Install dependencies: `npm install`
+3. Copy `firebase-credentials.example.json` to `quickrent-furnish-firebase-adminsdk.json`
+4. Replace the placeholder values in the credentials file with your Firebase project credentials:
+   - Get these from Firebase Console -> Project Settings -> Service Accounts -> Generate New Private Key
+5. Create a `.env` file based on `.env.example` (if exists) and fill in your environment variables
+6. Start the development server: `npm run dev`
+
+## Security Notes
+
+- Never commit real Firebase credentials to version control
+- Keep your `.env` and Firebase credential files secure
+- The `.gitignore` file is configured to prevent accidental commits of sensitive files
 
 ## MongoDB Setup
 
@@ -95,7 +110,3 @@ For authentication, this application uses Firebase:
 - The application will run in development mode even if MongoDB is not available, but with limited functionality
 - Firebase authentication can be set up later if needed
 - User schema includes `firebaseId` field for Firebase authentication integration
-=======
-# QuickRent-Furnish
-This is a project for web development course in university.
->>>>>>> b6659c5c2b86b48f6bc5c872e88a31e9491c8b39
