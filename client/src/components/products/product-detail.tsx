@@ -35,7 +35,6 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
     queryFn: () => fetchProduct(productId),
   });
 
-  // Fetch related products
   const { 
     data: relatedProducts, 
     isLoading: isLoadingRelated,
@@ -61,7 +60,6 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
   const isInWishlist = wishlistData?.isInWishlist || false;
   const isInCart = cartData?.isInCart || false;
 
-  // Add to wishlist mutation
   const wishlistMutation = useMutation({
     mutationFn: isInWishlist 
       ? () => removeFromWishlist(productId)
@@ -86,7 +84,6 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
     },
   });
 
-  // Add to cart mutation
   const cartMutation = useMutation({
     mutationFn: () => addToCart(productId, parseInt(duration)),
     onSuccess: () => {
