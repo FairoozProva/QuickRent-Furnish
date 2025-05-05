@@ -17,7 +17,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-// Temporarily remove image import
 
 export default function Navbar() {
   const { user, logoutMutation } = useAuth();
