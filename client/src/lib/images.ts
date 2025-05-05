@@ -1,5 +1,3 @@
-// Import images properly using Vite's import.meta.url approach
-// This ensures proper bundling and file path handling
 
 // Living Room
 import sofaImage1 from '../assets/Sofa Set 1.jpeg';
