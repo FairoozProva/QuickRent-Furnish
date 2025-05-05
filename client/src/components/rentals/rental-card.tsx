@@ -14,6 +14,7 @@ import {
 import { useState } from "react";
 import { format } from "date-fns";
 
+
 type RentalCardProps = {
   rental: {
     _id: string;
